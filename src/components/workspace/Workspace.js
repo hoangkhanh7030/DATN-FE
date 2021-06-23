@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
+import { theme } from "../../assets/css/Common";
 
 export default function Workspace({ workspace }) {
   const classes = useStyles();
@@ -62,7 +63,6 @@ export default function Workspace({ workspace }) {
     }
     prevOpen.current = open;
   }, [open]);
-  const theme = {};
   return (
     <ThemeProvider theme={theme}>
       <Card className={classes.root}>
@@ -74,6 +74,7 @@ export default function Workspace({ workspace }) {
           }
           title={info.name}
           subheader={subHeader}
+          titleTypographyProps={{ variant: "h2" }}
         />
         <Popper
           open={open}

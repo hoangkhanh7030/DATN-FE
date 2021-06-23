@@ -1,9 +1,17 @@
-import { AppBar, Toolbar, Typography, Button, Avatar } from "@material-ui/core";
-
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Avatar,
+  ThemeProvider,
+} from "@material-ui/core";
 import { useStyles } from "./style";
-
+import logo from "../../../assets/icons/app-logo.svg";
+import { theme } from "../../../assets/css/Common";
+import avatar from "../../../assets/images/avatar.png";
 const headersData = [
   {
     label: "Dashboard",
@@ -26,12 +34,15 @@ const headersData = [
 export default function TheHeader() {
   const classes = useStyles();
   const navbar = true;
-  const appLogo = (
-    <Typography variant="h1" className={classes.logo}>
-      JuggleFish
-    </Typography>
-  );
 
+  const appLogo = (
+    <div className={classes.logoApp}>
+      <img src={logo} alt="Logo" width={30} />
+      <Typography variant="h1" className={classes.logo}>
+        JuggleFish
+      </Typography>
+    </div>
+  );
   const getMenuButtons = () => {
     return headersData.map(({ label, href }) => {
       return (
@@ -51,14 +62,16 @@ export default function TheHeader() {
   };
 
   return (
-    <header>
-      <AppBar className={classes.header}>
-        <Toolbar className={classes.toolbar}>
-          {appLogo}
-          {navbar && <div>{getMenuButtons()}</div>}
-          <Avatar alt="Avatar" src="https://via.placeholder.com/50" />
-        </Toolbar>
-      </AppBar>
-    </header>
+    <ThemeProvider theme={theme}>
+      <header>
+        <AppBar className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            {appLogo}
+            {navbar && <div>{getMenuButtons()}</div>}
+            <Avatar alt="Avatar" src={avatar} />
+          </Toolbar>
+        </AppBar>
+      </header>
+    </ThemeProvider>
   );
 }

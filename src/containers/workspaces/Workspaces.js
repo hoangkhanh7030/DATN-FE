@@ -3,11 +3,11 @@ import {
   Typography,
   Paper,
   IconButton,
-  createMuiTheme,
   ThemeProvider,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import React from "react";
+import { theme } from "../../assets/css/Common";
 import Workspace from "../../components/workspace/Workspace";
 import { useStyles } from "./style";
 
@@ -21,9 +21,9 @@ export default function Workspaces() {
       createdBy: 4,
       modifiedDate: "2021-06-22T10:02:49.000+00:00",
       modifiedBy: 4,
-      name: "c",
-      projectListLength: 0,
-      resourceListLength: 0,
+      name: "CES",
+      projectListLength: 5,
+      resourceListLength: 20,
       role: "VIEW",
     },
     {
@@ -32,9 +32,9 @@ export default function Workspaces() {
       createdBy: 4,
       modifiedDate: "2021-06-22T10:02:46.000+00:00",
       modifiedBy: 4,
-      name: "a",
-      projectListLength: 1,
-      resourceListLength: 1,
+      name: "CESCES",
+      projectListLength: 4,
+      resourceListLength: 15,
       role: "VIEW",
     },
     {
@@ -43,23 +43,17 @@ export default function Workspaces() {
       createdBy: 4,
       modifiedDate: "2021-06-22T10:02:48.000+00:00",
       modifiedBy: 4,
-      name: "b",
-      projectListLength: 0,
-      resourceListLength: 0,
+      name: "Nile Home",
+      projectListLength: 7,
+      resourceListLength: 30,
       role: "EDIT",
     },
   ];
-  const theme = createMuiTheme({
-    typography: {
-      h1: {
-        fontSize: 24,
-      },
-    },
-  });
+
   return (
     <ThemeProvider theme={theme}>
       {" "}
-      <Typography variant="h1" className={classes.title} gutterBottom>
+      <Typography variant="h1" gutterBottom>
         Workspaces
       </Typography>
       <Grid container spacing={5} className={classes.container}>
@@ -70,8 +64,8 @@ export default function Workspaces() {
         ))}
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
-            <IconButton variant="h1">
-              <AddIcon className={classes.addIcon} />
+            <IconButton>
+              <AddIcon className={classes.addIcon} gutterBottom />
             </IconButton>
             <Typography variant="h3" className={classes.newWorkspace}>
               NEW WORKSPACE

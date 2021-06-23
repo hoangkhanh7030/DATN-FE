@@ -1,5 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
+import * as colors from "../../../assets/css/Common";
 
 export const useStyles = makeStyles({
-  root: { padding: "0 24px", margin: "100px 0 0" },
+  root: {
+    padding: "100px 24px 0",
+    margin: 0,
+    backgroundColor: colors.bgColor,
+    height: "100vh",
+  },
 });

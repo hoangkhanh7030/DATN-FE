@@ -1,13 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
+import * as colors from "../../assets/css/Common";
 
 export const useStyles = makeStyles({
-  title: {
-    fontWeight: 600,
-  },
   container: {
     justifyContent: "space-between",
   },
-  newWorkspace: { fontWeight: 600 },
+  newWorkspace: { fontWeight: 600, marginTop: "10px" },
   paper: {
     display: "flex",
     flexDirection: "column",
@@ -17,6 +15,6 @@ export const useStyles = makeStyles({
   },
   addIcon: {
     fontSize: "50px",
-    color: "#3870f5",
+    color: colors.primaryColor,
   },
 });

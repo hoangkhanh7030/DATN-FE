@@ -6,11 +6,13 @@ import {
   Redirect,
 } from "react-router-dom";
 import TheLayout from "./containers/layouts/TheLayout/TheLayout";
-
+import Login from "./containers/Login";
 function App() {
   return (
     <Router>
       <Switch>
+        <Route path={"/login"} component={Login} />
+
         {routes.map((route, idx) => {
           return (
             route.component && (
@@ -28,5 +30,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

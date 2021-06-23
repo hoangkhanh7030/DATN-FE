@@ -1,16 +1,18 @@
 import { makeStyles } from "@material-ui/core/styles";
+import * as colors from "../../../assets/css/Common";
 
 export const useStyles = makeStyles({
-  header: {
-    color: "black",
-    backgroundColor: "white",
+  root: {
+    color: colors.blackColor,
+    backgroundColor: colors.secondaryColor,
     "@media (max-width: 900px)": {
       paddingLeft: 0,
     },
   },
+  logoApp: { display: "flex", alignItems: "center" },
   logo: {
-    color: "black",
-    fontWeight: 600,
+    marginLeft: "5px",
+    color: colors.blackColor,
     textAlign: "left",
   },
   menuButton: {

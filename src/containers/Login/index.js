@@ -1,35 +1,43 @@
 import React, { useState } from "react";
-
+import * as contants from "../../constants";
 import LoginForm from "../../components/login/LoginForm";
 
 export default function Login() {
   const [loginData, setLogin] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
-  const isValidate = (inputNameOnChange = loginData) => {
+  const isValid = (inputNameOnChange = loginData) => {
     let errorsCheck = { ...errors };
+
     if ("email" in inputNameOnChange)
-    errorsCheck.email =
-        /$^|.+@.+..+/.test(inputNameOnChange.email) && inputNameOnChange.email
+      errorsCheck.email =
+        contants.EMAIL_REGREX.test(inputNameOnChange.email) &&
+        inputNameOnChange.email
           ? ""
-          : "email is not valid";
+          : contants.EMAIL_ERROR;
+
     if ("password" in inputNameOnChange)
-    errorsCheck.password = inputNameOnChange.password ? "" : "password is required";
+      errorsCheck.password = inputNameOnChange.password
+        ? ""
+        : contants.PASSWORD_ERROR;
+
     setErrors({ ...errorsCheck });
+
     if (inputNameOnChange === loginData)
       return Object.values(errorsCheck).every((el) => el === "");
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setLogin({ ...loginData, [name]: value });
-    isValidate({ [name]: value });
+    isValid({ [name]: value });
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (isValidate()) {
-      window.alert();
+    if (isValid()) {
+      console.log(loginData);
     }
   };
 

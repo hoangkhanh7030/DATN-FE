@@ -1,7 +1,7 @@
-
+import Login from './containers/Login';
 function App() {
   return (
-    <div> HR Resourcing App </div>
+    <div> <Login/>  </div>
   );
 }
 

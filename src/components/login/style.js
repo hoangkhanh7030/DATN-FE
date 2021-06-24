@@ -1,7 +1,12 @@
 import { makeStyles } from "@material-ui/core/styles";
-import * as colors from '../../assets/css/Common';
+import * as colors from "../../assets/css/Common";
 
 const loginStyle = makeStyles((theme) => ({
+  main: {
+    height: "100vh",
+    width: "100vw",
+    backgroundColor: colors.secondaryColor,
+  },
   login: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -14,7 +19,6 @@ const loginStyle = makeStyles((theme) => ({
   },
   text: {
     textAlign: "center",
-
   },
   submit: {
     margin: theme.spacing(3, 0, 2),

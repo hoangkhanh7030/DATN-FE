@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as contants from "../../constants";
+import * as constants from "../../constants";
 import LoginForm from "../../components/login/LoginForm";
 
 export default function Login() {
@@ -11,15 +11,15 @@ export default function Login() {
 
     if ("email" in inputNameOnChange)
       errorsCheck.email =
-        contants.EMAIL_REGREX.test(inputNameOnChange.email) &&
+        constants.EMAIL_REGEX.test(inputNameOnChange.email) &&
         inputNameOnChange.email
           ? ""
-          : contants.EMAIL_ERROR;
+          : constants.EMAIL_ERROR;
 
     if ("password" in inputNameOnChange)
       errorsCheck.password = inputNameOnChange.password
         ? ""
-        : contants.PASSWORD_ERROR;
+        : constants.PASSWORD_ERROR;
 
     setErrors({ ...errorsCheck });
 

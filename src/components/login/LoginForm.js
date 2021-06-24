@@ -18,11 +18,9 @@ const LoginForm = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" className={classes.name}>
         <div className={classes.login}>
-          <Typography variant="h1">
-            Sign In
-          </Typography>
+          <Typography variant="h1">Sign In</Typography>
           <form className={classes.form} onSubmit={handleFormSubmit} noValidate>
             <TextField
               variant="outlined"

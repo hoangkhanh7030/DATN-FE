@@ -6,6 +6,7 @@ export const secondaryColor = "#FFFFFF";
 export const disabledColor = "#BCBCBC";
 export const bgColor = "#F5F5F5";
 export const ggColor = "#D63B30";
+export const blackColor = "#000000";
 
 /* ------------ common component styles -------*/
 export const commonStyle = makeStyles(() => ({
@@ -15,8 +16,8 @@ export const commonStyle = makeStyles(() => ({
   btn: {
     primary: {
       backgroundColor: primaryColor,
-    }
-  }
+    },
+  },
 }));
 
 /* ----------- customized theme styles -------*/
@@ -29,12 +30,14 @@ export const theme = createMuiTheme({
   typography: {
     h1: {
       fontSize: "24px",
+      fontWeight: 600,
     },
     h2: {
       fontSize: "20px",
+      fontWeight: 600,
     },
     h3: {
-      fontSize: "18px",
+      fontSize: "16px",
     },
-  }
+  },
 });

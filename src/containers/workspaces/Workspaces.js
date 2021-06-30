@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { Redirect } from 'react-router-dom';
 import {
   Grid,
   Typography,
@@ -13,7 +15,9 @@ import { useStyles } from "./style";
 
 export default function Workspaces() {
   const classes = useStyles();
-
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  if(!isLoggedIn) return <Redirect to="/"/>
+  
   const workspaces = [
     {
       id: 3,
@@ -53,19 +57,17 @@ export default function Workspaces() {
   return (
     <ThemeProvider theme={theme}>
       {" "}
-      <Typography variant="h1" gutterBottom>
-        Workspaces
-      </Typography>
+      <Typography variant="h1">Workspaces</Typography>
       <Grid container spacing={5} className={classes.container}>
         {workspaces.map((workspace) => (
-          <Grid item xs={12} sm={4} md={3}>
-            <Workspace key={workspace.key} workspace={workspace} />
+          <Grid item key={workspace.id} xs={12} sm={4} md={3}>
+            <Workspace workspace={workspace} />
           </Grid>
         ))}
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
             <IconButton>
-              <AddIcon className={classes.addIcon} gutterBottom />
+              <AddIcon className={classes.addIcon} />
             </IconButton>
             <Typography variant="h3" className={classes.newWorkspace}>
               NEW WORKSPACE

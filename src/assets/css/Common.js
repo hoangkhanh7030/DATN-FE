@@ -12,6 +12,10 @@ export const blackColor = "#000000";
 export const commonStyle = makeStyles(() => ({
   icon: {
     marginRight: "10px",
+    color: primaryColor,
+  },
+  ggicon: {
+    marginRight: "10px",
   },
   btn: {
     primary: {
@@ -19,6 +23,10 @@ export const commonStyle = makeStyles(() => ({
       color: secondaryColor,
     },
   },
+  a: {
+    textDecoration:"none", 
+    color: blackColor,
+  }
 }));
 
 /* ----------- customized theme styles -------*/

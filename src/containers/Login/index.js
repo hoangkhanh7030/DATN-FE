@@ -1,10 +1,19 @@
 import React, { useState } from "react";
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 import * as constants from "../../constants";
 import LoginForm from "../../components/login/LoginForm";
+import {Progress} from '../../components/common/Progress';
+import { login } from "../../redux/actions/authAction";
 
-export default function Login() {
+export default function Login(props) {
   const [loginData, setLogin] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { message } = useSelector((state) => state.message);
+
+  const dispatch = useDispatch();
 
   const isValid = (inputNameOnChange = loginData) => {
     let errorsCheck = { ...errors };
@@ -36,16 +45,32 @@ export default function Login() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+
     if (isValid()) {
-      console.log(loginData);
+      dispatch(login(loginData))
+        .then(() => {
+          props.history.push("/workspaces");
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   };
 
+  if(isLoggedIn) return <Redirect to="/workspaces"/>
+
   return (
-    <LoginForm
+    <div>
+      <LoginForm
       handleInputChange={handleInputChange}
       handleFormSubmit={handleFormSubmit}
       errors={errors}
+      message = {message}
     />
+    <Progress isOpen={loading}/>
+    </div>
   );
 }

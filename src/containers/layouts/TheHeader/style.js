@@ -22,4 +22,7 @@ export const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
   },
+  popover: {
+    marginTop: "10px",
+  },
 });

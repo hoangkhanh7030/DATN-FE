@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -14,6 +16,12 @@ import { useStyles } from "./style";
 
 export default function Workspaces() {
   const classes = useStyles();
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const [name, setName] = useState("");
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+
+  if (!isLoggedIn) return <Redirect to="/" />;
 
   const workspaces = [
     {
@@ -56,7 +64,6 @@ export default function Workspaces() {
     title: "Create new workspace",
     btnTitle: "Create",
   };
-  const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreateDialog = () => {
     setOpenCreate(true);
   };
@@ -69,7 +76,6 @@ export default function Workspaces() {
     title: "Edit workspace",
     btnTitle: "Save",
   };
-  const [openEdit, setOpenEdit] = useState(false);
   const handleOpenEditDialog = () => {
     setOpenEdit(true);
   };
@@ -78,7 +84,6 @@ export default function Workspaces() {
     setName("");
   };
 
-  const [name, setName] = useState("");
   const handleInputName = (e) => {
     setName(e.target.value);
   };
@@ -86,7 +91,7 @@ export default function Workspaces() {
   return (
     <ThemeProvider theme={theme}>
       {" "}
-      <Typography variant="h1" gutterBottom>
+      <Typography variant="h1" style={{ marginBottom: "10px" }}>
         Workspaces
       </Typography>
       <Grid container spacing={5} className={classes.container}>

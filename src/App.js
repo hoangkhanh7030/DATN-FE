@@ -25,7 +25,7 @@ function App() {
             )
           );
         })}
-        <Redirect from="/" to="/workspaces" />
+        <Redirect from="/" to="/login" />
       </Switch>
     </Router>
   );

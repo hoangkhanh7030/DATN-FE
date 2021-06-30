@@ -15,8 +15,21 @@ import {
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
 import { theme } from "../../assets/css/Common";
+import WorkspaceDialog from "./dialog/Dialog";
 
-export default function Workspace({ workspace }) {
+export default function Workspace(props) {
+  const {
+    workspace,
+    open,
+    content,
+    name,
+    handleOpenDialog,
+    handleCloseDialog,
+    handleInputName,
+  } = {
+    ...props,
+  };
+
   const classes = useStyles();
 
   const info = {
@@ -34,35 +47,36 @@ export default function Workspace({ workspace }) {
     </ul>
   );
 
-  const [open, setOpen] = useState(false);
+  const [openOption, setOpenOption] = useState(false);
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpenOption((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-    setOpen(false);
+    setOpenOption(false);
   };
 
   const handleListKeyDown = (event) => {
     if (event.key === "Tab") {
       event.preventDefault();
-      setOpen(false);
+      setOpenOption(false);
     }
   };
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = useRef(open);
+  const prevOpen = useRef(openOption);
   useEffect(() => {
-    if (prevOpen.current === true && open === false) {
+    if (prevOpen.current === true && openOption === false) {
       anchorRef.current.focus();
     }
-    prevOpen.current = open;
-  }, [open]);
+    prevOpen.current = openOption;
+  }, [openOption]);
+
   return (
     <ThemeProvider theme={theme}>
       <Card className={classes.root}>
@@ -77,7 +91,7 @@ export default function Workspace({ workspace }) {
           titleTypographyProps={{ variant: "h2" }}
         />
         <Popper
-          open={open}
+          open={openOption}
           anchorEl={anchorRef.current}
           role={undefined}
           transition
@@ -89,11 +103,17 @@ export default function Workspace({ workspace }) {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
-                    autoFocusItem={open}
-                    id="menu-list-grow"
+                    autoFocusItem={openOption}
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleOpenDialog}>Edit</MenuItem>
+                    <WorkspaceDialog
+                      open={open}
+                      content={content}
+                      name={name}
+                      handleCloseDialog={handleCloseDialog}
+                      handleInputName={handleInputName}
+                    />
                     <MenuItem onClick={handleClose}>Delete</MenuItem>
                   </MenuList>
                 </ClickAwayListener>

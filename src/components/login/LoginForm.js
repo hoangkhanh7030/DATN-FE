@@ -6,7 +6,10 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { Alert } from "@material-ui/lab";
 import { ThemeProvider } from "@material-ui/styles";
+
+import logo from "../../assets/icons/app-logo.svg";
 import loginStyle from "./style";
 import { commonStyle, theme } from "../../assets/css/Common";
 
@@ -14,12 +17,13 @@ const LoginForm = (props) => {
   const classes = loginStyle();
   const commonClasses = commonStyle();
 
-  const { handleInputChange, handleFormSubmit, errors } = { ...props };
+  const { handleInputChange, handleFormSubmit, errors, message } = { ...props };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs" className={classes.name}>
         <div className={classes.login}>
+          <img className={classes.image} src={logo} alt="Logo" width={30} />
           <Typography variant="h1">Sign In</Typography>
           <form className={classes.form} onSubmit={handleFormSubmit} noValidate>
             <TextField
@@ -65,23 +69,26 @@ const LoginForm = (props) => {
               variant="contained"
               className={classes.google}
             >
-              <i className={commonClasses.icon + " fab fa-google"}></i>Login
+              <i className={commonClasses.ggicon + " fab fa-google"}></i>Login
               with Google
             </Button>
 
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" color="primary">
-                  Forgot password?
-                </Link>
+                <Typography variant="body2">Don't have an account?</Typography>
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2" color="primary">
-                  {"Don't have an account? Sign Up"}
+                  {"Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </form>
+          {message && (
+            <Alert severity="error">
+              <strong>Error</strong> - {message}
+            </Alert>
+          )}
         </div>
       </Container>
     </ThemeProvider>

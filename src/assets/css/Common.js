@@ -16,6 +16,7 @@ export const commonStyle = makeStyles(() => ({
   btn: {
     primary: {
       backgroundColor: primaryColor,
+      color: secondaryColor,
     },
   },
 }));

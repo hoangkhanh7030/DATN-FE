@@ -6,8 +6,9 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import React from "react";
+import React, { useState } from "react";
 import { theme } from "../../assets/css/Common";
+import WorkspaceDialog from "../../components/workspace/dialog/Dialog";
 import Workspace from "../../components/workspace/Workspace";
 import { useStyles } from "./style";
 
@@ -50,6 +51,38 @@ export default function Workspaces() {
     },
   ];
 
+  // handle workspace dialog
+  const createContent = {
+    title: "Create new workspace",
+    btnTitle: "Create",
+  };
+  const [openCreate, setOpenCreate] = useState(false);
+  const handleOpenCreateDialog = () => {
+    setOpenCreate(true);
+  };
+  const handleCloseCreateDialog = () => {
+    setOpenCreate(false);
+    setName("");
+  };
+
+  const editContent = {
+    title: "Edit workspace",
+    btnTitle: "Save",
+  };
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleOpenEditDialog = () => {
+    setOpenEdit(true);
+  };
+  const handleCloseEditDialog = () => {
+    setOpenEdit(false);
+    setName("");
+  };
+
+  const [name, setName] = useState("");
+  const handleInputName = (e) => {
+    setName(e.target.value);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       {" "}
@@ -58,18 +91,35 @@ export default function Workspaces() {
       </Typography>
       <Grid container spacing={5} className={classes.container}>
         {workspaces.map((workspace) => (
-          <Grid item xs={12} sm={4} md={3}>
-            <Workspace key={workspace.key} workspace={workspace} />
+          <Grid key={workspace.id} item xs={12} sm={4} md={3}>
+            <Workspace
+              workspace={workspace}
+              open={openEdit}
+              content={editContent}
+              name={workspace.name}
+              handleCloseDialog={handleCloseEditDialog}
+              handleOpenDialog={handleOpenEditDialog}
+              handleInputName={handleInputName}
+            />
           </Grid>
         ))}
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
-            <IconButton>
-              <AddIcon className={classes.addIcon} gutterBottom />
-            </IconButton>
+            <div onClick={handleOpenCreateDialog}>
+              <IconButton>
+                <AddIcon className={classes.addIcon} />
+              </IconButton>
+            </div>
             <Typography variant="h3" className={classes.newWorkspace}>
               NEW WORKSPACE
             </Typography>
+            <WorkspaceDialog
+              open={openCreate}
+              content={createContent}
+              name={name}
+              handleCloseDialog={handleCloseCreateDialog}
+              handleInputName={handleInputName}
+            />
           </Paper>
         </Grid>
       </Grid>

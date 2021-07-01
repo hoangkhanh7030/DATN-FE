@@ -6,6 +6,6 @@ export const useStyles = makeStyles({
     padding: "100px 24px 0",
     margin: 0,
     backgroundColor: colors.bgColor,
-    height: "100vh",
+    minHeight: "100vh",
   },
 });

@@ -37,6 +37,7 @@ export default function WorkspaceDialog(props) {
             type="text"
             fullWidth
             onChange={handleInputName}
+            autoComplete="off"
           />
         </DialogContent>
         <DialogActions>
@@ -45,7 +46,6 @@ export default function WorkspaceDialog(props) {
           </Button>
           <Button
             className={classes.createBtn}
-            onClick={handleCloseDialog}
             variant="contained"
             color="primary"
           >

@@ -1,4 +1,4 @@
-import { SET_MESSAGE, CLEAR_MESSAGE } from "../contants";
+import { SET_MESSAGE, CLEAR_MESSAGE } from "../constants";
 
 const initialState = {};
 

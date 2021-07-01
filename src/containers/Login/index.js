@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as constants from "../../constants";
 import LoginForm from "../../components/login/LoginForm";
-import {Progress} from '../../components/common/Progress';
+import { Progress } from "../../components/common/Progress";
 import { login } from "../../redux/actions/authAction";
 
 export default function Login(props) {
@@ -60,17 +60,17 @@ export default function Login(props) {
     }
   };
 
-  if(isLoggedIn) return <Redirect to="/workspaces"/>
+  if (isLoggedIn) return <Redirect to="/workspaces" />;
 
   return (
     <div>
       <LoginForm
-      handleInputChange={handleInputChange}
-      handleFormSubmit={handleFormSubmit}
-      errors={errors}
-      message = {message}
-    />
-    <Progress isOpen={loading}/>
+        handleInputChange={handleInputChange}
+        handleFormSubmit={handleFormSubmit}
+        errors={errors}
+        message={message}
+      />
+      <Progress isOpen={loading} />
     </div>
   );
 }

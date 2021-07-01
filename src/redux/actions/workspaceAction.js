@@ -1,13 +1,13 @@
 import * as actionTypes from "../constants";
 
-import { loginService, logoutService } from "../../services/auth-service";
+import { getWorkspacesService } from "../../services/user-service";
 
-export const login = (loginData) => (dispatch) => {
-  return loginService(loginData).then(
+export const getWorkspaces = () => (dispatch) => {
+  return getWorkspacesService().then(
     (data) => {
       dispatch({
-        type: actionTypes.LOGIN_SUCCEED,
-        payload: { user: data },
+        type: actionTypes.GET_WORKSPACES_SUCCEED,
+        payload: data,
       });
 
       return Promise.resolve();
@@ -21,7 +21,7 @@ export const login = (loginData) => (dispatch) => {
         error.toString();
 
       dispatch({
-        type: actionTypes.LOGIN_FAILED,
+        type: actionTypes.GET_WORKSPACES_FAILED,
       });
 
       dispatch({
@@ -32,12 +32,4 @@ export const login = (loginData) => (dispatch) => {
       return Promise.reject();
     }
   );
-};
-
-export const logout = () => (dispatch) => {
-  logoutService();
-
-  dispatch({
-    type: actionTypes.LOGOUT,
-  });
 };

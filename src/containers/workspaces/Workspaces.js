@@ -14,7 +14,10 @@ import WorkspaceDialog from "../../components/workspace/dialog/Dialog";
 import Workspace from "../../components/workspace/Workspace";
 import { useStyles } from "./style";
 import { Progress } from "../../components/common/Progress";
-import { getWorkspaces } from "../../redux/actions/workspaceAction";
+import {
+  addWorkspace,
+  getWorkspaces,
+} from "../../redux/actions/workspaceAction";
 
 export default function Workspaces() {
   const classes = useStyles();
@@ -72,6 +75,23 @@ export default function Workspaces() {
     setName(e.target.value);
   };
 
+  // handle create workspace
+  const handelCreateWorkspace = () => {
+    let data = {
+      name,
+    };
+    setLoading(true);
+
+    dispatch(addWorkspace(data)).then(() => {
+      dispatch(getWorkspaces()).then(() => {
+        setLoading(false);
+      });
+    });
+
+    setName("");
+    setOpenCreate(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       {" "}
@@ -108,6 +128,7 @@ export default function Workspaces() {
               name={name}
               handleCloseDialog={handleCloseCreateDialog}
               handleInputName={handleInputName}
+              onHandleSubmit={handelCreateWorkspace}
             />
           </Paper>
         </Grid>

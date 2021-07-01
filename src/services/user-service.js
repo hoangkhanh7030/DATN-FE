@@ -10,3 +10,11 @@ export const getWorkspacesService = () => {
       return response.data;
     });
 };
+
+export const addWorkspaceService = (data) => {
+  return axios
+    .post(baseURL + "/workspaces", data, { headers: authHeader() })
+    .then((response) => {
+      return response.data;
+    });
+};

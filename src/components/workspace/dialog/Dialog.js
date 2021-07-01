@@ -17,7 +17,14 @@ export default function WorkspaceDialog(props) {
       marginRight: "15px",
     },
   });
-  const { open, content, name, handleCloseDialog, handleInputName } = {
+  const {
+    open,
+    content,
+    name,
+    handleCloseDialog,
+    handleInputName,
+    onHandleSubmit,
+  } = {
     ...props,
   };
   const classes = useStyles();
@@ -46,6 +53,7 @@ export default function WorkspaceDialog(props) {
           </Button>
           <Button
             className={classes.createBtn}
+            onClick={onHandleSubmit}
             variant="contained"
             color="primary"
           >

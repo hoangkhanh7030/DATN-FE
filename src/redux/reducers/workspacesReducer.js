@@ -12,7 +12,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
       };
-
+    case actionTypes.ADD_WORKSPACES_SUCCEED:
+      return { ...state, message: payload.message };
+    case actionTypes.ADD_WORKSPACES_FAILED:
+      return {
+        ...state,
+      };
     default:
       return state;
   }

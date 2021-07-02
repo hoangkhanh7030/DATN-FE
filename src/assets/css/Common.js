@@ -14,8 +14,16 @@ export const commonStyle = makeStyles(() => ({
     marginRight: "10px",
     color: primaryColor,
   },
+  warning: {
+    marginRight: "10px",
+    color: ggColor,
+  },
   ggicon: {
     marginRight: "10px",
+  },
+  gglink:{
+    textDecoration:"none", 
+    color: secondaryColor,
   },
   btn: {
     primary: {
@@ -35,6 +43,9 @@ export const theme = createMuiTheme({
     primary: {
       main: primaryColor,
     },
+    secondary: {
+      main: ggColor,
+    }
   },
   typography: {
     h1: {

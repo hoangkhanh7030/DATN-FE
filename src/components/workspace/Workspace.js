@@ -11,26 +11,34 @@ import {
   MenuItem,
   IconButton,
   ThemeProvider,
+  Icon,
 } from "@material-ui/core";
+
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
-import { theme } from "../../assets/css/Common";
+import { theme,commonStyle } from "../../assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
+import AlertDialog from "../common/AlertDialog";
 
 export default function Workspace(props) {
   const {
     workspace,
     open,
+    openDelete,
     content,
     name,
     handleOpenDialog,
     handleCloseDialog,
     handleInputName,
+    handleCloseDeleteDialog,
+    handleOpenDeleteDialog,
+    handelDeleteWorkspace
   } = {
     ...props,
   };
 
   const classes = useStyles();
+  const iconClasses = commonStyle();
 
   const info = {
     name: workspace.name,
@@ -106,7 +114,13 @@ export default function Workspace(props) {
                     autoFocusItem={openOption}
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleOpenDialog}>Edit</MenuItem>
+                    <MenuItem onClick={handleOpenDialog}>
+                      <Icon
+                        className={`${iconClasses.icon} fas fa-pen`}
+                        style={{ fontSize: "16px"}}
+                      />
+                      Edit
+                    </MenuItem>
                     <WorkspaceDialog
                       open={open}
                       content={content}
@@ -114,7 +128,19 @@ export default function Workspace(props) {
                       handleCloseDialog={handleCloseDialog}
                       handleInputName={handleInputName}
                     />
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    <MenuItem onClick={handleOpenDeleteDialog}>
+                      <Icon
+                        className={`${iconClasses.icon} fas fa-trash`}
+                        style={{ fontSize: "16px"}}
+                      />
+                      Delete
+                    </MenuItem>
+                    <AlertDialog
+                      open={openDelete}
+                      content={`Do you really want to delete ${name} workspace?`}
+                      handleCloseDialog={handleCloseDeleteDialog}
+                      handelDeleteWorkspace= {handelDeleteWorkspace}
+                    />
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

@@ -6,7 +6,6 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Alert } from "@material-ui/lab";
 import { ThemeProvider } from "@material-ui/styles";
 
 import logo from "../../assets/icons/app-logo.svg";
@@ -17,7 +16,7 @@ const LoginForm = (props) => {
   const classes = loginStyle();
   const commonClasses = commonStyle();
 
-  const { handleInputChange, handleFormSubmit, errors, message } = { ...props };
+  const { handleInputChange, handleFormSubmit, errors } = { ...props };
 
   return (
     <ThemeProvider theme={theme}>
@@ -84,11 +83,6 @@ const LoginForm = (props) => {
               </Grid>
             </Grid>
           </form>
-          {message && (
-            <Alert severity="error">
-              <strong>Error</strong> - {message}
-            </Alert>
-          )}
         </div>
       </Container>
     </ThemeProvider>

@@ -13,9 +13,16 @@ export default function reducer(state = initialState, action) {
         ...state,
       };
 
-    case actionTypes.ADD_WORKSPACES_SUCCEED:
+    case actionTypes.ADD_WORKSPACE_SUCCEED:
       return { ...state, status: payload.status };
-    case actionTypes.ADD_WORKSPACES_FAILED:
+    case actionTypes.ADD_WORKSPACE_FAILED:
+      return {
+        ...state,
+      };
+
+    case actionTypes.UPDATE_WORKSPACE_SUCCEED:
+      return { ...state, status: payload.status };
+    case actionTypes.UPDATE_WORKSPACE_FAILED:
       return {
         ...state,
       };

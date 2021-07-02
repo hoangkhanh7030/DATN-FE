@@ -16,7 +16,7 @@ import {
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
-import { theme,commonStyle } from "../../assets/css/Common";
+import { theme, commonStyle } from "../../assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
 import AlertDialog from "../common/AlertDialog";
 
@@ -30,9 +30,11 @@ export default function Workspace(props) {
     handleOpenDialog,
     handleCloseDialog,
     handleInputName,
+    error,
+    onHandleSubmit,
     handleCloseDeleteDialog,
     handleOpenDeleteDialog,
-    handelDeleteWorkspace
+    handelDeleteWorkspace,
   } = {
     ...props,
   };
@@ -117,7 +119,7 @@ export default function Workspace(props) {
                     <MenuItem onClick={handleOpenDialog}>
                       <Icon
                         className={`${iconClasses.icon} fas fa-pen`}
-                        style={{ fontSize: "16px"}}
+                        style={{ fontSize: "16px" }}
                       />
                       Edit
                     </MenuItem>
@@ -127,11 +129,13 @@ export default function Workspace(props) {
                       name={name}
                       handleCloseDialog={handleCloseDialog}
                       handleInputName={handleInputName}
+                      onHandleSubmit={onHandleSubmit}
+                      error={error}
                     />
                     <MenuItem onClick={handleOpenDeleteDialog}>
                       <Icon
                         className={`${iconClasses.icon} fas fa-trash`}
-                        style={{ fontSize: "16px"}}
+                        style={{ fontSize: "16px" }}
                       />
                       Delete
                     </MenuItem>
@@ -139,7 +143,7 @@ export default function Workspace(props) {
                       open={openDelete}
                       content={`Do you really want to delete ${name} workspace?`}
                       handleCloseDialog={handleCloseDeleteDialog}
-                      handelDeleteWorkspace= {handelDeleteWorkspace}
+                      handelDeleteWorkspace={handelDeleteWorkspace}
                     />
                   </MenuList>
                 </ClickAwayListener>

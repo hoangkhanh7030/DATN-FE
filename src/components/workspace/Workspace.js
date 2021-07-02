@@ -30,6 +30,7 @@ export default function Workspace(props) {
     handleOpenDialog,
     handleCloseDialog,
     handleInputName,
+    error,
     onHandleSubmit,
     handleCloseDeleteDialog,
     handleOpenDeleteDialog,
@@ -129,6 +130,7 @@ export default function Workspace(props) {
                       handleCloseDialog={handleCloseDialog}
                       handleInputName={handleInputName}
                       onHandleSubmit={onHandleSubmit}
+                      error={error}
                     />
                     <MenuItem onClick={handleOpenDeleteDialog}>
                       <Icon

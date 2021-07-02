@@ -21,6 +21,7 @@ import {
   updateWorkspace,
   deleteWorkspace,
 } from "../../redux/actions/workspaceAction";
+import * as constants from "../../constants";
 
 export default function Workspaces() {
   const classes = useStyles();
@@ -36,6 +37,8 @@ export default function Workspaces() {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+
+  const [dialogError, setDialogError] = useState("");
 
   const dispatch = useDispatch();
 
@@ -89,6 +92,14 @@ export default function Workspaces() {
   };
 
   const handleInputName = (e) => {
+    e.preventDefault();
+
+    if (!e.target.value.trim()) {
+      setDialogError(constants.EMPTY_ERROR);
+    } else {
+      setDialogError("");
+    }
+
     setName(e.target.value);
   };
 
@@ -170,6 +181,7 @@ export default function Workspaces() {
               handleOpenDeleteDialog={handleOpenDeleteDialog}
               handleCloseDeleteDialog={handleCloseDeleteDialog}
               handleInputName={handleInputName}
+              error={dialogError}
               onHandleSubmit={() => handelEditWorkspace(workspace.id)}
               handelDeleteWorkspace={() => handelDeleteWorkspace(workspace.id)}
             />
@@ -192,6 +204,7 @@ export default function Workspaces() {
               handleCloseDialog={handleCloseCreateDialog}
               handleInputName={handleInputName}
               onHandleSubmit={handelCreateWorkspace}
+              error={dialogError}
             />
           </Paper>
         </Grid>

@@ -24,11 +24,11 @@ export default function WorkspaceDialog(props) {
     handleCloseDialog,
     handleInputName,
     onHandleSubmit,
+    error,
   } = {
     ...props,
   };
   const classes = useStyles();
-
   useEffect(() => {}, []);
   return (
     <ThemeProvider theme={theme}>
@@ -45,6 +45,11 @@ export default function WorkspaceDialog(props) {
             fullWidth
             onChange={handleInputName}
             autoComplete="off"
+            required
+            {...(error && {
+              error: true,
+              helperText: error,
+            })}
           />
         </DialogContent>
         <DialogActions>
@@ -56,6 +61,7 @@ export default function WorkspaceDialog(props) {
             onClick={onHandleSubmit}
             variant="contained"
             color="primary"
+            disabled={!name}
           >
             {content.btnTitle}
           </Button>

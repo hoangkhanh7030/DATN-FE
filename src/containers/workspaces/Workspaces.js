@@ -14,23 +14,33 @@ import WorkspaceDialog from "../../components/workspace/dialog/Dialog";
 import Workspace from "../../components/workspace/Workspace";
 import { useStyles } from "./style";
 import { Progress } from "../../components/common/Progress";
+import { Message } from "../../components/common/Message";
 import {
   addWorkspace,
   getWorkspaces,
   updateWorkspace,
+  deleteWorkspace,
 } from "../../redux/actions/workspaceAction";
 
 export default function Workspaces() {
   const classes = useStyles();
+
   const { isLoggedIn } = useSelector((state) => state.auth);
+  const { status } = useSelector((state) => state.workspaces);
+  const { message } = useSelector((state) => state.message);
+  const [hasMessage, setOpenMessage] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+
   const [name, setName] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const dispatch = useDispatch();
+
   const [workspaces, setWorkspaces] = useState([]);
   const storeWorkspaces = useSelector((state) => state.workspaces);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -71,6 +81,12 @@ export default function Workspaces() {
     setOpenEdit(false);
     setName("");
   };
+  const handleOpenDeleteDialog = () => {
+    setOpenDelete(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDelete(false);
+  };
 
   const handleInputName = (e) => {
     setName(e.target.value);
@@ -82,11 +98,11 @@ export default function Workspaces() {
       name,
     };
     setLoading(true);
-
     dispatch(addWorkspace(data)).then(() => {
       dispatch(getWorkspaces()).then(() => {
         setLoading(false);
       });
+      setOpenMessage(true);
     });
 
     setName("");
@@ -100,14 +116,38 @@ export default function Workspaces() {
     };
 
     setLoading(true);
-
     dispatch(updateWorkspace(data, id)).then(() => {
-      dispatch(getWorkspaces()).then(() => {
-        setLoading(false);
-      });
+      dispatch(getWorkspaces())
+        .then(() => {
+          setLoading(false);
+        })
+        .finally(setOpenMessage(true));
     });
 
     setOpenEdit(false);
+  };
+
+  const handelDeleteWorkspace = (id) => {
+    setLoading(true);
+
+    dispatch(deleteWorkspace(id))
+      .then(() => {
+        dispatch(getWorkspaces()).then(() => {});
+      })
+      .finally(() => {
+        setLoading(false);
+        setOpenDelete(false);
+        setOpenMessage(true);
+      });
+
+    setOpenDelete(false);
+  };
+
+  const handleCloseMessage = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenMessage(false);
   };
 
   return (
@@ -122,12 +162,16 @@ export default function Workspaces() {
             <Workspace
               workspace={workspace}
               open={openEdit}
+              openDelete={openDelete}
               content={editContent}
               name={workspace.name}
               handleCloseDialog={handleCloseEditDialog}
               handleOpenDialog={handleOpenEditDialog}
+              handleOpenDeleteDialog={handleOpenDeleteDialog}
+              handleCloseDeleteDialog={handleCloseDeleteDialog}
               handleInputName={handleInputName}
               onHandleSubmit={() => handelEditWorkspace(workspace.id)}
+              handelDeleteWorkspace={() => handelDeleteWorkspace(workspace.id)}
             />
           </Grid>
         ))}
@@ -152,6 +196,14 @@ export default function Workspaces() {
           </Paper>
         </Grid>
       </Grid>
+      {message && (
+        <Message
+          message={message}
+          isOpen={hasMessage}
+          handleCloseMessage={handleCloseMessage}
+          type={status === 200 ? "success" : "error"}
+        />
+      )}
       <Progress isOpen={loading} />
     </ThemeProvider>
   );

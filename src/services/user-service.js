@@ -20,8 +20,16 @@ export const addWorkspaceService = (data) => {
 };
 
 export const updateWorkspaceService = (data, id) => {
+  return axios.put(baseURL + `/workspaces/${id}`, data, {
+    headers: authHeader(),
+  }).then((response) => {
+    return response.data;
+  });
+};
+
+export const deleteWorkspaceService = (id) => {
   return axios
-    .put(baseURL + `/workspaces/${id}`, data, { headers: authHeader() })
+    .delete(baseURL + "/workspaces/" + id, { headers: authHeader() })
     .then((response) => {
       return response.data;
     });

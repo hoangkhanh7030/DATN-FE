@@ -4,6 +4,7 @@ import {
   addWorkspaceService,
   getWorkspacesService,
   updateWorkspaceService,
+  deleteWorkspaceService,
 } from "../../services/user-service";
 
 export const getWorkspaces = () => (dispatch) => {
@@ -46,6 +47,10 @@ export const addWorkspace = (createdData) => (dispatch) => {
         payload: data,
       });
 
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
       return Promise.resolve();
     },
     (error) => {
@@ -55,7 +60,6 @@ export const addWorkspace = (createdData) => (dispatch) => {
           error.response.data.message) ||
         error.message ||
         error.toString();
-
       dispatch({
         type: actionTypes.ADD_WORKSPACE_FAILED,
       });
@@ -94,6 +98,43 @@ export const updateWorkspace = (updatedData, id) => (dispatch) => {
 
       dispatch({
         type: actionTypes.UPDATE_WORKSPACE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const deleteWorkspace = (id) => (dispatch) => {
+  return deleteWorkspaceService(id).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.DELETE_WORKSPACE_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: actionTypes.DELETE_WORKSPACE_FAILED,
       });
 
       dispatch({

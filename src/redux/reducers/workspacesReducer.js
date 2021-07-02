@@ -26,6 +26,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
       };
+
+    case actionTypes.DELETE_WORKSPACE_SUCCEED:
+      return { ...state, status: payload.status };
+    case actionTypes.DELETE_WORKSPACE_FAILED:
+      return {
+        ...state,
+      };
     default:
       return state;
   }

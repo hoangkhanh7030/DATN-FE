@@ -1,6 +1,6 @@
 import * as actionTypes from "../constants";
 
-const initialState = { data: [], message: "" };
+const initialState = { data: [], status: null };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -12,9 +12,17 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
       };
-    case actionTypes.ADD_WORKSPACES_SUCCEED:
-      return { ...state, message: payload.message };
-    case actionTypes.ADD_WORKSPACES_FAILED:
+
+    case actionTypes.ADD_WORKSPACE_SUCCEED:
+      return { ...state, status: payload.status };
+    case actionTypes.ADD_WORKSPACE_FAILED:
+      return {
+        ...state,
+      };
+
+    case actionTypes.UPDATE_WORKSPACE_SUCCEED:
+      return { ...state, status: payload.status };
+    case actionTypes.UPDATE_WORKSPACE_FAILED:
       return {
         ...state,
       };

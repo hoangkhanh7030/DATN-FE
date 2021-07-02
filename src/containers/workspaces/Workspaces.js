@@ -17,6 +17,7 @@ import { Progress } from "../../components/common/Progress";
 import {
   addWorkspace,
   getWorkspaces,
+  updateWorkspace,
 } from "../../redux/actions/workspaceAction";
 
 export default function Workspaces() {
@@ -92,6 +93,23 @@ export default function Workspaces() {
     setOpenCreate(false);
   };
 
+  // handle edit workspace
+  const handelEditWorkspace = (id) => {
+    let data = {
+      name,
+    };
+
+    setLoading(true);
+
+    dispatch(updateWorkspace(data, id)).then(() => {
+      dispatch(getWorkspaces()).then(() => {
+        setLoading(false);
+      });
+    });
+
+    setOpenEdit(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       {" "}
@@ -109,6 +127,7 @@ export default function Workspaces() {
               handleCloseDialog={handleCloseEditDialog}
               handleOpenDialog={handleOpenEditDialog}
               handleInputName={handleInputName}
+              onHandleSubmit={() => handelEditWorkspace(workspace.id)}
             />
           </Grid>
         ))}

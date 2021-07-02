@@ -3,6 +3,7 @@ import * as actionTypes from "../constants";
 import {
   addWorkspaceService,
   getWorkspacesService,
+  updateWorkspaceService,
 } from "../../services/user-service";
 
 export const getWorkspaces = () => (dispatch) => {
@@ -41,7 +42,7 @@ export const addWorkspace = (createdData) => (dispatch) => {
   return addWorkspaceService(createdData).then(
     (data) => {
       dispatch({
-        type: actionTypes.ADD_WORKSPACES_SUCCEED,
+        type: actionTypes.ADD_WORKSPACE_SUCCEED,
         payload: data,
       });
 
@@ -56,7 +57,43 @@ export const addWorkspace = (createdData) => (dispatch) => {
         error.toString();
 
       dispatch({
-        type: actionTypes.ADD_WORKSPACES_FAILED,
+        type: actionTypes.ADD_WORKSPACE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const updateWorkspace = (updatedData, id) => (dispatch) => {
+  return updateWorkspaceService(updatedData, id).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.UPDATE_WORKSPACE_SUCCEED,
+        payload: data,
+      });
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch({
+        type: actionTypes.UPDATE_WORKSPACE_FAILED,
       });
 
       dispatch({

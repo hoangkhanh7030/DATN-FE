@@ -18,3 +18,11 @@ export const addWorkspaceService = (data) => {
       return response.data;
     });
 };
+
+export const deleteWorkspaceService = (id) => {
+  return axios
+    .delete(baseURL + "/workspaces/" + id, { headers: authHeader() })
+    .then((response) => {
+      return response.data;
+    });
+};

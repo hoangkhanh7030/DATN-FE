@@ -8,6 +8,10 @@ import {
 } from "services/user-service";
 
 export const getWorkspaces = () => (dispatch) => {
+  dispatch({
+    type: actionTypes.GET_WORKSPACES,
+  });
+
   return getWorkspacesService().then(
     (data) => {
       dispatch({
@@ -19,11 +23,7 @@ export const getWorkspaces = () => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response && error.response.data && error.response.data.error;
 
       dispatch({
         type: actionTypes.GET_WORKSPACES_FAILED,
@@ -40,6 +40,10 @@ export const getWorkspaces = () => (dispatch) => {
 };
 
 export const addWorkspace = (createdData) => (dispatch) => {
+  dispatch({
+    type: actionTypes.ADD_WORKSPACE,
+  });
+
   return addWorkspaceService(createdData).then(
     (data) => {
       dispatch({
@@ -55,11 +59,7 @@ export const addWorkspace = (createdData) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response && error.response.data && error.response.data.error;
       dispatch({
         type: actionTypes.ADD_WORKSPACE_FAILED,
       });
@@ -75,6 +75,10 @@ export const addWorkspace = (createdData) => (dispatch) => {
 };
 
 export const updateWorkspace = (updatedData, id) => (dispatch) => {
+  dispatch({
+    type: actionTypes.UPDATE_WORKSPACE,
+  });
+
   return updateWorkspaceService(updatedData, id).then(
     (data) => {
       dispatch({
@@ -90,12 +94,7 @@ export const updateWorkspace = (updatedData, id) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
+        error.response && error.response.data && error.response.data.error;
       dispatch({
         type: actionTypes.UPDATE_WORKSPACE_FAILED,
       });
@@ -111,6 +110,10 @@ export const updateWorkspace = (updatedData, id) => (dispatch) => {
 };
 
 export const deleteWorkspace = (id) => (dispatch) => {
+  dispatch({
+    type: actionTypes.DELETE_WORKSPACE,
+  });
+
   return deleteWorkspaceService(id).then(
     (data) => {
       dispatch({
@@ -127,11 +130,7 @@ export const deleteWorkspace = (id) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response && error.response.data && error.response.data.error;
 
       dispatch({
         type: actionTypes.DELETE_WORKSPACE_FAILED,

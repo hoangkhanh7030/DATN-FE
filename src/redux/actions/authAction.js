@@ -2,6 +2,10 @@ import * as actionTypes from "redux/constants";
 import { loginService, logoutService } from "services/auth-service";
 
 export const login = (loginData) => (dispatch) => {
+  dispatch({
+    type: actionTypes.LOGIN,
+  });
+  
   return loginService(loginData).then(
     (data) => {
       dispatch({
@@ -13,11 +17,7 @@ export const login = (loginData) => (dispatch) => {
     },
     (error) => {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response && error.response.data && error.response.data.error;
 
       dispatch({
         type: actionTypes.LOGIN_FAILED,

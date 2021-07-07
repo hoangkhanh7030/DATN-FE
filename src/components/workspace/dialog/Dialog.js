@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   Dialog,
@@ -7,8 +8,8 @@ import {
   TextField,
   ThemeProvider,
 } from "@material-ui/core";
+
 import { theme } from "assets/css/Common";
-import React from "react";
 import { useStyles } from "./style";
 
 export default function WorkspaceDialog(props) {

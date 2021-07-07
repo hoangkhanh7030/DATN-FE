@@ -1,4 +1,5 @@
-import { SET_MESSAGE, CLEAR_MESSAGE } from "./types";
+import { CLEAR_MESSAGE, SET_MESSAGE } from "redux/constants";
+
 
 export const setMessage = (message) => ({
   type: SET_MESSAGE,

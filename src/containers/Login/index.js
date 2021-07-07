@@ -8,12 +8,14 @@ import LoginForm from "components/login/LoginForm";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
 
-export default function Login(props) {
+export default function Login() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [loginData, setLogin] = useState({ email: "", password: "" });
   const [invalidInputs, setInvalidInputs] = useState({});
-
-  const [loading, setLoading] = useState(false);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  
+  const { isLoggedIn, isLoading } = useSelector((state) => state.auth);
 
   const { message } = useSelector((state) => state.message);
   const [hasError, setOpenError] = useState(false);
@@ -24,8 +26,6 @@ export default function Login(props) {
     }
     setOpenError(false);
   };
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const isValid = (inputNameOnChange = loginData) => {
     const invalidCheck = { ...invalidInputs };
@@ -60,10 +60,9 @@ export default function Login(props) {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
+  
     if (!isValid()) {
-      setLoading(false);
+     
       return;
     }
     dispatch(login(loginData))
@@ -71,7 +70,7 @@ export default function Login(props) {
         history.push("/workspaces");
       })
       .catch(() => {
-        setLoading(false);
+        
         setOpenError(true);
       });
   };
@@ -85,6 +84,7 @@ export default function Login(props) {
         handleFormSubmit={handleFormSubmit}
         errors={invalidInputs}
       />
+      
       {message && (
         <Message
           message={message}
@@ -93,7 +93,8 @@ export default function Login(props) {
           type="error"
         />
       )}
-      <Progress isOpen={loading} />
+      
+      <Progress isOpen={isLoading} />
     </Fragment>
   );
 }

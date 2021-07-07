@@ -23,16 +23,15 @@ import Workspace from "components/workspace/Workspace";
 import WorkspaceDialog from "components/workspace/dialog/Dialog";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
+import { clearMessage } from "redux/actions/msgAction";
 
 export default function Workspaces() {
   const classes = useStyles();
 
   const { isLoggedIn } = useSelector((state) => state.auth);
-  const { status } = useSelector((state) => state.workspaces);
+  const { status, isLoading } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
-
-  const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
@@ -47,11 +46,11 @@ export default function Workspaces() {
   const storeWorkspaces = useSelector((state) => state.workspaces);
 
   useEffect(() => {
-    setLoading(true);
-    dispatch(getWorkspaces()).then(() => {
-      setLoading(false);
-    });
-  }, []);
+    dispatch(clearMessage());
+
+    dispatch(getWorkspaces()).catch(() => setOpenMessage(true));
+  }, [dispatch]);
+
   useEffect(() => {
     if (!storeWorkspaces.data) {
       return;
@@ -109,13 +108,16 @@ export default function Workspaces() {
     const data = {
       name,
     };
-    setLoading(true);
-    dispatch(addWorkspace(data)).then(() => {
-      dispatch(getWorkspaces()).then(() => {
-        setLoading(false);
+    dispatch(addWorkspace(data))
+      .then(() => {
+        dispatch(getWorkspaces()).catch(() => {
+          setOpenMessage(true);
+        });
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
       });
-      setOpenMessage(true);
-    });
 
     setName("");
     setOpenCreate(false);
@@ -127,28 +129,29 @@ export default function Workspaces() {
       name,
     };
 
-    setLoading(true);
-    dispatch(updateWorkspace(data, id)).then(() => {
-      dispatch(getWorkspaces())
-        .then(() => {
-          setLoading(false);
-        })
-        .finally(setOpenMessage(true));
-    });
+    dispatch(updateWorkspace(data, id))
+      .then(() => {
+        dispatch(getWorkspaces()).catch(() => {
+          setOpenMessage(true);
+        });
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
 
     setOpenEdit(false);
   };
 
   const handelDeleteWorkspace = (id) => {
-    setLoading(true);
-
     dispatch(deleteWorkspace(id))
       .then(() => {
-        dispatch(getWorkspaces()).then(() => {});
+        dispatch(getWorkspaces()).catch(() => {
+          setOpenMessage(true);
+        });
+        setOpenMessage(true);
       })
-      .finally(() => {
-        setLoading(false);
-        setOpenDelete(false);
+      .catch(() => {
         setOpenMessage(true);
       });
 
@@ -164,30 +167,33 @@ export default function Workspaces() {
 
   return (
     <ThemeProvider theme={theme}>
-      {" "}
       <Typography variant="h1" className={classes.header}>
         Workspaces
       </Typography>
       <Grid container spacing={5}>
-        {workspaces.map((workspace) => (
-          <Grid key={workspace.id} item xs={12} sm={4} md={3}>
-            <Workspace
-              workspace={workspace}
-              open={openEdit}
-              openDelete={openDelete}
-              content={editContent}
-              name={workspace.name}
-              handleCloseDialog={handleCloseEditDialog}
-              handleOpenDialog={handleOpenEditDialog}
-              handleOpenDeleteDialog={handleOpenDeleteDialog}
-              handleCloseDeleteDialog={handleCloseDeleteDialog}
-              handleInputName={handleInputName}
-              error={dialogError}
-              onHandleSubmit={() => handelEditWorkspace(workspace.id)}
-              handelDeleteWorkspace={() => handelDeleteWorkspace(workspace.id)}
-            />
-          </Grid>
-        ))}
+        {workspaces &&
+          workspaces.map((workspace) => (
+            <Grid key={workspace.id} item xs={12} sm={4} md={3}>
+              <Workspace
+                workspace={workspace}
+                open={openEdit}
+                openDelete={openDelete}
+                content={editContent}
+                name={workspace.name}
+                handleCloseDialog={handleCloseEditDialog}
+                handleOpenDialog={handleOpenEditDialog}
+                handleOpenDeleteDialog={handleOpenDeleteDialog}
+                handleCloseDeleteDialog={handleCloseDeleteDialog}
+                handleInputName={handleInputName}
+                error={dialogError}
+                onHandleSubmit={() => handelEditWorkspace(workspace.id)}
+                handelDeleteWorkspace={() =>
+                  handelDeleteWorkspace(workspace.id)
+                }
+              />
+            </Grid>
+          ))}
+          
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
             <div onClick={handleOpenCreateDialog}>
@@ -210,6 +216,7 @@ export default function Workspaces() {
           </Paper>
         </Grid>
       </Grid>
+
       {message && (
         <Message
           message={message}
@@ -218,7 +225,8 @@ export default function Workspaces() {
           type={status === 200 ? "success" : "error"}
         />
       )}
-      <Progress isOpen={loading} />
+
+      <Progress isOpen={isLoading} />
     </ThemeProvider>
   );
 }

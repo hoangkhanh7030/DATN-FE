@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
+import * as _ from "underscore";
 
 import {
   addWorkspace,
@@ -173,22 +174,24 @@ export default function Workspaces() {
       <Grid container spacing={5}>
         {workspaces &&
           workspaces.map((workspace) => (
-            <Grid key={workspace.id} item xs={12} sm={4} md={3}>
+            <Grid key={_.get(workspace, "id")} item xs={12} sm={4} md={3}>
               <Workspace
                 workspace={workspace}
                 open={openEdit}
                 openDelete={openDelete}
                 content={editContent}
-                name={workspace.name}
+                name={_.get(workspace, "name")}
                 handleCloseDialog={handleCloseEditDialog}
                 handleOpenDialog={handleOpenEditDialog}
                 handleOpenDeleteDialog={handleOpenDeleteDialog}
                 handleCloseDeleteDialog={handleCloseDeleteDialog}
                 handleInputName={handleInputName}
                 error={dialogError}
-                onHandleSubmit={() => handelEditWorkspace(workspace.id)}
+                onHandleSubmit={() =>
+                  handelEditWorkspace(_.get(workspace, "id"))
+                }
                 handelDeleteWorkspace={() =>
-                  handelDeleteWorkspace(workspace.id)
+                  handelDeleteWorkspace(_.get(workspace, "id"))
                 }
               />
             </Grid>

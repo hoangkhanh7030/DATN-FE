@@ -1,4 +1,5 @@
 import * as actionTypes from "redux/constants";
+import * as _ from "underscore";
 
 import {
   addWorkspaceService,
@@ -23,7 +24,9 @@ export const getWorkspaces = () => (dispatch) => {
     },
     (error) => {
       const message =
-        error.response && error.response.data && error.response.data.error;
+        _.get(error, "response") &&
+        _.get(error, ["response", "data"]) &&
+        _.get(error, ["response", "data", "error"]);
 
       dispatch({
         type: actionTypes.GET_WORKSPACES_FAILED,
@@ -59,7 +62,9 @@ export const addWorkspace = (createdData) => (dispatch) => {
     },
     (error) => {
       const message =
-        error.response && error.response.data && error.response.data.error;
+        _.get(error, "response") &&
+        _.get(error, ["response", "data"]) &&
+        _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ADD_WORKSPACE_FAILED,
       });
@@ -94,7 +99,9 @@ export const updateWorkspace = (updatedData, id) => (dispatch) => {
     },
     (error) => {
       const message =
-        error.response && error.response.data && error.response.data.error;
+        _.get(error, "response") &&
+        _.get(error, ["response", "data"]) &&
+        _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.UPDATE_WORKSPACE_FAILED,
       });
@@ -130,7 +137,9 @@ export const deleteWorkspace = (id) => (dispatch) => {
     },
     (error) => {
       const message =
-        error.response && error.response.data && error.response.data.error;
+        _.get(error, "response") &&
+        _.get(error, ["response", "data"]) &&
+        _.get(error, ["response", "data", "error"]);
 
       dispatch({
         type: actionTypes.DELETE_WORKSPACE_FAILED,

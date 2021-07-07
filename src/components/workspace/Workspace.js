@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
+import * as _ from "underscore";
+
 import {
   Card,
   CardHeader,
@@ -41,10 +43,12 @@ export default function Workspace(props) {
   const iconClasses = commonStyle();
 
   const info = {
-    name: workspace.name,
-    projectNum: `${workspace.projectListLength} Projects`,
-    date: `Since ${moment(workspace.createdDate).format("DD MMMM YYYY")}`,
-    resourceNum: `${workspace.resourceListLength} Members`,
+    name: _.get(workspace, "name"),
+    projectNum: `${_.get(workspace, "projectListLength")} Projects`,
+    date: `Since ${moment(_.get(workspace, "createdDate")).format(
+      "DD MMMM YYYY"
+    )}`,
+    resourceNum: `${_.get(workspace, "resourceListLength")} Members`,
   };
 
   const subHeader = (

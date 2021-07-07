@@ -23,7 +23,6 @@ export default function WorkspaceDialog(props) {
     onHandleSubmit,
     error = "",
   } = props;
-
   return (
     <ThemeProvider theme={theme}>
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
@@ -51,11 +50,10 @@ export default function WorkspaceDialog(props) {
             Cancel
           </Button>
           <Button
-            className={classes.createBtn}
+            className={classes.dialogBtn}
             onClick={onHandleSubmit}
             variant="contained"
             color="primary"
-            disabled={!name}
           >
             {content.btnTitle}
           </Button>

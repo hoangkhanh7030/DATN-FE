@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles({
-  createBtn: {
+  dialogBtn: {
     marginRight: "15px",
   },
 });

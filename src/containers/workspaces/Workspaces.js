@@ -92,8 +92,6 @@ export default function Workspaces() {
   };
 
   const handleInputName = (e) => {
-    e.preventDefault();
-
     if (!e.target.value.trim()) {
       setDialogError(constants.EMPTY_ERROR);
     } else {
@@ -105,6 +103,7 @@ export default function Workspaces() {
 
   // handle create workspace
   const handelCreateWorkspace = () => {
+    if (!name) return;
     const data = {
       name,
     };
@@ -125,6 +124,7 @@ export default function Workspaces() {
 
   // handle edit workspace
   const handelEditWorkspace = (id) => {
+    if (!name) return;
     const data = {
       name,
     };
@@ -193,7 +193,7 @@ export default function Workspaces() {
               />
             </Grid>
           ))}
-          
+
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
             <div onClick={handleOpenCreateDialog}>

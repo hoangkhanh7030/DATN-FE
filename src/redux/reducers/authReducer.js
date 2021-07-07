@@ -1,4 +1,4 @@
-import * as actionTypes from "../constants";
+import * as actionTypes from "redux/constants";
 
 const user = JSON.parse(localStorage.getItem("user"));
 

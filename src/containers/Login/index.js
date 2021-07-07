@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+import { Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Progress } from "../../components/common/Progress";
-import * as constants from "../../constants";
-import LoginForm from "../../components/login/LoginForm";
-import { login } from "../../redux/actions/authAction";
-import { Message } from "../../components/common/Message";
+import * as constants from "constants/index";
+import { login } from "redux/actions/authAction";
+import LoginForm from "components/login/LoginForm";
+import { Message } from "components/common/Message";
+import { Progress } from "components/common/Progress";
 
 export default function Login(props) {
   const [loginData, setLogin] = useState({ email: "", password: "" });
@@ -14,7 +14,7 @@ export default function Login(props) {
 
   const [loading, setLoading] = useState(false);
   const { isLoggedIn } = useSelector((state) => state.auth);
-  
+
   const { message } = useSelector((state) => state.message);
   const [hasError, setOpenError] = useState(false);
 
@@ -25,21 +25,24 @@ export default function Login(props) {
     setOpenError(false);
   };
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const isValid = (inputNameOnChange = loginData) => {
-    let invalidCheck = { ...invalidInputs };
+    const invalidCheck = { ...invalidInputs };
 
-    if ("email" in inputNameOnChange)
+    if ("email" in inputNameOnChange) {
       invalidCheck.email =
         constants.EMAIL_REGEX.test(inputNameOnChange.email) &&
         inputNameOnChange.email
           ? ""
           : constants.EMAIL_ERROR;
+    }
 
-    if ("password" in inputNameOnChange)
+    if ("password" in inputNameOnChange) {
       invalidCheck.password = inputNameOnChange.password
         ? ""
         : constants.PASSWORD_ERROR;
+    }
 
     setInvalidInputs({ ...invalidCheck });
 
@@ -59,24 +62,24 @@ export default function Login(props) {
     e.preventDefault();
     setLoading(true);
 
-    if (isValid()) {
-      dispatch(login(loginData))
-        .then(() => {
-          props.history.push("/workspaces");
-        })
-        .catch(() => {
-          setLoading(false);
-          setOpenError(true);
-        });
-    } else {
+    if (!isValid()) {
       setLoading(false);
+      return;
     }
+    dispatch(login(loginData))
+      .then(() => {
+        history.push("/workspaces");
+      })
+      .catch(() => {
+        setLoading(false);
+        setOpenError(true);
+      });
   };
 
-  if (isLoggedIn) return <Redirect to="/workspaces" />;
+  if (isLoggedIn) return <Redirect to={constants.WORKSPACES_URL} />;
 
   return (
-    <div>
+    <Fragment>
       <LoginForm
         handleInputChange={handleInputChange}
         handleFormSubmit={handleFormSubmit}
@@ -91,6 +94,6 @@ export default function Login(props) {
         />
       )}
       <Progress isOpen={loading} />
-    </div>
+    </Fragment>
   );
 }

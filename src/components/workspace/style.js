@@ -12,4 +12,7 @@ export const useStyles = makeStyles({
   grow: {
     transformOrigin: "left top",
   },
+  icon: {
+    fontSize: "16px",
+  },
 });

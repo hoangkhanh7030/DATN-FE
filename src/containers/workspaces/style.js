@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import * as colors from "../../assets/css/Common";
+import * as colors from "assets/css/Common";
 
 export const useStyles = makeStyles({
   newWorkspace: { fontWeight: 600, marginTop: "10px" },
@@ -14,4 +14,5 @@ export const useStyles = makeStyles({
     fontSize: "50px",
     color: colors.primaryColor,
   },
+  header: { marginBottom: "10px" },
 });

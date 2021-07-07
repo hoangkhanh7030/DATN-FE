@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { commonStyle } from "../../assets/css/Common";
+import { commonStyle } from "assets/css/Common";
 
 export default function AlertDialog({
   open,
@@ -15,7 +15,7 @@ export default function AlertDialog({
 }) {
   const commonClasses = commonStyle();
   return (
-    <div>
+    <Fragment>
       <Dialog
         open={open}
         onClose={handleCloseDialog}
@@ -23,7 +23,10 @@ export default function AlertDialog({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <i className={`${commonClasses.warning} fas fa-exclamation-triangle`}></i>Are you sure?
+          <i
+            className={`${commonClasses.warning} fas fa-exclamation-triangle`}
+          ></i>
+          Are you sure?
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -34,11 +37,16 @@ export default function AlertDialog({
           <Button onClick={handleCloseDialog} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handelDeleteWorkspace} color="secondary" variant="contained" autoFocus>
+          <Button
+            onClick={handelDeleteWorkspace}
+            color="secondary"
+            variant="contained"
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Fragment>
   );
 }

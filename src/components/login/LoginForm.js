@@ -8,15 +8,15 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { ThemeProvider } from "@material-ui/styles";
 
-import logo from "../../assets/icons/app-logo.svg";
+import logo from "assets/icons/app-logo.svg";
 import loginStyle from "./style";
-import { commonStyle, theme } from "../../assets/css/Common";
+import { commonStyle, theme } from "assets/css/Common";
 
 const LoginForm = (props) => {
   const classes = loginStyle();
   const commonClasses = commonStyle();
 
-  const { handleInputChange, handleFormSubmit, errors } = { ...props };
+  const { handleInputChange, handleFormSubmit, errors = {} } = props;
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,7 +68,7 @@ const LoginForm = (props) => {
               variant="contained"
               className={classes.google}
             >
-              <i className={commonClasses.ggicon + " fab fa-google"}></i>Login
+              <i className={`${commonClasses.ggicon} fab fa-google`}></i>Login
               with Google
             </Button>
 

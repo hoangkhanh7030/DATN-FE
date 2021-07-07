@@ -1,11 +1,11 @@
-import * as actionTypes from "../constants";
+import * as actionTypes from "redux/constants";
 
 import {
   addWorkspaceService,
   getWorkspacesService,
   updateWorkspaceService,
   deleteWorkspaceService,
-} from "../../services/user-service";
+} from "services/user-service";
 
 export const getWorkspaces = () => (dispatch) => {
   return getWorkspacesService().then(

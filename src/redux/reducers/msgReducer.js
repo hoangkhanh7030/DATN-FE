@@ -1,4 +1,4 @@
-import { SET_MESSAGE, CLEAR_MESSAGE } from "../constants";
+import { SET_MESSAGE, CLEAR_MESSAGE } from "redux/constants";
 
 const initialState = {};
 

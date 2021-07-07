@@ -5,13 +5,15 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import TheLayout from "./containers/layouts/TheLayout/TheLayout";
-import Login from "./containers/Login";
+import Login from "./containers/login";
+import { LOGIN_URL } from "./constants";
+import TheLayout from "containers/layouts/layout/TheLayout";
+
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path={"/login"} component={Login} />
+        <Route path={LOGIN_URL} component={Login} />
 
         {routes.map((route, idx) => {
           return (
@@ -25,7 +27,7 @@ function App() {
             )
           );
         })}
-        <Redirect from="/" to="/login" />
+        <Redirect from="/" to={LOGIN_URL} />
       </Switch>
     </Router>
   );

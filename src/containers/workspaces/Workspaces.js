@@ -9,19 +9,20 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { theme } from "../../assets/css/Common";
-import WorkspaceDialog from "../../components/workspace/dialog/Dialog";
-import Workspace from "../../components/workspace/Workspace";
+import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
-import { Progress } from "../../components/common/Progress";
-import { Message } from "../../components/common/Message";
+
 import {
   addWorkspace,
   getWorkspaces,
   updateWorkspace,
   deleteWorkspace,
-} from "../../redux/actions/workspaceAction";
-import * as constants from "../../constants";
+} from "redux/actions/workspaceAction";
+import * as constants from "constants/index";
+import Workspace from "components/workspace/Workspace";
+import WorkspaceDialog from "components/workspace/dialog/Dialog";
+import { Message } from "components/common/Message";
+import { Progress } from "components/common/Progress";
 
 export default function Workspaces() {
   const classes = useStyles();
@@ -105,7 +106,7 @@ export default function Workspaces() {
 
   // handle create workspace
   const handelCreateWorkspace = () => {
-    let data = {
+    const data = {
       name,
     };
     setLoading(true);
@@ -122,7 +123,7 @@ export default function Workspaces() {
 
   // handle edit workspace
   const handelEditWorkspace = (id) => {
-    let data = {
+    const data = {
       name,
     };
 
@@ -164,7 +165,7 @@ export default function Workspaces() {
   return (
     <ThemeProvider theme={theme}>
       {" "}
-      <Typography variant="h1" style={{ marginBottom: "10px" }}>
+      <Typography variant="h1" className={classes.header}>
         Workspaces
       </Typography>
       <Grid container spacing={5}>

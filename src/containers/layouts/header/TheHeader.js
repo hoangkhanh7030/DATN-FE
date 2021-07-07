@@ -12,28 +12,35 @@ import {
 } from "@material-ui/core";
 
 import { useStyles } from "./style";
-import logo from "../../../assets/icons/app-logo.svg";
-import { commonStyle, theme } from "../../../assets/css/Common";
-import avatar from "../../../assets/images/avatar.png";
+import logo from "assets/icons/app-logo.svg";
+import { commonStyle, theme } from "assets/css/Common";
+import avatar from "assets/images/avatar.png";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { logout } from "../../../redux/actions/authAction";
+import { logout } from "redux/actions/authAction";
+import {
+  DASHBOARD_URL,
+  PROJECTS_URL,
+  PEOPLE_URL,
+  REPORT_URL,
+  LOGIN_URL,
+} from "constants/index";
 
 const headersData = [
   {
     label: "Dashboard",
-    href: "/dashboard",
+    href: DASHBOARD_URL,
   },
   {
     label: "Projects",
-    href: "/projects",
+    href: PROJECTS_URL,
   },
   {
     label: "People",
-    href: "/people",
+    href: PEOPLE_URL,
   },
   {
     label: "Report",
-    href: "/report",
+    href: REPORT_URL,
   },
 ];
 
@@ -42,7 +49,6 @@ export default function TheHeader() {
   const commonClasses = commonStyle();
 
   const dispatch = useDispatch();
-  const navbar = true;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -73,9 +79,9 @@ export default function TheHeader() {
         horizontal: "center",
       }}
     >
-      <Button style={{textTransform:"none"}}>
+      <Button style={{ textTransform: "none" }}>
         <ExitToAppIcon className={commonClasses.icon} />
-        <a href="/login" className={commonClasses.a} onClick={handleLogout}>
+        <a href={LOGIN_URL} className={commonClasses.a} onClick={handleLogout}>
           Log out
         </a>
       </Button>
@@ -114,7 +120,7 @@ export default function TheHeader() {
         <AppBar className={classes.root}>
           <Toolbar className={classes.toolbar}>
             {appLogo}
-            {navbar && <div>{getMenuButtons()}</div>}
+            {<div> {getMenuButtons()}</div>}
             <Avatar alt="Avatar" src={avatar} onClick={handleOpenLogout} />
             {logoutButton}
           </Toolbar>

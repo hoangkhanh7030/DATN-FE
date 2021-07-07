@@ -4,32 +4,25 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  makeStyles,
   TextField,
   ThemeProvider,
 } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { theme } from "../../../assets/css/Common";
+import { theme } from "assets/css/Common";
+import React from "react";
+import { useStyles } from "./style";
 
 export default function WorkspaceDialog(props) {
-  const useStyles = makeStyles({
-    createBtn: {
-      marginRight: "15px",
-    },
-  });
+  const classes = useStyles();
   const {
-    open,
-    content,
-    name,
+    open = true,
+    content = {},
+    name = "",
     handleCloseDialog,
     handleInputName,
     onHandleSubmit,
-    error,
-  } = {
-    ...props,
-  };
-  const classes = useStyles();
-  useEffect(() => {}, []);
+    error = "",
+  } = props;
+
   return (
     <ThemeProvider theme={theme}>
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="xs" fullWidth>

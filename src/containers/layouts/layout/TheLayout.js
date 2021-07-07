@@ -1,5 +1,5 @@
 import React from "react";
-import TheHeader from "../TheHeader/TheHeader";
+import TheHeader from "../header/TheHeader";
 import { Container } from "@material-ui/core";
 import { useStyles } from "./style";
 

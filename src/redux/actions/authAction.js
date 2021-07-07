@@ -1,6 +1,5 @@
-import * as actionTypes from "../constants";
-
-import { loginService, logoutService } from "../../services/auth-service";
+import * as actionTypes from "redux/constants";
+import { loginService, logoutService } from "services/auth-service";
 
 export const login = (loginData) => (dispatch) => {
   return loginService(loginData).then(

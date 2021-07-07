@@ -16,28 +16,26 @@ import {
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
-import { theme, commonStyle } from "../../assets/css/Common";
+import { theme, commonStyle } from "assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
-import AlertDialog from "../common/AlertDialog";
+import AlertDialog from "components/common/AlertDialog";
 
 export default function Workspace(props) {
   const {
-    workspace,
-    open,
-    openDelete,
-    content,
-    name,
+    workspace = {},
+    open = true,
+    openDelete = true,
+    content = {},
+    name = "",
     handleOpenDialog,
     handleCloseDialog,
     handleInputName,
-    error,
+    error = "",
     onHandleSubmit,
     handleCloseDeleteDialog,
     handleOpenDeleteDialog,
     handelDeleteWorkspace,
-  } = {
-    ...props,
-  };
+  } = props;
 
   const classes = useStyles();
   const iconClasses = commonStyle();
@@ -118,8 +116,7 @@ export default function Workspace(props) {
                   >
                     <MenuItem onClick={handleOpenDialog}>
                       <Icon
-                        className={`${iconClasses.icon} fas fa-pen`}
-                        style={{ fontSize: "16px" }}
+                        className={`${iconClasses.icon} fas fa-pen ${classes.icon}`}
                       />
                       Edit
                     </MenuItem>
@@ -134,8 +131,7 @@ export default function Workspace(props) {
                     />
                     <MenuItem onClick={handleOpenDeleteDialog}>
                       <Icon
-                        className={`${iconClasses.icon} fas fa-trash`}
-                        style={{ fontSize: "16px" }}
+                        className={`${iconClasses.icon} fas fa-trash ${classes.icon}`}
                       />
                       Delete
                     </MenuItem>

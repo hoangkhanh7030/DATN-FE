@@ -12,8 +12,6 @@ export const useStyles = makeStyles((theme) => ({
   logoApp: { display: "flex", alignItems: "center" },
   logo: {
     marginLeft: "5px",
-    color: colors.blackColor,
-    textAlign: "left",
   },
   menuButton: {
     fontWeight: 600,

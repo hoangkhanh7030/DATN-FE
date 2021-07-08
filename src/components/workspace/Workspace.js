@@ -14,6 +14,7 @@ import {
   IconButton,
   ThemeProvider,
   Icon,
+  Typography,
 } from "@material-ui/core";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -21,6 +22,8 @@ import { useStyles } from "./style";
 import { theme, commonStyle } from "assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
 import AlertDialog from "components/common/AlertDialog";
+import { useHistory } from "react-router-dom";
+import { WORKSPACES_URL } from "constants/index";
 
 export default function Workspace(props) {
   const {
@@ -39,8 +42,17 @@ export default function Workspace(props) {
     handelDeleteWorkspace,
   } = props;
 
+  const history = useHistory();
   const classes = useStyles();
   const iconClasses = commonStyle();
+
+  const noPermission = (workspace) => {
+    return _.get(workspace, "role") !== "EDIT";
+  };
+
+  const accessWorkspacePage = (workspace) => {
+    history.push(`${WORKSPACES_URL}/${_.get(workspace, "id")}`);
+  };
 
   const info = {
     name: _.get(workspace, "name"),
@@ -94,11 +106,22 @@ export default function Workspace(props) {
       <Card className={classes.root}>
         <CardHeader
           action={
-            <IconButton ref={anchorRef} onClick={handleToggle}>
-              <MoreHorizIcon />
-            </IconButton>
+            noPermission(workspace) ? (
+              <></>
+            ) : (
+              <IconButton ref={anchorRef} onClick={handleToggle}>
+                <MoreHorizIcon />
+              </IconButton>
+            )
           }
-          title={info.name}
+          title={
+            <Typography
+              variant="h2"
+              onClick={() => accessWorkspacePage(workspace)}
+            >
+              {info.name}
+            </Typography>
+          }
           subheader={subHeader}
           titleTypographyProps={{ variant: "h2" }}
         />

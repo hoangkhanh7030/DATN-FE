@@ -12,6 +12,17 @@ export const loginService = (loginData) => {
     });
 };
 
+export const loginWithGGService = (googleData) => {
+  return axios
+    .post(process.env.REACT_APP_API_URL + "/auth/google", googleData)
+    .then((response) => {
+      if (response.data.jwt) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    });
+};
+
 export const logoutService = () => {
   localStorage.removeItem("user");
 };

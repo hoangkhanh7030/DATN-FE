@@ -3,7 +3,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as constants from "constants/index";
-import { login } from "redux/actions/authAction";
+import { login, loginWithGG } from "redux/actions/authAction";
 import LoginForm from "components/login/LoginForm";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
@@ -14,7 +14,7 @@ export default function Login() {
 
   const [loginData, setLogin] = useState({ email: "", password: "" });
   const [invalidInputs, setInvalidInputs] = useState({});
-  
+
   const { isLoggedIn, isLoading } = useSelector((state) => state.auth);
 
   const { message } = useSelector((state) => state.message);
@@ -60,17 +60,24 @@ export default function Login() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-  
-    if (!isValid()) {
-     
-      return;
-    }
+
+    if (!isValid()) return;
+
     dispatch(login(loginData))
       .then(() => {
-        history.push("/workspaces");
+        history.push(constants.WORKSPACES_URL);
       })
       .catch(() => {
-        
+        setOpenError(true);
+      });
+  };
+
+  const handleLoginWithGG = (googleData) => {
+    dispatch(loginWithGG(googleData.profileObj))
+      .then(() => {
+        history.push(constants.WORKSPACES_URL);
+      })
+      .catch(() => {
         setOpenError(true);
       });
   };
@@ -83,8 +90,8 @@ export default function Login() {
         handleInputChange={handleInputChange}
         handleFormSubmit={handleFormSubmit}
         errors={invalidInputs}
+        handleLoginWithGG={handleLoginWithGG}
       />
-      
       {message && (
         <Message
           message={message}
@@ -93,7 +100,7 @@ export default function Login() {
           type="error"
         />
       )}
-      
+
       <Progress isOpen={isLoading} />
     </Fragment>
   );

@@ -103,7 +103,7 @@ export default function Workspaces() {
   };
 
   // handle create workspace
-  const handelCreateWorkspace = () => {
+  const handleCreateWorkspace = () => {
     if (!name) return;
     const data = {
       name,
@@ -124,7 +124,7 @@ export default function Workspaces() {
   };
 
   // handle edit workspace
-  const handelEditWorkspace = (id) => {
+  const handleEditWorkspace = (id) => {
     if (!name) return;
     const data = {
       name,
@@ -141,6 +141,7 @@ export default function Workspaces() {
         setOpenMessage(true);
       });
 
+    setName("");
     setOpenEdit(false);
   };
 
@@ -188,7 +189,7 @@ export default function Workspaces() {
                 handleInputName={handleInputName}
                 error={dialogError}
                 onHandleSubmit={() =>
-                  handelEditWorkspace(_.get(workspace, "id"))
+                  handleEditWorkspace(_.get(workspace, "id"))
                 }
                 handelDeleteWorkspace={() =>
                   handelDeleteWorkspace(_.get(workspace, "id"))
@@ -213,7 +214,7 @@ export default function Workspaces() {
               name={name}
               handleCloseDialog={handleCloseCreateDialog}
               handleInputName={handleInputName}
-              onHandleSubmit={handelCreateWorkspace}
+              onHandleSubmit={handleCreateWorkspace}
               error={dialogError}
             />
           </Paper>

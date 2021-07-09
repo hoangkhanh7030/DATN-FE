@@ -73,6 +73,7 @@ export default function Login() {
   };
 
   const handleLoginWithGG = (googleData) => {
+ 
     dispatch(loginWithGG(googleData.profileObj))
       .then(() => {
         history.push(constants.WORKSPACES_URL);

@@ -11,7 +11,6 @@ export default function Workspace() {
 
   return (
     <ThemeProvider theme={theme}>
-      {" "}
       <Typography variant="h1" style={{ marginBottom: "10px" }}>
         Workspace {id}
       </Typography>

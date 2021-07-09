@@ -14,6 +14,10 @@ export const commonStyle = makeStyles(() => ({
     marginRight: "10px",
     color: primaryColor,
   },
+  action: {
+    marginRight: "10px",
+    fontSize: "18px",
+  },
   warning: {
     marginRight: "10px",
     color: ggColor,

@@ -203,7 +203,6 @@ export default function TheHeader() {
         displayEmpty
       >
         <MenuItem value="" component={RouterLink} to="/workspaces">
-          {" "}
           <span className={classes.select}>
             <DesktopWindowsIcon className={classes.selectIcon} />
             Workspaces
@@ -264,7 +263,7 @@ export default function TheHeader() {
   return (
     <ThemeProvider theme={theme}>
       <header>
-        <AppBar className={classes.root}>
+        <AppBar className={classes.root} >
           <Toolbar className={classes.toolbar}>
             <div style={{ display: "flex" }}>
               {appLogo}

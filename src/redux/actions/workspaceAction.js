@@ -6,7 +6,7 @@ import {
   getWorkspacesService,
   updateWorkspaceService,
   deleteWorkspaceService,
-} from "services/user-service";
+} from "services/workspace-service";
 
 export const getWorkspaces = () => (dispatch) => {
   dispatch({

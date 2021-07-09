@@ -5,16 +5,16 @@ export const StyledTableCell = withStyles((theme) => ({
   head: {
     fontWeight: "bold",
     borderRight: "1px solid #E6E6E6",
-    '&:last-child':{
-      borderRight:0,
-    }
+    "&:last-child": {
+      borderRight: 0,
+    },
   },
   body: {
     fontSize: 14,
     border: "1px solid #E6E6E6",
-    '&:last-child':{
-      borderRight:0,
-    }
+    "&:last-child": {
+      borderRight: 0,
+    },
   },
 }))(TableCell);
 
@@ -30,7 +30,6 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: "12ch",
     },
   },
   pagination: {
@@ -93,5 +92,12 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: "0px 0px 5px 5px",
     border: "1px solid #E6E6E6",
     borderTop: 0,
+  },
+  button: {
+    padding: "8px 20px",
+  },
+
+  dropdown: {
+    marginRight: 10,
   },
 }));

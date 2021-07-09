@@ -26,46 +26,40 @@ const ProjectsTable = ({ rows, page, rowsPerPage, emptyRows }) => {
             <StyledTableCell align="center">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {rows
-            .slice(
-              page === 1 ? page - 1 : (page - 1) * rowsPerPage,
-              page * rowsPerPage
-            )
-            .map((row) => {
-              return (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    <i
-                      className={`fas fa-circle ${commonClasses.icon}`}
-                      style={{ color: row.color }}
-                    ></i>
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.calories}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Button
-                      className={
-                        row.fat === "active" ? classes.active : classes.inactive
-                      }
-                    >
-                      {row.fat}
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <i
-                      className={`fas fa-pencil-alt ${commonClasses.action}`}
-                    ></i>
-                    <i className={`fas fa-inbox ${commonClasses.action}`}></i>
-                    <i
-                      className={`far fa-trash-alt ${commonClasses.action}`}
-                    ></i>
-                  </StyledTableCell>
-                </StyledTableRow>
-              );
-            })}
+          {rows.map((row) => {
+            return (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">
+                  <i
+                    className={`fas fa-circle ${commonClasses.icon}`}
+                    style={{ color: row.color }}
+                  ></i>
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.clientName}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <Button
+                    className={
+                      row.isActivate ? classes.active : classes.inactive
+                    }
+                  >
+                    {row.isActivate ? "active" : "archived"}
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <i
+                    className={`fas fa-pencil-alt ${commonClasses.action}`}
+                  ></i>
+                  <i className={`fas fa-inbox ${commonClasses.action}`}></i>
+                  <i className={`far fa-trash-alt ${commonClasses.action}`}></i>
+                </StyledTableCell>
+              </StyledTableRow>
+            );
+          })}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: emptyRows }}>

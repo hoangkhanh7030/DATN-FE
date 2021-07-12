@@ -2,19 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
 
-import {
-  Button,
-  ThemeProvider,
-  TextField,
-  Menu,
-  MenuItem,
-  FormControl,
-  Typography,
-} from "@material-ui/core";
-import ExpandMoreOutlinedIcon from "@material-ui/icons/ExpandMoreOutlined";
-import Pagination from "@material-ui/lab/Pagination";
-import SearchBar from "material-ui-search-bar";
+import { ThemeProvider, Box } from "@material-ui/core";
+
 import ProjectsTable from "./Table";
+import TableHeader from "./TableHeader";
+import TableFooter from "./TableFooter";
 
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
@@ -22,31 +14,12 @@ import { Progress } from "components/common/Progress";
 import { getProjects } from "redux/actions/projectAction";
 import { clearMessage } from "redux/actions/msgAction";
 
-import { theme } from "../../assets/css/Common";
+import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
+import { LOGIN_URL } from "constants/index";
 
-const actions = [
-  { label: "Import", value: "Import" },
-  { label: "Export", value: "Export" },
-];
-
-const sizes = [
-  { label: 5, value: 5 },
-  { label: 10, value: 10 },
-  { label: 15, value: 15 },
-];
-
-const types = [
-  { label: "TYPE", value: "TYPE" },
-  { label: "Project Name", value: "Project Name" },
-  { label: "Client Name", value: "Client Name" },
-];
-
-const statuses = [
-  { label: "STATUS", value: "STATUS" },
-  { label: "active", value: "active" },
-  { label: "archived", value: "archived" },
-];
+const STATUS = "status";
+const SIZE = "size";
 
 export default function Projects() {
   const classes = useStyles();
@@ -56,7 +29,6 @@ export default function Projects() {
 
   const { isLoggedIn } = useSelector((state) => state.auth);
   const { message } = useSelector((state) => state.message);
-  const { isLoading } = useSelector((state) => state.projects);
 
   const [projects, setProjects] = useState([]);
 
@@ -68,8 +40,6 @@ export default function Projects() {
   const [hasMessage, setOpenMessage] = useState(false);
 
   const storeProjects = useSelector((state) => state.projects);
-
-  const [type, setType] = useState("TYPE");
 
   const [status, setStatus] = useState("STATUS");
 
@@ -98,17 +68,13 @@ export default function Projects() {
     setPage(newPage);
   };
 
-  const handleChange = (event) => {
+  const handleChangeDropdown = (event) => {
     switch (event.target.name) {
-      case "type": {
-        setType(event.target.value);
-        break;
-      }
-      case "status": {
+      case STATUS: {
         setStatus(event.target.value);
         break;
       }
-      case "size": {
+      case SIZE: {
         setRowsPerPage(event.target.value);
         break;
       }
@@ -117,147 +83,33 @@ export default function Projects() {
     }
   };
 
-  /* handle popup 'MORE' options */
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, projects.length - (page - 1) * rowsPerPage);
-
-  if (!isLoggedIn) return <Redirect to="/" />;
+  if (!isLoggedIn) return <Redirect to={LOGIN_URL} />;
 
   return (
     <ThemeProvider theme={theme}>
-      {/* header of table */}
-      <div className={`${classes.header} ${classes.flex}`}>
-        <div className={classes.flex}>
-          <SearchBar value={searched} className={classes.searchbar} />
-          <FormControl className={classes.root} noValidate autoComplete="off">
-            <TextField
-              select
-              value={type}
-              name={"type"}
-              onChange={handleChange}
-              variant="outlined"
-              margin="dense"
-            >
-              {types.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </FormControl>
-          <FormControl className={classes.root} noValidate autoComplete="off">
-            <TextField
-              select
-              value={status}
-              name={"status"}
-              onChange={handleChange}
-              variant="outlined"
-              margin="dense"
-            >
-              {statuses.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </FormControl>
-        </div>
-
-        <div className={classes.flex}>
-          <Button
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-            variant="outlined"
-            className={`${classes.button} ${classes.dropdown}`}
-            endIcon={<ExpandMoreOutlinedIcon />}
-          >
-            MORE
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            getContentAnchorEl={null}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-          >
-            {actions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Menu>
-
-          <Button
-            color="primary"
-            variant="contained"
-            className={classes.button}
-          >
-            New Project
-          </Button>
-        </div>
-      </div>
-      {/* content of table */}
-      <ProjectsTable
-        rows={projects}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        emptyRows={emptyRows}
+      <TableHeader
+        searched={searched}
+        status={status}
+        handleChangeDropdown={handleChangeDropdown}
       />
-      {/* footer of table */}
-      <div className={`${classes.footer} ${classes.flex}`}>
-        <div className={classes.flex}>
-          <Typography>SHOW </Typography>
-          <FormControl className={classes.root} noValidate autoComplete="off">
-            <TextField
-              select
-              value={rowsPerPage}
-              name={"size"}
-              onChange={handleChange}
-              variant="outlined"
-              margin="dense"
-            >
-              {sizes.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </FormControl>
-          <Typography> ITEMS </Typography>
-        </div>
 
-        <div className={classes.flex}>
-          <Pagination
-            count={5}
-            variant="outlined"
-            className={classes.pagination}
-            shape="rounded"
-            page={page}
-            onChange={handleChangePage}
-          />
-        </div>
-      </div>
+      <Box className={classes.boxTable}>
+        <ProjectsTable
+          rows={projects}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          emptyRows={emptyRows}
+        />
+      </Box>
+      <TableFooter
+        rowsPerPage={rowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeDropdown={handleChangeDropdown}
+        numPage={storeProjects.numPage}
+        page={page}
+      />
 
       {message && (
         <Message
@@ -268,7 +120,7 @@ export default function Projects() {
         />
       )}
 
-      <Progress isOpen={isLoading} />
+      <Progress isOpen={storeProjects.isLoading} />
     </ThemeProvider>
   );
 }

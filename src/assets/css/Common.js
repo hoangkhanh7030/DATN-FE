@@ -7,6 +7,7 @@ export const disabledColor = "#BCBCBC";
 export const bgColor = "#F5F5F5";
 export const ggColor = "#D63B30";
 export const blackColor = "#000000";
+export const borderColor = "#E0E0E0";
 
 /* ------------ common component styles -------*/
 export const commonStyle = makeStyles(() => ({
@@ -26,7 +27,7 @@ export const commonStyle = makeStyles(() => ({
     marginRight: "10px",
   },
   gglink:{
-    textDecoration:"none", 
+    textDecoration:"none",
     color: secondaryColor,
   },
   btn: {
@@ -36,9 +37,9 @@ export const commonStyle = makeStyles(() => ({
     },
   },
   a: {
-    textDecoration:"none", 
+    textDecoration:"none",
     color: blackColor,
-  }
+ }
 }));
 
 /* ----------- customized theme styles -------*/
@@ -62,6 +63,7 @@ export const theme = createMuiTheme({
     },
     h3: {
       fontSize: "16px",
+      fontWeight: 600,
     },
   },
 });

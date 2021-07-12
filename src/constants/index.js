@@ -4,6 +4,11 @@ export const EMAIL_ERROR = "email is invalid";
 export const PASSWORD_ERROR = "password is required";
 export const EMPTY_ERROR = "this field is required";
 
+/* --------------------- projects ---------------------- */
+export const STATUS = "STATUS";
+export const ACTIVE = "active";
+export const ARCHIVED = "archived";
+
 /* ----------------------- paths ----------------------- */
 export const LOGIN_URL = "/login";
 export const WORKSPACES_URL = "/workspaces";

@@ -1,20 +1,15 @@
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { TableCell, TableRow } from "@material-ui/core";
+import * as colors from "assets/css/Common";
 
 export const StyledTableCell = withStyles((theme) => ({
   head: {
     fontWeight: "bold",
-    borderRight: "1px solid #E6E6E6",
-    "&:last-child": {
-      borderRight: 0,
-    },
+    fontSize: 16,
+    borderRight: `1px solid ${colors.borderColor}`,
   },
   body: {
-    fontSize: 14,
-    border: "1px solid #E6E6E6",
-    "&:last-child": {
-      borderRight: 0,
-    },
+    borderRight: `1px solid ${colors.borderColor}`,
   },
 }))(TableCell);
 
@@ -31,11 +26,15 @@ export const useStyles = makeStyles((theme) => ({
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
     },
+    "& .MuiSelect-outlined": {
+      fontSize: 14,
+    },
   },
+
   pagination: {
     "& .Mui-selected": {
-      backgroundColor: "#000000",
-      color: "#FFFFFF",
+      backgroundColor: colors.blackColor,
+      color: colors.secondaryColor,
     },
   },
 
@@ -43,58 +42,70 @@ export const useStyles = makeStyles((theme) => ({
     minWidth: 700,
   },
 
-  active: {
-    color: "#8BACFB",
-    background: "#C3D4FC",
+  boxTable: {
+    borderLeft: `1px solid ${colors.borderColor}`,
+  },
+
+  status: {
     minWidth: 150,
     height: 25,
-    border: "0.1px solid #8BACFB",
+  },
+
+  active: {
+    color: "#5586F6",
+    background: "#C3D4FC",
+    border: "1px solid #5586F6",
   },
 
   inactive: {
     color: "#A9A9A9",
     background: "#E6E6E6",
-    minWidth: 150,
-    height: 25,
-    border: "0.1px solid #A9A9A9",
+    border: "1px solid #A9A9A9",
   },
 
   flex: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
   },
 
   header: {
-    justifyContent: "space-between",
-    background: "#FFFFFF",
-    padding: 20,
     borderRadius: "5px 5px 0px 0px",
-    border: "1px solid #E6E6E6",
   },
 
   searchbar: {
     background: "#F5F5F5",
-    border: "0.5px solid #E6E6E6",
+    border: `1px solid ${colors.borderColor}`,
     boxShadow: "none",
-    height: "38.5px",
+    height: "38.5px !important",
     marginRight: "8px",
   },
 
   label: {
-    fontSize: "14px",
-    paddingLeft: "20px",
+    fontSize: 14,
+    paddingLeft: 20,
+  },
+
+  container: {
+    background: colors.secondaryColor,
+    padding: 20,
+    border: `1px solid ${colors.borderColor}`,
   },
 
   footer: {
-    justifyContent: "space-between",
-    background: "#FFFFFF",
-    padding: "20px",
     borderRadius: "0px 0px 5px 5px",
-    border: "1px solid #E6E6E6",
     borderTop: 0,
   },
+
   button: {
     padding: "8px 20px",
+  },
+
+  color: {
+    fontSize: 10,
+  },
+  midIcon: {
+    padding: "0px 10px",
   },
 
   dropdown: {

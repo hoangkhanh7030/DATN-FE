@@ -1,6 +1,6 @@
 import * as actionTypes from "redux/constants";
 
-const initialState = { data: [], status: null, isLoading: false };
+const initialState = { data: [], numPage: 1, status: null, isLoading: false };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -12,7 +12,8 @@ export default function reducer(state = initialState, action) {
     case actionTypes.GET_PROJECTS_SUCCEED:
       return {
         ...state,
-        data: payload,
+        data: payload.projectDTOList,
+        numPage: payload.numberSize,
         isLoading: false,
       };
 

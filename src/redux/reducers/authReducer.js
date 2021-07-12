@@ -1,6 +1,7 @@
 import * as actionTypes from "redux/constants";
+import { USER } from "constants/index";
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem(USER));
 
 const initialState = user
   ? { isLoggedIn: true, user, isLoading: false }

@@ -79,7 +79,7 @@ export default function TheHeader() {
         horizontal: "center",
       }}
     >
-      <Button style={{ textTransform: "none" }}>
+      <Button>
         <ExitToAppIcon className={commonClasses.icon} />
         <a href={LOGIN_URL} className={commonClasses.a} onClick={handleLogout}>
           Log out

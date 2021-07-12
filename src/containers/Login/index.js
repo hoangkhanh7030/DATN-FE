@@ -14,7 +14,7 @@ export default function Login() {
 
   const [loginData, setLogin] = useState({ email: "", password: "" });
   const [invalidInputs, setInvalidInputs] = useState({});
-  
+
   const { isLoggedIn, isLoading } = useSelector((state) => state.auth);
 
   const { message } = useSelector((state) => state.message);
@@ -30,7 +30,7 @@ export default function Login() {
   const isValid = (inputNameOnChange = loginData) => {
     const invalidCheck = { ...invalidInputs };
 
-    if ("email" in inputNameOnChange) {
+    if (constants.EMAIL in inputNameOnChange) {
       invalidCheck.email =
         constants.EMAIL_REGEX.test(inputNameOnChange.email) &&
         inputNameOnChange.email
@@ -38,7 +38,7 @@ export default function Login() {
           : constants.EMAIL_ERROR;
     }
 
-    if ("password" in inputNameOnChange) {
+    if (constants.PASSWORD in inputNameOnChange) {
       invalidCheck.password = inputNameOnChange.password
         ? ""
         : constants.PASSWORD_ERROR;
@@ -60,17 +60,15 @@ export default function Login() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-  
+
     if (!isValid()) {
-     
       return;
     }
     dispatch(login(loginData))
       .then(() => {
-        history.push("/workspaces");
+        history.push(constants.WORKSPACES_URL);
       })
       .catch(() => {
-        
         setOpenError(true);
       });
   };
@@ -84,7 +82,7 @@ export default function Login() {
         handleFormSubmit={handleFormSubmit}
         errors={invalidInputs}
       />
-      
+
       {message && (
         <Message
           message={message}
@@ -93,7 +91,7 @@ export default function Login() {
           type="error"
         />
       )}
-      
+
       <Progress isOpen={isLoading} />
     </Fragment>
   );

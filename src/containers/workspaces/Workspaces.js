@@ -59,7 +59,7 @@ export default function Workspaces() {
     setWorkspaces(storeWorkspaces.data);
   }, [storeWorkspaces.data]);
 
-  if (!isLoggedIn) return <Redirect to="/" />;
+  if (!isLoggedIn) return <Redirect to={constants.LOGIN_URL} />;
 
   // handle workspace dialog
   const createContent = {

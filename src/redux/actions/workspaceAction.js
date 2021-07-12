@@ -23,10 +23,7 @@ export const getWorkspaces = () => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        _.get(error, "response") &&
-        _.get(error, ["response", "data"]) &&
-        _.get(error, ["response", "data", "error"]);
+      const message = _.get(error, ["response", "data", "error"]);
 
       dispatch({
         type: actionTypes.GET_WORKSPACES_FAILED,
@@ -61,10 +58,7 @@ export const addWorkspace = (createdData) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        _.get(error, "response") &&
-        _.get(error, ["response", "data"]) &&
-        _.get(error, ["response", "data", "error"]);
+      const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ADD_WORKSPACE_FAILED,
       });
@@ -98,10 +92,7 @@ export const updateWorkspace = (updatedData, id) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        _.get(error, "response") &&
-        _.get(error, ["response", "data"]) &&
-        _.get(error, ["response", "data", "error"]);
+      const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.UPDATE_WORKSPACE_FAILED,
       });
@@ -136,10 +127,7 @@ export const deleteWorkspace = (id) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        _.get(error, "response") &&
-        _.get(error, ["response", "data"]) &&
-        _.get(error, ["response", "data", "error"]);
+      const message = _.get(error, ["response", "data", "error"]);
 
       dispatch({
         type: actionTypes.DELETE_WORKSPACE_FAILED,

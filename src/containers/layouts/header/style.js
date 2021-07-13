@@ -41,7 +41,8 @@ export const useStyles = makeStyles((theme) => ({
   newBtn: {
     margin: "10px 16px",
   },
-
+  center: { textAlign: "center" },
+  flex: { display: "flex" },
 }));
 
 export const MenuProps = {

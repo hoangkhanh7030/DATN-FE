@@ -5,7 +5,8 @@ export const PASSWORD_ERROR = "password is required";
 export const EMPTY_ERROR = "this field is required";
 
 /* ----------------------- paths ----------------------- */
-export const LOGIN_URL = "/login";
+export const HOMEPAGE = "/";
+export const LOGIN_URL = "/login" ;
 export const WORKSPACES_URL = "/workspaces";
 export const DASHBOARD_URL = "/dashboard";
 export const PROJECTS_URL = "/projects";

@@ -25,6 +25,10 @@ import WorkspaceDialog from "components/workspace/dialog/Dialog";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
 import { clearMessage } from "redux/actions/msgAction";
+import {
+  CREATE_WORKSPACE_DIALOG,
+  EDIT_WORKSPACE_DIALOG,
+} from "components/common/Dialog";
 
 export default function Workspaces() {
   const classes = useStyles();
@@ -32,7 +36,7 @@ export default function Workspaces() {
   const { isLoggedIn } = useSelector((state) => state.auth);
   const { status, isLoading } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
-  const [hasMessage, setOpenMessage] = useState(false);
+  const [isOpenMessage, setIsOpenMessage] = useState(false);
 
   const [name, setName] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
@@ -49,7 +53,7 @@ export default function Workspaces() {
   useEffect(() => {
     dispatch(clearMessage());
 
-    dispatch(getWorkspaces()).catch(() => setOpenMessage(true));
+    dispatch(getWorkspaces()).catch(() => setIsOpenMessage(true));
   }, [dispatch]);
 
   useEffect(() => {
@@ -59,31 +63,22 @@ export default function Workspaces() {
     setWorkspaces(storeWorkspaces.data);
   }, [storeWorkspaces.data]);
 
-  if (!isLoggedIn) return <Redirect to="/" />;
+  if (!isLoggedIn) return <Redirect to={constants.LOGIN_URL} />;
 
   // handle workspace dialog
-  const createContent = {
-    title: "Create new workspace",
-    btnTitle: "Create",
-  };
-  const handleOpenCreateDialog = () => {
-    setOpenCreate(true);
-  };
-  const handleCloseCreateDialog = () => {
-    setOpenCreate(false);
+  const handleCreateDialogState = () => {
+    setOpenCreate(!openCreate);
     setName("");
+    setDialogError("");
   };
 
-  const editContent = {
-    title: "Edit workspace",
-    btnTitle: "Save",
-  };
   const handleOpenEditDialog = () => {
     setOpenEdit(true);
   };
   const handleCloseEditDialog = () => {
     setOpenEdit(false);
     setName("");
+    setDialogError("");
   };
   const handleOpenDeleteDialog = () => {
     setOpenDelete(true);
@@ -93,39 +88,41 @@ export default function Workspaces() {
   };
 
   const handleInputName = (e) => {
-    if (!e.target.value.trim()) {
-      setDialogError(constants.EMPTY_ERROR);
-    } else {
-      setDialogError("");
-    }
-
+    setDialogError(!e.target.value.trim() ? constants.EMPTY_ERROR : "");
     setName(e.target.value);
   };
 
   // handle create workspace
   const handleCreateWorkspace = () => {
-    if (!name) return;
+    if (!name) {
+      setDialogError(constants.EMPTY_ERROR);
+      return;
+    }
     const data = {
       name,
     };
     dispatch(addWorkspace(data))
       .then(() => {
         dispatch(getWorkspaces()).catch(() => {
-          setOpenMessage(true);
+          setIsOpenMessage(true);
         });
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       })
       .catch(() => {
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       });
 
     setName("");
+    setDialogError("");
     setOpenCreate(false);
   };
 
   // handle edit workspace
   const handleEditWorkspace = (id) => {
-    if (!name) return;
+    if (!name) {
+      setDialogError(constants.EMPTY_ERROR);
+      return;
+    }
     const data = {
       name,
     };
@@ -133,15 +130,16 @@ export default function Workspaces() {
     dispatch(updateWorkspace(data, id))
       .then(() => {
         dispatch(getWorkspaces()).catch(() => {
-          setOpenMessage(true);
+          setIsOpenMessage(true);
         });
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       })
       .catch(() => {
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       });
 
     setName("");
+    setDialogError("");
     setOpenEdit(false);
   };
 
@@ -149,12 +147,12 @@ export default function Workspaces() {
     dispatch(deleteWorkspace(id))
       .then(() => {
         dispatch(getWorkspaces()).catch(() => {
-          setOpenMessage(true);
+          setIsOpenMessage(true);
         });
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       })
       .catch(() => {
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       });
 
     setOpenDelete(false);
@@ -164,7 +162,7 @@ export default function Workspaces() {
     if (reason === "clickaway") {
       return;
     }
-    setOpenMessage(false);
+    setIsOpenMessage(false);
   };
 
   return (
@@ -180,7 +178,7 @@ export default function Workspaces() {
                 workspace={workspace}
                 open={openEdit}
                 openDelete={openDelete}
-                content={editContent}
+                content={EDIT_WORKSPACE_DIALOG}
                 name={_.get(workspace, "name")}
                 handleCloseDialog={handleCloseEditDialog}
                 handleOpenDialog={handleOpenEditDialog}
@@ -200,7 +198,7 @@ export default function Workspaces() {
 
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper}>
-            <div onClick={handleOpenCreateDialog}>
+            <div onClick={handleCreateDialogState}>
               <IconButton>
                 <AddIcon className={classes.addIcon} />
               </IconButton>
@@ -210,9 +208,9 @@ export default function Workspaces() {
             </Typography>
             <WorkspaceDialog
               open={openCreate}
-              content={createContent}
+              content={CREATE_WORKSPACE_DIALOG}
               name={name}
-              handleCloseDialog={handleCloseCreateDialog}
+              handleCloseDialog={handleCreateDialogState}
               handleInputName={handleInputName}
               onHandleSubmit={handleCreateWorkspace}
               error={dialogError}
@@ -224,7 +222,7 @@ export default function Workspaces() {
       {message && (
         <Message
           message={message}
-          isOpen={hasMessage}
+          isOpen={isOpenMessage}
           handleCloseMessage={handleCloseMessage}
           type={status === 200 ? "success" : "error"}
         />

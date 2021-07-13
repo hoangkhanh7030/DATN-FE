@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_URL } from "constants/index";
+import { LOGIN_URL, USER } from "constants/index";
 
 export const loginService = (loginData) => {
   return axios
@@ -17,7 +17,7 @@ export const loginWithGGService = (googleData) => {
     .post(process.env.REACT_APP_API_URL + "/auth/google", googleData)
     .then((response) => {
       if (response.data.jwt) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem(USER, JSON.stringify(response.data));
       }
       return response.data;
     });

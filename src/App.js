@@ -6,7 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Login from "./containers/login";
-import { LOGIN_URL } from "./constants";
+import { HOMEPAGE, LOGIN_URL } from "./constants";
 import TheLayout from "containers/layouts/layout/TheLayout";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
             )
           );
         })}
-        <Redirect from="/" to={LOGIN_URL} />
+        <Redirect from={HOMEPAGE} to={LOGIN_URL} />
       </Switch>
     </Router>
   );

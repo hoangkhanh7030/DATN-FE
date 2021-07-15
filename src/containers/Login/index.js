@@ -30,7 +30,7 @@ export default function Login() {
   const isValid = (inputNameOnChange = loginData) => {
     const invalidCheck = { ...invalidInputs };
 
-    if ("email" in inputNameOnChange) {
+    if (constants.EMAIL in inputNameOnChange) {
       invalidCheck.email =
         constants.EMAIL_REGEX.test(inputNameOnChange.email) &&
         inputNameOnChange.email
@@ -38,7 +38,7 @@ export default function Login() {
           : constants.EMAIL_ERROR;
     }
 
-    if ("password" in inputNameOnChange) {
+    if (constants.PASSWORD in inputNameOnChange) {
       invalidCheck.password = inputNameOnChange.password
         ? ""
         : constants.PASSWORD_ERROR;

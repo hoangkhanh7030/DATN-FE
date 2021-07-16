@@ -15,4 +15,10 @@ export const useStyles = makeStyles({
   icon: {
     fontSize: "16px",
   },
+  overflowWithDots: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    width: "200px",
+  },
 });

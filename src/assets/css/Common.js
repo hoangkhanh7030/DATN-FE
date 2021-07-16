@@ -21,8 +21,8 @@ export const commonStyle = makeStyles(() => ({
   ggicon: {
     marginRight: "10px",
   },
-  gglink:{
-    textDecoration:"none", 
+  gglink: {
+    textDecoration: "none",
     color: secondaryColor,
   },
   btn: {
@@ -32,9 +32,9 @@ export const commonStyle = makeStyles(() => ({
     },
   },
   a: {
-    textDecoration:"none", 
+    textDecoration: "none",
     color: blackColor,
-  }
+  },
 }));
 
 /* ----------- customized theme styles -------*/
@@ -45,7 +45,7 @@ export const theme = createMuiTheme({
     },
     secondary: {
       main: ggColor,
-    }
+    },
   },
   typography: {
     h1: {

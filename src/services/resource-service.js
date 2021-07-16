@@ -1,6 +1,14 @@
 import axios from "axios";
-import { RESOURCES_URL, WORKSPACES_URL, EXPORT_URL, RESPONSE_TYPE, DOWNLOAD, RESOURCES_CSV } from "constants/index";
-import authHeader from "./data-service";
+import {
+  RESOURCES_URL,
+  WORKSPACES_URL,
+  EXPORT_URL,
+  IMPORT_URL,
+  RESPONSE_TYPE,
+  DOWNLOAD,
+  RESOURCES_CSV,
+} from "constants/index";
+import authHeader, { uploadHeader } from "./data-service";
 
 export const getResourcesService = (workspaceId, resourceParams) => {
   return axios
@@ -76,5 +84,22 @@ export const exportResourcesService = (id) => {
       a.setAttribute(DOWNLOAD, RESOURCES_CSV);
       document.body.appendChild(a);
       a.click();
+    });
+};
+
+export const importResourcesService = (id, file) => {
+  const formData = new FormData();
+  formData.append("csvFile", file);
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${RESOURCES_URL}${IMPORT_URL}`,
+      formData,
+      {
+        headers: uploadHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
     });
 };

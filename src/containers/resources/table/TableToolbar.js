@@ -5,6 +5,7 @@ import {
   Menu,
   MenuItem,
   Select,
+  TextField,
   ThemeProvider,
   Toolbar,
 } from "@material-ui/core";
@@ -27,6 +28,7 @@ export default function TableToolbar(props) {
     handleOpenDialog,
     handleReset,
     handleExportResources,
+    handleImportResources,
   } = props;
   const classes = useToolbarStyles();
 
@@ -39,6 +41,13 @@ export default function TableToolbar(props) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onFileSelect = (e) => {
+    const file = e.target.files[0];
+
+    setAnchorEl(null);
+    handleImportResources(file);
   };
 
   return (
@@ -89,7 +98,18 @@ export default function TableToolbar(props) {
           >
             <MenuItem>Settings</MenuItem>
             <MenuItem onClick={handleExportResources}>Export</MenuItem>
-            <MenuItem>Import</MenuItem>
+            <MenuItem>
+              <label htmlFor="btn-upload">
+                <TextField
+                  type="file"
+                  id="btn-upload"
+                  name="btn-upload"
+                  onChange={onFileSelect}
+                  className={classes.import}
+                />
+                <Button component="span">Import</Button>
+              </label>
+            </MenuItem>
           </Menu>
           <Button
             variant="contained"

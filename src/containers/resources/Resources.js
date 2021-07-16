@@ -14,13 +14,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { clearMessage } from "redux/actions/msgAction";
+import { clearMessage, setMessage } from "redux/actions/msgAction";
 import {
   getResources,
   addResource,
   editResource,
   deleteResource,
   exportResources,
+  importResources,
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
@@ -63,6 +64,8 @@ export default function Resources() {
   const storeTeams = useSelector((state) => state.teams);
 
   const [isUploading, setIsUploading] = useState(false);
+
+  const [errorImport, setErrorImport] = useState(false);
 
   const handleOpenDialog = (resource = null) => {
     setResource(
@@ -240,6 +243,25 @@ export default function Resources() {
     dispatch(exportResources(id));
   };
 
+  const handleImportResources = (file) => {
+    if (file.type === "application/vnd.ms-excel") {
+      dispatch(importResources(id, file))
+        .then(() => {
+          fetchResources(setResourceParams());
+
+          setOpenMessage(true);
+        })
+        .catch(() => {
+          setOpenMessage(true);
+        });
+    } else {
+      dispatch(setMessage("Wrong type of file. Please choose csv file!"));
+      setErrorImport(true);
+      setOpenMessage(true);
+      setErrorImport(false);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <TableToolbar
@@ -251,6 +273,7 @@ export default function Resources() {
         handleOpenDialog={handleOpenDialog}
         handleReset={handleReset}
         handleExportResources={handleExportResources}
+        handleImportResources={handleImportResources}
       />
       <ResourcesTable
         data={resources}
@@ -289,7 +312,9 @@ export default function Resources() {
           message={message}
           isOpen={openMessage}
           handleCloseMessage={handleCloseMessage}
-          type={storeResources.status === 200 ? "success" : "error"}
+          type={
+            storeResources.status === 200 && !errorImport ? "success" : "error"
+          }
         />
       )}
     </ThemeProvider>

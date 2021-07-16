@@ -97,6 +97,9 @@ export const useToolbarStyles = makeStyles({
   resetBtn: {
     padding: `8px !important`,
   },
+  import: {
+    display: "none",
+  },
 });
 
 export const useFooterStyles = makeStyles({

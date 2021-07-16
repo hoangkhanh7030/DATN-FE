@@ -63,7 +63,7 @@ export default function reducer(state = initialState, action) {
 
     case actionTypes.DELETE_RESOURCE_FAILED:
       return { ...state, status: payload.status, isLoading: false };
-      
+
     case actionTypes.EXPORT_RESOURCES:
       return { ...state, isLoading: true };
 
@@ -72,6 +72,19 @@ export default function reducer(state = initialState, action) {
 
     case actionTypes.EXPORT_RESOURCES_FAILED:
       return { ...state, isLoading: false };
+
+    case actionTypes.IMPORT_RESOURCES:
+      return { ...state, isLoading: true };
+
+    case actionTypes.IMPORT_RESOURCES_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.IMPORT_RESOURCES_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
 
     case actionTypes.GET_RESOURCES_BOOKING:
       return { ...state, data: [], isLoading: true };

@@ -16,6 +16,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { commonStyle, theme } from "assets/css/Common";
 import logo from "assets/icons/app-logo.svg";
 import avatar from "assets/images/avatar.png";
+import { CREATE_WORKSPACE_DIALOG } from "components/common/Dialog";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
 import WorkspaceDialog from "components/workspace/dialog/Dialog";
@@ -71,51 +72,42 @@ export default function TheHeader() {
   const workspaces = useSelector((state) => state.workspaces).data;
   const { status, isLoading } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
-  const [hasMessage, setOpenMessage] = useState(false);
+  const [isOpenMessage, setIsOpenMessage] = useState(false);
 
   const [name, setName] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
   const [dialogError, setDialogError] = useState("");
 
   // handle workspace dialog
-  const createContent = {
-    title: "Create new workspace",
-    btnTitle: "Create",
-  };
-
-  const handleOpenCreateDialog = () => {
-    setOpenCreate(true);
-  };
-
-  const handleCloseCreateDialog = () => {
-    setOpenCreate(false);
+  const handleCreateDialogState = () => {
+    setOpenCreate(!openCreate);
     setName("");
+    setDialogError("");
   };
 
   const handleInputName = (e) => {
-    if (!e.target.value.trim()) {
-      setDialogError(constants.EMPTY_ERROR);
-    } else {
-      setDialogError("");
-    }
+    setDialogError(!e.target.value.trim() ? constants.EMPTY_ERROR : "");
     setName(e.target.value);
   };
 
   // handle create workspace
   const handleCreateWorkspace = () => {
-    if (!name) return;
+    if (!name) {
+      setDialogError(constants.EMPTY_ERROR);
+      return;
+    }
     const data = {
       name,
     };
     dispatch(addWorkspace(data))
       .then(() => {
         dispatch(getWorkspaces()).catch(() => {
-          setOpenMessage(true);
+          setIsOpenMessage(true);
         });
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       })
       .catch(() => {
-        setOpenMessage(true);
+        setIsOpenMessage(true);
       });
 
     setName("");
@@ -126,22 +118,20 @@ export default function TheHeader() {
     if (!workspaceId) return;
     dispatch(clearMessage);
 
-    dispatch(getWorkspaces()).catch(() => setOpenMessage(true));
+    dispatch(getWorkspaces()).catch(() => setIsOpenMessage(true));
   }, [dispatch, workspaceId]);
 
   const handleChange = (event) => {
-    if (!event.target.value) {
-      setOpenCreate(true);
-    } else {
-      setWorkspaceId(event.target.value);
-    }
+    !event.target.value
+      ? setOpenCreate(true)
+      : setWorkspaceId(event.target.value);
   };
 
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenMessage(false);
+    setIsOpenMessage(false);
   };
 
   const handleOpenLogout = (event) => {
@@ -202,7 +192,8 @@ export default function TheHeader() {
         onChange={handleChange}
         displayEmpty
       >
-        <MenuItem value="" component={RouterLink} to="/workspaces">
+        <MenuItem value="" component={RouterLink} to={WORKSPACES_URL}>
+          {" "}
           <span className={classes.select}>
             <DesktopWindowsIcon className={classes.selectIcon} />
             Workspaces
@@ -220,12 +211,12 @@ export default function TheHeader() {
               {workspace.name}
             </MenuItem>
           ))}
-        <div style={{ textAlign: "center" }}>
+        <div classNames={classes.center}>
           <Button
             variant="outlined"
             className={classes.newBtn}
             startIcon={<AddCircleOutlineIcon />}
-            onClick={handleOpenCreateDialog}
+            onClick={handleCreateDialogState}
           >
             NEW WORKSPACE
           </Button>
@@ -233,9 +224,9 @@ export default function TheHeader() {
       </Select>
       <WorkspaceDialog
         open={openCreate}
-        content={createContent}
+        content={CREATE_WORKSPACE_DIALOG}
         name={name}
-        handleCloseDialog={handleCloseCreateDialog}
+        handleCloseDialog={handleCreateDialogState}
         handleInputName={handleInputName}
         onHandleSubmit={handleCreateWorkspace}
         error={dialogError}
@@ -265,7 +256,7 @@ export default function TheHeader() {
       <header>
         <AppBar className={classes.root} >
           <Toolbar className={classes.toolbar}>
-            <div style={{ display: "flex" }}>
+            <div className={classes.flex}>
               {appLogo}
               {workspaceSelect}
             </div>
@@ -278,7 +269,7 @@ export default function TheHeader() {
       {message && (
         <Message
           message={message}
-          isOpen={hasMessage}
+          isOpen={isOpenMessage}
           handleCloseMessage={handleCloseMessage}
           type={status === 200 ? "success" : "error"}
         />

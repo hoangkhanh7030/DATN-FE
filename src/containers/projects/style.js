@@ -40,10 +40,30 @@ export const useStyles = makeStyles((theme) => ({
 
   table: {
     minWidth: 700,
+    "& .MuiIconButton-root": {
+      padding: 0,
+    },
   },
 
   boxTable: {
     borderLeft: `1px solid ${colors.borderColor}`,
+  },
+
+  tableTitleCenter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+
+  tableTitleIconCenter: {
+    position: "absolute",
+    right: 0,
+  },
+
+  tableTitleIcon: {
+    fontSize: 14,
+    color: colors.blackColor,
   },
 
   status: {

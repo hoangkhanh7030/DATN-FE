@@ -16,10 +16,7 @@ import { clearMessage } from "redux/actions/msgAction";
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
-import { LOGIN_URL } from "constants/index";
-
-const STATUS = "status";
-const SIZE = "size";
+import { LOGIN_URL, STATUS, ACTIVE } from "constants/index";
 
 export default function Projects() {
   const classes = useStyles();
@@ -41,19 +38,51 @@ export default function Projects() {
 
   const storeProjects = useSelector((state) => state.projects);
 
-  const [status, setStatus] = useState("STATUS");
+  const [status, setStatus] = useState(STATUS);
+
+  const [order, setOrder] = useState(false);
+
+  const [orderBy, setOrderBy] = useState("");
+
+  const onSearchChange = (newValue) => {
+    setSearched(newValue);
+    setPage(1);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+  };
+
+  const handleSort = (orderBy) => {
+    setOrderBy(orderBy);
+    setOrder(!order);
+  };
 
   useEffect(() => {
     dispatch(clearMessage());
-    dispatch(getProjects(id, rowsPerPage, page - 1)).catch(() =>
-      setOpenMessage(true)
-    );
-  }, [dispatch, id, rowsPerPage, page]);
+
+    const timer = setTimeout(() => {
+      dispatch(
+        getProjects(
+          id,
+          page - 1,
+          rowsPerPage,
+          searched,
+          order ? "ASC" : "DESC",
+          orderBy,
+          status === STATUS ? "" : status === ACTIVE ? true : false
+        )
+      );
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [dispatch, id, searched, status, rowsPerPage, page, order, orderBy]);
 
   useEffect(() => {
     if (!storeProjects.data) {
       return;
     }
+
     setProjects(storeProjects.data);
   }, [storeProjects.data]);
 
@@ -69,12 +98,13 @@ export default function Projects() {
   };
 
   const handleChangeDropdown = (event) => {
+    setPage(1);
     switch (event.target.name) {
-      case STATUS: {
+      case "status": {
         setStatus(event.target.value);
         break;
       }
-      case SIZE: {
+      case "size": {
         setRowsPerPage(event.target.value);
         break;
       }
@@ -91,6 +121,8 @@ export default function Projects() {
     <ThemeProvider theme={theme}>
       <TableHeader
         searched={searched}
+        onSearchChange={onSearchChange}
+        cancelSearch={cancelSearch}
         status={status}
         handleChangeDropdown={handleChangeDropdown}
       />
@@ -101,15 +133,18 @@ export default function Projects() {
           page={page}
           rowsPerPage={rowsPerPage}
           emptyRows={emptyRows}
+          handleSort={handleSort}
         />
       </Box>
-      <TableFooter
-        rowsPerPage={rowsPerPage}
-        handleChangePage={handleChangePage}
-        handleChangeDropdown={handleChangeDropdown}
-        numPage={storeProjects.numPage}
-        page={page}
-      />
+      {projects.length > 0 && (
+        <TableFooter
+          rowsPerPage={rowsPerPage}
+          handleChangePage={handleChangePage}
+          handleChangeDropdown={handleChangeDropdown}
+          numPage={storeProjects.numPage}
+          page={page}
+        />
+      )}
 
       {message && (
         <Message

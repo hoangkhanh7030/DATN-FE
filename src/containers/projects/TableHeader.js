@@ -23,6 +23,8 @@ const statuses = [
 export default function Projects({
   searched = "",
   status = constants.STATUS,
+  onSearchChange,
+  cancelSearch,
   handleChangeDropdown,
 }) {
   const classes = useStyles();
@@ -41,7 +43,12 @@ export default function Projects({
   return (
     <Box className={`${classes.container} ${classes.header} ${classes.flex}`}>
       <Box className={classes.flex}>
-        <SearchBar value={searched} className={classes.searchbar} />
+        <SearchBar
+          value={searched}
+          className={classes.searchbar}
+          onCancelSearch={cancelSearch}
+          onChange={(newValue) => onSearchChange(newValue)}
+        />
         <FormControl className={classes.root} noValidate autoComplete="off">
           <TextField
             select

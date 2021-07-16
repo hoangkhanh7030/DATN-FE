@@ -10,14 +10,14 @@ import {
 } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import { GoogleLogin } from "react-google-login";
+import { GoogleButton } from "./GoogleButton";
 
 import logo from "assets/icons/app-logo.svg";
 import loginStyle from "./style";
-import { commonStyle, theme } from "assets/css/Common";
+import { theme } from "assets/css/Common";
 
 const LoginForm = (props) => {
   const classes = loginStyle();
-  const commonClasses = commonStyle();
 
   const { handleInputChange, handleFormSubmit, handleLoginWithGG, errors } =
     props;
@@ -69,17 +69,7 @@ const LoginForm = (props) => {
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
               render={(renderProps) => (
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                  className={classes.google}
-                  color="secondary"
-                >
-                  <i className={`${commonClasses.ggicon} + fab fa-google`}></i>
-                  Login with Google
-                </Button>
+                <GoogleButton onClick={renderProps.onClick} />
               )}
               buttonText="Sign in with Google"
               onSuccess={handleLoginWithGG}

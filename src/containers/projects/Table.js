@@ -7,17 +7,18 @@ import {
   Paper,
   Button,
   Typography,
+  IconButton,
 } from "@material-ui/core";
 
 import { commonStyle } from "../../assets/css/Common";
 import { StyledTableCell, StyledTableRow, useStyles } from "./style";
 import * as _ from "underscore";
 
-const ProjectsTable = ({ rows = [], emptyRows = 5 }) => {
+const ProjectsTable = ({ rows = [], emptyRows = 5, handleSort }) => {
   const classes = useStyles();
   const commonClasses = commonStyle();
 
-  const EMPTY_TABLE = "No projects to load. Please add a new project!";
+  const EMPTY_TABLE = "No projects to load.";
 
   return (
     <TableContainer component={Paper} elevation={0}>
@@ -26,17 +27,29 @@ const ProjectsTable = ({ rows = [], emptyRows = 5 }) => {
           <TableRow>
             <StyledTableCell width="45%">
               <Typography variant="h3" className={classes.flex}>
-                Project Name <i className="fas fa-sort"></i>
+                Project Name
+                <IconButton
+                  className={`${classes.tableTitleIcon} fas fa-sort`}
+                  onClick={() => handleSort("name")}
+                ></IconButton>
               </Typography>
             </StyledTableCell>
             <StyledTableCell width="25%" align="center">
-              <Typography variant="h3" className={classes.flex}>
-                Client Name <i className="fas fa-sort"></i>
+              <Typography variant="h3" className={classes.tableTitleCenter}>
+                Client Name
+                <IconButton
+                  className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
+                  onClick={() => handleSort("clientName")}
+                ></IconButton>
               </Typography>
             </StyledTableCell>
             <StyledTableCell width="15%" align="center">
-              <Typography variant="h3" className={classes.flex}>
-                Status <i className="fas fa-sort"></i>
+              <Typography variant="h3" className={classes.tableTitleCenter}>
+                Status
+                <IconButton
+                  className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
+                  onClick={() => handleSort("isActivate")}
+                ></IconButton>
               </Typography>
             </StyledTableCell>
             <StyledTableCell width="15%" align="center">
@@ -51,10 +64,10 @@ const ProjectsTable = ({ rows = [], emptyRows = 5 }) => {
               return (
                 <StyledTableRow key={row.id}>
                   <StyledTableCell component="th" scope="row">
-                    <i
+                    <IconButton
                       className={`fas fa-circle ${commonClasses.icon}  ${classes.color}`}
                       style={{ color: row.color }}
-                    ></i>
+                    ></IconButton>
                     {_.get(row, "name")}
                   </StyledTableCell>
                   <StyledTableCell align="center">

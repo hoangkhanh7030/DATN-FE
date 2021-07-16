@@ -52,10 +52,7 @@ export const loginWithGG = (googleData) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        _.get(error, "response") &&
-        _.get(error, ["response", "data"]) &&
-        _.get(error, ["response", "data", "error"]);
+      const message = _.get(error, ["response", "data", "error"]);
 
       dispatch({
         type: actionTypes.LOGIN_FAILED,

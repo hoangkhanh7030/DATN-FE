@@ -9,16 +9,18 @@ import {
   Container,
 } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
+import { GoogleLogin } from "react-google-login";
+import { GoogleButton } from "./GoogleButton";
 
 import logo from "assets/icons/app-logo.svg";
 import loginStyle from "./style";
-import { commonStyle, theme } from "assets/css/Common";
+import { theme } from "assets/css/Common";
 
 const LoginForm = (props) => {
   const classes = loginStyle();
-  const commonClasses = commonStyle();
 
-  const { handleInputChange, handleFormSubmit, errors = {} } = props;
+  const { handleInputChange, handleFormSubmit, handleLoginWithGG, errors } =
+    props;
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,15 +66,16 @@ const LoginForm = (props) => {
               Sign In
             </Button>
             <Typography className={classes.text}>OR</Typography>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className={classes.google}
-            >
-              <i className={`${commonClasses.ggicon} fab fa-google`}></i>Login
-              with Google
-            </Button>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              render={(renderProps) => (
+                <GoogleButton onClick={renderProps.onClick} />
+              )}
+              buttonText="Sign in with Google"
+              onSuccess={handleLoginWithGG}
+              onFailure={handleLoginWithGG}
+              cookiePolicy={"single_host_origin"}
+            />
 
             <Grid container>
               <Grid item xs>
@@ -80,7 +83,7 @@ const LoginForm = (props) => {
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2" color="primary">
-                  {"Sign Up"}
+                  Sign Up
                 </Link>
               </Grid>
             </Grid>

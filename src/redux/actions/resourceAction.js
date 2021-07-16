@@ -6,6 +6,7 @@ import {
   addResourceService,
   editResourceService,
   deleteResourceService,
+  exportResourcesService,
 } from "services/resource-service";
 import { getResourcesBookingService } from "containers/workspace/dialog/api";
 
@@ -130,6 +131,40 @@ export const deleteResource = (id, resourceId) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.DELETE_RESOURCE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const exportResources = (id) => (dispatch) => {
+  dispatch({
+    type: actionTypes.EXPORT_RESOURCES,
+  });
+
+  return exportResourcesService(id).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.EXPORT_RESOURCES_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.EXPORT_RESOURCES_FAILED,
       });
 
       dispatch({

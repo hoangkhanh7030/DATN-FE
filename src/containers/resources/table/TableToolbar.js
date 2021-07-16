@@ -26,6 +26,7 @@ export default function TableToolbar(props) {
     handleChangeDropdown,
     handleOpenDialog,
     handleReset,
+    handleExportResources,
   } = props;
   const classes = useToolbarStyles();
 
@@ -87,7 +88,7 @@ export default function TableToolbar(props) {
             elevation={5}
           >
             <MenuItem>Settings</MenuItem>
-            <MenuItem>Export</MenuItem>
+            <MenuItem onClick={handleExportResources}>Export</MenuItem>
             <MenuItem>Import</MenuItem>
           </Menu>
           <Button

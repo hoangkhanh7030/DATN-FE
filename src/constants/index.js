@@ -73,6 +73,8 @@ export const USERS_URL = "/manageUsers";
 export const RE_INVITE_URL = "/reinvited";
 export const REPORTS_URL = "/report";
 export const BOOKINGS_URL = "/bookings";
+export const EXPORT_URL = "/export";
+export const IMPORT_URL = "/import";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";
@@ -135,3 +137,7 @@ export const END_DATE = "END DATE";
 
 export const PERCENTAGE = "PERCENTAGE";
 export const DURATION = "DURATION";
+
+export const DOWNLOAD = "download";
+export const RESPONSE_TYPE = "blob";
+export const RESOURCES_CSV = "Resources.csv";

@@ -20,6 +20,7 @@ import {
   addResource,
   editResource,
   deleteResource,
+  exportResources,
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
@@ -235,6 +236,10 @@ export default function Resources() {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
 
+  const handleExportResources = () => {
+    dispatch(exportResources(id));
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <TableToolbar
@@ -245,6 +250,7 @@ export default function Resources() {
         handleChangeDropdown={handleChangeDropdown}
         handleOpenDialog={handleOpenDialog}
         handleReset={handleReset}
+        handleExportResources={handleExportResources}
       />
       <ResourcesTable
         data={resources}

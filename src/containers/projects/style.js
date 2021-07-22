@@ -18,6 +18,9 @@ export const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
+    "& .MuiTableCell-root": {
+      padding: 13.5,
+    },
   },
 }))(TableRow);
 
@@ -41,7 +44,8 @@ export const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 700,
     "& .MuiIconButton-root": {
-      padding: 0,
+      color: colors.blackColor,
+      padding: 6,
     },
   },
 
@@ -72,7 +76,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   active: {
-    color: "#5586F6",
+    color: "#5586F6 !important",
     background: "#C3D4FC",
     border: "1px solid #5586F6",
   },
@@ -123,6 +127,9 @@ export const useStyles = makeStyles((theme) => ({
 
   color: {
     fontSize: 10,
+    color: ({ projectColor }) => projectColor,
+    border: `1px solid ${colors.borderColor}`,
+    borderRadius: "50%",
   },
   midIcon: {
     padding: "0px 10px",
@@ -130,5 +137,8 @@ export const useStyles = makeStyles((theme) => ({
 
   dropdown: {
     marginRight: 10,
+  },
+  emptyRows: {
+    height: ({ emptyRows }) => emptyRows * 58,
   },
 }));

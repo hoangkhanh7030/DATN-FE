@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as constants from "constants/index";
@@ -73,7 +73,6 @@ export default function Login() {
   };
 
   const handleLoginWithGG = (googleData) => {
- 
     dispatch(loginWithGG(googleData.profileObj))
       .then(() => {
         history.push(constants.WORKSPACES_URL);
@@ -83,7 +82,7 @@ export default function Login() {
       });
   };
 
-  if (isLoggedIn) return <Redirect to={constants.WORKSPACES_URL} />;
+  if (isLoggedIn) history.push(constants.WORKSPACES_URL);
 
   return (
     <Fragment>

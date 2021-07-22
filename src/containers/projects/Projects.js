@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { ThemeProvider, Box } from "@material-ui/core";
 
@@ -9,14 +9,21 @@ import TableHeader from "./TableHeader";
 import TableFooter from "./TableFooter";
 
 import { Message } from "components/common/Message";
-import { Progress } from "components/common/Progress";
 
 import { getProjects } from "redux/actions/projectAction";
 import { clearMessage } from "redux/actions/msgAction";
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
-import { LOGIN_URL, STATUS, ACTIVE } from "constants/index";
+import {
+  STATUS_OPTION,
+  SIZE_OPTION,
+  ASC,
+  DESC,
+  STATUS,
+  INITIAL_PAGE,
+  INITIAL_ROWS_PER_PAGE,
+} from "constants/index";
 
 export default function Projects() {
   const classes = useStyles();
@@ -24,15 +31,14 @@ export default function Projects() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
   const { message } = useSelector((state) => state.message);
 
   const [projects, setProjects] = useState([]);
 
   const [searched, setSearched] = useState("");
 
-  const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(INITIAL_ROWS_PER_PAGE);
 
   const [hasMessage, setOpenMessage] = useState(false);
 
@@ -44,10 +50,58 @@ export default function Projects() {
 
   const [orderBy, setOrderBy] = useState("");
 
-  const onSearchChange = (newValue) => {
-    setSearched(newValue);
-    setPage(1);
+  const setProjectParams = (
+    searchNameParam = searched,
+    pageParam = page,
+    sizeParam = rowsPerPage,
+    sortNameParam = orderBy,
+    typeParam = order,
+    isActivateParam = status
+  ) => {
+    return {
+      page: pageParam - 1,
+      size: sizeParam,
+      sortName: sortNameParam,
+      searchName: searchNameParam,
+      type: typeParam ? ASC : DESC,
+      isActivate: isActivateParam === STATUS ? "" : status,
+    };
   };
+
+  const fetchProjects = (projectParams) => {
+    dispatch(getProjects(id, projectParams));
+  };
+
+  useEffect(() => {
+    dispatch(clearMessage());
+    const projectParams = setProjectParams(
+      searched,
+      page,
+      rowsPerPage,
+      orderBy,
+      order,
+      status
+    );
+    fetchProjects(projectParams);
+  }, [dispatch, page, rowsPerPage, orderBy, order, status]);
+
+  useEffect(() => {
+    if (!storeProjects.data) {
+      return;
+    }
+
+    setProjects(storeProjects.data);
+  }, [storeProjects.data]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      page === INITIAL_PAGE
+        ? fetchProjects(setProjectParams())
+        : setPage(INITIAL_PAGE);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searched]);
 
   const cancelSearch = () => {
     setSearched("");
@@ -57,34 +111,6 @@ export default function Projects() {
     setOrderBy(orderBy);
     setOrder(!order);
   };
-
-  useEffect(() => {
-    dispatch(clearMessage());
-
-    const timer = setTimeout(() => {
-      dispatch(
-        getProjects(
-          id,
-          page - 1,
-          rowsPerPage,
-          searched,
-          order ? "ASC" : "DESC",
-          orderBy,
-          status === STATUS ? "" : status === ACTIVE ? true : false
-        )
-      );
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [dispatch, id, searched, status, rowsPerPage, page, order, orderBy]);
-
-  useEffect(() => {
-    if (!storeProjects.data) {
-      return;
-    }
-
-    setProjects(storeProjects.data);
-  }, [storeProjects.data]);
 
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
@@ -97,31 +123,23 @@ export default function Projects() {
     setPage(newPage);
   };
 
-  const handleChangeDropdown = (event) => {
-    setPage(1);
-    switch (event.target.name) {
-      case "status": {
-        setStatus(event.target.value);
-        break;
-      }
-      case "size": {
-        setRowsPerPage(event.target.value);
-        break;
-      }
-      default:
-        return;
-    }
+  const handleChangeDropdown = (e) => {
+    setPage(INITIAL_PAGE);
+    const { name, value } = e.target;
+
+    if (name === STATUS_OPTION) setStatus(value);
+    if (name === SIZE_OPTION) setRowsPerPage(value);
+
+    return;
   };
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length);
-
-  if (!isLoggedIn) return <Redirect to={LOGIN_URL} />;
 
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
         searched={searched}
-        onSearchChange={onSearchChange}
+        setSearched={setSearched}
         cancelSearch={cancelSearch}
         status={status}
         handleChangeDropdown={handleChangeDropdown}
@@ -134,28 +152,28 @@ export default function Projects() {
           rowsPerPage={rowsPerPage}
           emptyRows={emptyRows}
           handleSort={handleSort}
+          isLoading={storeProjects.isLoading}
         />
       </Box>
-      {projects.length > 0 && (
-        <TableFooter
-          rowsPerPage={rowsPerPage}
-          handleChangePage={handleChangePage}
-          handleChangeDropdown={handleChangeDropdown}
-          numPage={storeProjects.numPage}
-          page={page}
-        />
-      )}
 
-      {message && (
+      <TableFooter
+        rowsPerPage={rowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeDropdown={handleChangeDropdown}
+        numPage={storeProjects.numPage}
+        page={page}
+      />
+
+      {message ? (
         <Message
           message={message}
           isOpen={hasMessage}
           handleCloseMessage={handleCloseMessage}
           type={"error"}
         />
+      ) : (
+        <></>
       )}
-
-      <Progress isOpen={storeProjects.isLoading} />
     </ThemeProvider>
   );
 }

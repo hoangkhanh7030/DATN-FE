@@ -11,17 +11,11 @@ import {
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useStyles } from "./style";
-
-const sizes = [
-  { label: 5, value: 5 },
-  { label: 10, value: 10 },
-  { label: 15, value: 15 },
-];
-
-export default function Projects({
-  rowsPerPage = 5,
-  numPage = 1,
-  page = 1,
+import { INITIAL_PAGE, INITIAL_ROWS_PER_PAGE, SIZES } from "constants/index";
+export default function ProjectsFooter({
+  rowsPerPage = INITIAL_ROWS_PER_PAGE,
+  numPage = INITIAL_PAGE,
+  page = INITIAL_PAGE,
   handleChangePage,
   handleChangeDropdown,
 }) {
@@ -40,9 +34,9 @@ export default function Projects({
             variant="outlined"
             margin="dense"
           >
-            {sizes.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {SIZES.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
           </TextField>

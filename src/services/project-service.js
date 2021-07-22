@@ -2,19 +2,12 @@ import axios from "axios";
 import { WORKSPACES_URL, PROJECTS_URL } from "constants/index";
 import authHeader from "./data-service";
 
-export const getProjectsService = (
-  id,
-  page,
-  size,
-  searched,
-  order,
-  orderBy,
-  status
-) => {
+export const getProjectsService = (id, projectParams) => {
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}${WORKSPACES_URL}/${id}${PROJECTS_URL}?page=${page}&size=${size}&sortName=${orderBy}&searchName=${searched}&type=${order}&isActivate=${status}`,
+      `${process.env.REACT_APP_API_URL}${WORKSPACES_URL}/${id}${PROJECTS_URL}`,
       {
+        params: projectParams,
         headers: authHeader(),
       }
     )

@@ -54,6 +54,7 @@ export default function WorkspaceDialog(props) {
             onClick={onHandleSubmit}
             variant="contained"
             color="primary"
+            disableElevation
           >
             {content.btnTitle}
           </Button>

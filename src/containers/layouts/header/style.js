@@ -3,10 +3,27 @@ import * as colors from "assets/css/Common";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    color: colors.blackColor,
-    backgroundColor: colors.secondaryColor,
+    color: `${colors.blackColor} !important`,
+    backgroundColor: `${colors.secondaryColor} !important`,
+    borderBottom: "1px solid #E0E0E0",
     "@media (max-width: 900px)": {
       paddingLeft: 0,
+    },
+    "@media (min-width: 600px)": {
+      "& .MuiToolbar-regular": {
+        minHeight: 56,
+      },
+      "& .MuiTab-root": {
+        minWidth: 140,
+        minHeight: 55,
+        padding: 0,
+      },
+      "& .MuiTab-textColorInherit": {
+        opacity: 0.5,
+      },
+      "& .MuiTab-textColorInherit.Mui-selected": {
+        opacity: "1",
+      },
     },
   },
   logoApp: { display: "flex", alignItems: "center" },
@@ -40,7 +57,15 @@ export const useStyles = makeStyles((theme) => ({
     margin: "10px 16px",
   },
   center: { textAlign: "center" },
-  flex: { display: "flex" },
+  flex: { display: "flex", flex: 1 },
+  tabs: {
+    flex: 1,
+  },
+  avatar: {
+    display: "flex",
+    justifyContent: "flex-end",
+    flex: 1,
+  },
 }));
 
 export const MenuProps = {

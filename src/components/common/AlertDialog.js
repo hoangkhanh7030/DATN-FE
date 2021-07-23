@@ -45,6 +45,7 @@ export default function AlertDialog({
             color="secondary"
             variant="contained"
             autoFocus
+            disableElevation
           >
             Delete
           </Button>

@@ -33,7 +33,7 @@ export default function AlertDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`${content}This process cannot be undone.`}
+            {content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -45,6 +45,7 @@ export default function AlertDialog({
             color="secondary"
             variant="contained"
             autoFocus
+            disableElevation
           >
             Delete
           </Button>

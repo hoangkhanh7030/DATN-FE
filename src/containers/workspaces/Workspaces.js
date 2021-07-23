@@ -193,7 +193,7 @@ export default function Workspaces() {
           ))}
 
         <Grid item xs={12} sm={4} md={3}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={0}>
             <div onClick={handleCreateDialogState}>
               <IconButton>
                 <AddIcon className={classes.addIcon} />

@@ -24,6 +24,12 @@ export const IS_ACTIVATED = "isActivate";
 export const ENABLE = "enable";
 export const ARCHIVE = "archive";
 
+/* --------------------- resources ---------------------- */
+export const RESOURCE_NAME = "name";
+export const TEAM_NAME = "team";
+export const POSITION_NAME = "position";
+export const STATUS_NAME = "status";
+
 /* ----------------------- paths ----------------------- */
 export const HOMEPAGE = "/";
 export const LOGIN_URL = "/login";

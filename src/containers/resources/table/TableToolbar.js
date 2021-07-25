@@ -11,12 +11,18 @@ import {
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { theme } from "assets/css/Common";
-import { ACTIVE, ARCHIVED } from "constants/index";
+import { STATUS, STATUSES } from "constants/index";
 import SearchBar from "material-ui-search-bar";
 import React, { useState } from "react";
 import { MenuProps, useToolbarStyles } from "./style";
-const statuses = [ACTIVE, ARCHIVED];
 export default function TableToolbar(props) {
+  const {
+    keyword = "",
+    status = STATUS,
+    setKeyword,
+    cancelSearch,
+    handleChangeDropdown,
+  } = props;
   const classes = useToolbarStyles();
 
   // handle menu
@@ -34,16 +40,22 @@ export default function TableToolbar(props) {
     <ThemeProvider theme={theme}>
       <Toolbar className={classes.root}>
         <Box className={classes.leftToolbar}>
-          <SearchBar value={""} className={classes.searchbar} />
+          <SearchBar
+            value={keyword}
+            className={classes.searchbar}
+            onCancelSearch={cancelSearch}
+            onChange={(newValue) => setKeyword(newValue)}
+          />
           <FormControl variant="outlined" className={classes.selectInput}>
             <Select
-              value={""}
+              value={status}
+              name={"status"}
               displayEmpty
               MenuProps={MenuProps}
               input={<OutlinedInput classes={{ input: classes.input }} />}
+              onChange={handleChangeDropdown}
             >
-              <MenuItem value="">STATUS</MenuItem>
-              {statuses.map((option) => (
+              {STATUSES.map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>

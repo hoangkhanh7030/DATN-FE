@@ -1,9 +1,15 @@
 import { IconButton, TableHead, TableRow, Typography } from "@material-ui/core";
+import {
+  POSITION_NAME,
+  RESOURCE_NAME,
+  STATUS_NAME,
+  TEAM_NAME,
+} from "constants/index";
 import React from "react";
 import { StyledTableCell } from "./style";
 
 export default function EnhancedTableHead(props) {
-  const { classes } = props;
+  const { classes, handleSort } = props;
 
   return (
     <TableHead className={classes.headRoot}>
@@ -16,6 +22,7 @@ export default function EnhancedTableHead(props) {
             Name
             <IconButton
               className={`fas fa-sort ${classes.sortIcon}`}
+              onClick={() => handleSort(RESOURCE_NAME)}
             ></IconButton>
           </Typography>
         </StyledTableCell>
@@ -24,6 +31,7 @@ export default function EnhancedTableHead(props) {
             Team
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              onClick={() => handleSort(TEAM_NAME)}
             ></IconButton>
           </Typography>
         </StyledTableCell>
@@ -32,6 +40,7 @@ export default function EnhancedTableHead(props) {
             Position
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              onClick={() => handleSort(POSITION_NAME)}
             ></IconButton>
           </Typography>
         </StyledTableCell>
@@ -40,6 +49,7 @@ export default function EnhancedTableHead(props) {
             Status
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              onClick={() => handleSort(STATUS_NAME)}
             ></IconButton>
           </Typography>
         </StyledTableCell>

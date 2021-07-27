@@ -4,7 +4,7 @@ import React from "react";
 import * as _ from "underscore";
 import { StyledTableRow, StyledTableCell, useStyles } from "./style";
 export default function EnhancedTableRow(props) {
-  const { row } = props;
+  const { row, handleOpenDialog } = props;
   const classes = useStyles();
   return (
     <StyledTableRow key={row.id}>
@@ -30,7 +30,10 @@ export default function EnhancedTableRow(props) {
       </StyledTableCell>
       <StyledTableCell align="center">
         <Tooltip title="Edit resource">
-          <IconButton className={`fas fa-pencil-alt`}></IconButton>
+          <IconButton
+            className={`fas fa-pencil-alt`}
+            onClick={() => handleOpenDialog(row)}
+          ></IconButton>
         </Tooltip>
         <Tooltip title="Archive resource">
           <IconButton className={`fas fa-inbox`}></IconButton>

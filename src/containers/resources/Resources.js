@@ -15,9 +15,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage } from "redux/actions/msgAction";
 import { getResources } from "redux/actions/resourceAction";
+import { getTeams } from "redux/actions/teamAction";
+import * as _ from "underscore";
+import ResourceDialog from "./dialog/ResourceDialog";
 import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
+
+const INITIAL_RESOURCE = {
+  avatar: "",
+  name: "",
+  teamId: "",
+  positionId: "",
+};
 
 export default function Resources() {
   const { id } = useParams();
@@ -36,6 +46,28 @@ export default function Resources() {
   const [status, setStatus] = useState(STATUS);
   const [order, setOrder] = useState(false);
   const [orderBy, setOrderBy] = useState("");
+
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [resourceId, setResourceId] = useState(null);
+  const [resource, setResource] = useState(INITIAL_RESOURCE);
+
+  const [teams, setTeams] = useState([]);
+  const storeTeams = useSelector((state) => state.teams);
+
+  const handleOpenDialog = (resource = null) => {
+    setResource(
+      resource
+        ? {
+            avatar: _.get(resource, "avatar"),
+            name: _.get(resource, "name"),
+            teamId: _.get(resource, ["positionDTO", "teamDTO", "id"]),
+            positionId: _.get(resource, ["positionDTO", "id"]),
+          }
+        : INITIAL_RESOURCE
+    );
+    setResourceId(resource ? _.get(resource, "id") : null);
+    setIsOpenDialog(true);
+  };
 
   const setResourceParams = (
     keywordParam,
@@ -70,15 +102,17 @@ export default function Resources() {
       status
     );
     fetchResources(resourceParams);
+    dispatch(getTeams(id));
   }, [dispatch, page, rowsPerPage, orderBy, order, status]);
 
   useEffect(() => {
-    if (!storeResources.data) {
+    if (!storeResources.data || !storeTeams.data) {
       return;
     }
 
     setResources(storeResources.data);
-  }, [storeResources.data]);
+    setTeams(storeTeams.data);
+  }, [storeResources.data, storeTeams.data]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -130,12 +164,14 @@ export default function Resources() {
         cancelSearch={cancelSearch}
         status={status}
         handleChangeDropdown={handleChangeDropdown}
+        handleOpenDialog={handleOpenDialog}
       />
       <ResourcesTable
         data={resources}
         emptyRows={emptyRows}
         handleSort={handleSort}
         isLoading={storeResources.isLoading}
+        handleOpenDialog={handleOpenDialog}
       />
       <TableFooter
         page={page}
@@ -143,6 +179,14 @@ export default function Resources() {
         pageSize={storeResources.pageSize}
         handleChangePage={handleChangePage}
         handleChangeDropdown={handleChangeDropdown}
+      />
+      <ResourceDialog
+        isOpenDialog={isOpenDialog}
+        resource={resource}
+        resourceId={resourceId}
+        teams={teams}
+        setResource={setResource}
+        setIsOpenDialog={setIsOpenDialog}
       />
       {message && (
         <Message

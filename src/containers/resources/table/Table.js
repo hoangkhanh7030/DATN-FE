@@ -24,14 +24,15 @@ export default function ResourcesTable(props) {
     emptyRows = INITIAL_ROWS_PER_PAGE,
     handleSort,
     isLoading = false,
+    handleOpenDialog,
   } = props;
   const classes = useStyles({ emptyRows });
 
-  const hasData = () => {
-    return data.length > 0;
+  const noData = () => {
+    return data.length <= 0;
   };
   const noEmptyRows = () => {
-    return emptyRows <= 0 || !hasData();
+    return emptyRows <= 0 || noData();
   };
 
   return (
@@ -39,16 +40,7 @@ export default function ResourcesTable(props) {
       <Table className={classes.table}>
         <TableHeader classes={classes} handleSort={handleSort} />
         <TableBody>
-          {hasData() ? (
-            data.map((row) => {
-              return (
-                <EnhancedTableRow
-                  key={_.get(row, "id")}
-                  row={row}
-                ></EnhancedTableRow>
-              );
-            })
-          ) : isLoading ? (
+          {isLoading ? (
             ROWS.map((el) => (
               <TableRow key={el}>
                 {COLS.map((el) => (
@@ -58,7 +50,7 @@ export default function ResourcesTable(props) {
                 ))}
               </TableRow>
             ))
-          ) : (
+          ) : noData() ? (
             <TableRow className={classes.emptyRows}>
               <StyledTableCell colSpan={6}>
                 <Typography color="primary" align="center">
@@ -66,6 +58,16 @@ export default function ResourcesTable(props) {
                 </Typography>
               </StyledTableCell>
             </TableRow>
+          ) : (
+            data.map((row) => {
+              return (
+                <EnhancedTableRow
+                  key={_.get(row, "id")}
+                  row={row}
+                  handleOpenDialog={handleOpenDialog}
+                ></EnhancedTableRow>
+              );
+            })
           )}
           {noEmptyRows() ? (
             <></>

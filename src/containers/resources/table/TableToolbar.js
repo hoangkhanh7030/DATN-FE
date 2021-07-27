@@ -22,6 +22,7 @@ export default function TableToolbar(props) {
     setKeyword,
     cancelSearch,
     handleChangeDropdown,
+    handleOpenDialog,
   } = props;
   const classes = useToolbarStyles();
 
@@ -85,7 +86,12 @@ export default function TableToolbar(props) {
             <MenuItem>Export</MenuItem>
             <MenuItem>Import</MenuItem>
           </Menu>
-          <Button variant="contained" color="primary" disableElevation>
+          <Button
+            variant="contained"
+            color="primary"
+            disableElevation
+            onClick={() => handleOpenDialog()}
+          >
             New resource
           </Button>
         </Box>

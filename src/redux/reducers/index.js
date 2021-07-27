@@ -4,6 +4,8 @@ import message from "./msgReducer";
 import workspaces from "./workspaceReducer";
 import projects from "./projectReducer";
 import resources from "./resourceReducer";
+import teams from "./teamReducer";
+import positions from "./positionReducer";
 
 export default combineReducers({
   auth,
@@ -11,4 +13,6 @@ export default combineReducers({
   workspaces,
   projects,
   resources,
+  teams,
+  positions,
 });

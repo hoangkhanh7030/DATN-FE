@@ -40,6 +40,11 @@ export const commonStyle = makeStyles(() => ({
     textDecoration: "none",
     color: blackColor,
   },
+  helperText: {
+    color: "#F44336",
+    fontSize: "12px",
+    padding: "5px 0px",
+  },
 }));
 
 /* ----------- customized theme styles -------*/
@@ -63,6 +68,11 @@ export const theme = createMuiTheme({
     },
     h3: {
       fontSize: "16px",
+      fontWeight: 600,
+    },
+    h4: {
+      fontSize: "14px",
+      marginTop: 10,
       fontWeight: 600,
     },
   },

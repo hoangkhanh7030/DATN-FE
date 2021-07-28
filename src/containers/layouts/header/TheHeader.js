@@ -47,7 +47,7 @@ const headersData = [
     href: PROJECTS_URL,
   },
   {
-    label: "People",
+    label: "Resources",
     href: RESOURCES_URL,
   },
   {

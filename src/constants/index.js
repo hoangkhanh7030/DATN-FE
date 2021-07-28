@@ -24,6 +24,15 @@ export const IS_ACTIVATED = "isActivate";
 export const ENABLE = "enable";
 export const ARCHIVE = "archive";
 
+/* --------------------- resources ---------------------- */
+export const RESOURCE_NAME = "name";
+export const TEAM_NAME = "team";
+export const POSITION_NAME = "position";
+export const STATUS_NAME = "status";
+
+export const TEAM_ID = "teamId";
+export const POSITION_ID = "positionId";
+
 /* ----------------------- paths ----------------------- */
 export const HOMEPAGE = "/";
 export const LOGIN_URL = "/login";
@@ -33,6 +42,9 @@ export const PROJECTS_URL = "/projects";
 export const RESOURCES_URL = "/resources";
 export const REPORT_URL = "/report";
 export const WORKSPACE_URL = "/workspaces/:id";
+export const TEAMS_URL = "/team";
+export const POSITIONS_URL = "/position";
+export const IMAGES_URL = "/images/";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";

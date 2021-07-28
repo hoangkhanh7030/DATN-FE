@@ -3,7 +3,7 @@ import * as colors from "assets/css/Common";
 
 export const useStyles = makeStyles({
   root: {
-    padding: "100px 24px 0",
+    padding: "100px 65px 0",
     margin: 0,
     backgroundColor: colors.bgColor,
     minHeight: "100vh",

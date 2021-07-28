@@ -1,0 +1,49 @@
+import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
+import { INITIAL_ROWS_PER_PAGE } from "constants/index";
+import React from "react";
+import { useStyles } from "./style";
+import TableHeader from "./TableHeader";
+import EnhancedTableRow from "./TableRow";
+import * as _ from "underscore";
+import { LoadingTable } from "components/resources/LoadingTable";
+import { EmptyRows } from "components/resources/EmptyRows";
+
+export default function ResourcesTable(props) {
+  const {
+    data = [],
+    emptyRows = INITIAL_ROWS_PER_PAGE,
+    handleSort,
+    isLoading = false,
+    handleOpenDialog,
+  } = props;
+  const classes = useStyles({ emptyRows });
+
+  return (
+    <TableContainer component={Paper} className={classes.root} elevation={0}>
+      <Table className={classes.table}>
+        <TableHeader classes={classes} handleSort={handleSort} />
+        <TableBody>
+          {isLoading ? (
+            <LoadingTable />
+          ) : (
+            <>
+              {data.map((row) => (
+                <EnhancedTableRow
+                  key={_.get(row, "id")}
+                  row={row}
+                  handleOpenDialog={handleOpenDialog}
+                />
+              ))}
+
+              <EmptyRows
+                isFullPage={!emptyRows}
+                isEmptyTable={data.length === 0}
+                rowHeight={classes.emptyRows}
+              />
+            </>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}

@@ -44,6 +44,7 @@ export const REPORT_URL = "/report";
 export const WORKSPACE_URL = "/workspaces/:id";
 export const TEAMS_URL = "/team";
 export const POSITIONS_URL = "/position";
+export const IMAGES_URL = "/images/";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";

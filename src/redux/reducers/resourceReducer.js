@@ -25,6 +25,19 @@ export default function reducer(state = initialState, action) {
     case actionTypes.GET_RESOURCES_FAILED:
       return { ...state, isLoading: false };
 
+    case actionTypes.ADD_RESOURCE:
+      return { ...state, isLoading: true };
+
+    case actionTypes.ADD_RESOURCE_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.ADD_RESOURCE_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+      
     default:
       return state;
   }

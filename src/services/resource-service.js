@@ -15,3 +15,17 @@ export const getResourcesService = (workspaceId, resourceParams) => {
       return response.data;
     });
 };
+
+export const addResourceService = (id, data) => {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${RESOURCES_URL}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

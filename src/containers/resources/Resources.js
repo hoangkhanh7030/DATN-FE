@@ -4,6 +4,7 @@ import { Message } from "components/common/Message";
 import {
   ASC,
   DESC,
+  IMAGES_URL,
   INITIAL_PAGE,
   INITIAL_ROWS_PER_PAGE,
   SIZE_OPTION,
@@ -14,13 +15,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage } from "redux/actions/msgAction";
-import { getResources } from "redux/actions/resourceAction";
+import { getResources, addResource } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
+import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
 import * as _ from "underscore";
 import ResourceDialog from "./dialog/ResourceDialog";
 import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
+import { storage } from "../../firebase";
 
 const INITIAL_RESOURCE = {
   avatar: "",
@@ -70,7 +73,7 @@ export default function Resources() {
   };
 
   const setResourceParams = (
-    keywordParam,
+    keywordParam = keyword,
     pageParam = page,
     sizeParam = rowsPerPage,
     sortColumnParam = orderBy,
@@ -116,10 +119,10 @@ export default function Resources() {
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      setPage(INITIAL_PAGE);
-      const resourceParams = setResourceParams(keyword, INITIAL_PAGE);
-      fetchResources(resourceParams);
-    }, 500);
+      page === INITIAL_PAGE
+        ? fetchResources(setResourceParams())
+        : setPage(INITIAL_PAGE);
+    }, 1000);
 
     return () => clearTimeout(delayDebounce);
   }, [keyword]);
@@ -152,6 +155,44 @@ export default function Resources() {
     if (name === SIZE_OPTION) setRowsPerPage(value);
 
     return;
+  };
+
+  const callApiAddResource = (id, resource) => {
+    dispatch(addResource(id, resource))
+      .then(() => {
+        dispatch({
+          type: GET_RESOURCES,
+        });
+        window.location.reload();
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
+  const getUploadedImageUrl = async (avatarFile) => {
+    return new Promise((resolve, reject) => {
+      const uploadTask = storage
+        .ref(`${IMAGES_URL}${avatarFile.name}`)
+        .put(avatarFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          dispatch({
+            type: SET_MESSAGE,
+            payload: error,
+          });
+          reject(error);
+        },
+        async () => {
+          const imgURL = await uploadTask.snapshot.ref.getDownloadURL();
+          resolve(imgURL);
+          return imgURL;
+        }
+      );
+    });
   };
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
@@ -187,6 +228,8 @@ export default function Resources() {
         teams={teams}
         setResource={setResource}
         setIsOpenDialog={setIsOpenDialog}
+        callApiAddResource={callApiAddResource}
+        getUploadedImageUrl={getUploadedImageUrl}
       />
       {message && (
         <Message

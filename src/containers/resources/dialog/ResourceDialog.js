@@ -32,6 +32,8 @@ export default function ResourceDialog(props) {
     teams,
     setResource,
     setIsOpenDialog,
+    callApiAddResource,
+    getUploadedImageUrl,
   } = props;
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -44,6 +46,8 @@ export default function ResourceDialog(props) {
   const [invalidName, setInvalidName] = useState("");
   const [invalidTeam, setInvalidTeam] = useState("");
   const [invalidPosition, setInvalidPosition] = useState("");
+
+  const [avatarFile, setAvatarFile] = useState(null);
 
   const hasSelectedValue = (value) => {
     return value !== "";
@@ -78,6 +82,7 @@ export default function ResourceDialog(props) {
   };
 
   const handleCloseDialog = () => {
+    setAvatarFile(null);
     setIsOpenDialog(false);
     setInvalidName("");
     setInvalidTeam("");
@@ -104,6 +109,11 @@ export default function ResourceDialog(props) {
       hasEmptyValue(_.get(resource, "positionId"))
     )
       return;
+    callApiAddResource(id, {
+      ...resource,
+      avatar: avatarFile ? await getUploadedImageUrl(avatarFile) : "",
+    });
+    handleCloseDialog();
     setIsOpenDialog(false);
   };
 
@@ -119,7 +129,10 @@ export default function ResourceDialog(props) {
       </DialogTitle>
       <DialogContent>
         <Box>
-          <AvatarUpload avatar={_.get(resource, "avatar")} />
+          <AvatarUpload
+            avatar={_.get(resource, "avatar")}
+            setAvatarFile={setAvatarFile}
+          />
         </Box>
         <Paper
           className={`${classes.paper} ${

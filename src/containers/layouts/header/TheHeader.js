@@ -24,7 +24,7 @@ import * as constants from "constants/index";
 import {
   DASHBOARD_URL,
   LOGIN_URL,
-  PEOPLE_URL,
+  RESOURCES_URL,
   PROJECTS_URL,
   REPORT_URL,
   WORKSPACES_URL,
@@ -48,7 +48,7 @@ const headersData = [
   },
   {
     label: "People",
-    href: PEOPLE_URL,
+    href: RESOURCES_URL,
   },
   {
     label: "Report",

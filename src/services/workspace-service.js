@@ -29,7 +29,7 @@ export const updateWorkspaceService = (data, id) => {
     })
     .then((response) => {
       return response.data;
-    })
+    });
 };
 
 export const deleteWorkspaceService = (id) => {

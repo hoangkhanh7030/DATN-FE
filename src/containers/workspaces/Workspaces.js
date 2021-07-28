@@ -1,4 +1,3 @@
-import { Redirect } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -33,7 +32,6 @@ import {
 export default function Workspaces() {
   const classes = useStyles();
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
   const { status, isLoading } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
   const [isOpenMessage, setIsOpenMessage] = useState(false);
@@ -62,8 +60,6 @@ export default function Workspaces() {
     }
     setWorkspaces(storeWorkspaces.data);
   }, [storeWorkspaces.data]);
-
-  if (!isLoggedIn) return <Redirect to={constants.LOGIN_URL} />;
 
   // handle workspace dialog
   const handleCreateDialogState = () => {

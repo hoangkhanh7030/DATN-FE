@@ -7,12 +7,17 @@ export const disabledColor = "#BCBCBC";
 export const bgColor = "#F5F5F5";
 export const ggColor = "#D63B30";
 export const blackColor = "#000000";
+export const borderColor = "#E0E0E0";
 
 /* ------------ common component styles -------*/
 export const commonStyle = makeStyles(() => ({
   icon: {
     marginRight: "10px",
     color: primaryColor,
+  },
+  action: {
+    marginRight: "10px",
+    fontSize: "18px",
   },
   warning: {
     marginRight: "10px",
@@ -58,6 +63,7 @@ export const theme = createMuiTheme({
     },
     h3: {
       fontSize: "16px",
+      fontWeight: 600,
     },
   },
 });

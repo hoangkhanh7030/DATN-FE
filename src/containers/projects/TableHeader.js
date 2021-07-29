@@ -3,11 +3,15 @@ import React, { useState } from "react";
 import { Button, Box } from "@material-ui/core";
 
 import SearchBar from "material-ui-search-bar";
-import { StatusFilter } from "components/projects/StatusFilter";
-import { MoreOptions } from "components/projects/MoreOptions";
+import { StatusFilter } from "components/projects/toolbar/StatusFilter";
+import { MoreOptions } from "components/projects/toolbar/MoreOptions";
+import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
 
 import { STATUS } from "constants/index";
 import { useStyles } from "./style";
+
+const DIALOGTITLE = "New Project";
+const BUTTONTEXT = "CONFIRM";
 
 export default function ProjectsHeader({
   searched = "",
@@ -15,6 +19,12 @@ export default function ProjectsHeader({
   setSearched,
   cancelSearch,
   handleChangeDropdown,
+  project,
+  setProject,
+  isOpenDialog,
+  setOpenDialog,
+  handleOpenDialog,
+  handleCreateProject,
 }) {
   const classes = useStyles();
 
@@ -56,10 +66,21 @@ export default function ProjectsHeader({
           variant="contained"
           disableElevation
           className={classes.button}
+          onClick={() => handleOpenDialog()}
         >
           New Project
         </Button>
       </Box>
+
+      <FormDialog
+        project={project}
+        setProject={setProject}
+        isOpenDialog={isOpenDialog}
+        setOpenDialog={setOpenDialog}
+        handleActionDialog={handleCreateProject}
+        dialogTitle={DIALOGTITLE}
+        buttonText={BUTTONTEXT}
+      />
     </Box>
   );
 }

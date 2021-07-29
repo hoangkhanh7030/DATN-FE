@@ -49,3 +49,27 @@ export const IMAGES_URL = "/images/";
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";
 export const CLIENT_NAME = "clientName";
+export const COLOR = "color";
+export const TEXT_COLOR = "textColor";
+export const COLOR_PATTERN = "colorPattern";
+
+export const PALETTE = {
+  red: "#ff0000",
+  blue: "#0000ff",
+  yellow: "yellow",
+  lime: "lime",
+  gray: "gray",
+  orange: "orange",
+  purple: "purple",
+  black: "black",
+  white: "white",
+  pink: "pink",
+};
+
+export const DEFAULT_PROJECT = {
+  name: "",
+  clientName: "",
+  color: "#fff",
+  textColor: "#000",
+  colorPattern: "#ff00",
+};

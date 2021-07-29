@@ -11,8 +11,8 @@ import {
 
 import { StyledTableCell, useStyles } from "./style";
 import ProjectRow from "./TableRow";
-import { LoadingTable } from "components/projects/LoadingTable";
-import { EmptyRows } from "components/projects/EmptyRows";
+import { LoadingTable } from "components/projects/table/LoadingTable";
+import { EmptyRows } from "components/projects/table/EmptyRows";
 import * as _ from "underscore";
 import { PROJECT_NAME, CLIENT_NAME, IS_ACTIVATED } from "constants/index";
 

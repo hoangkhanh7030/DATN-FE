@@ -10,7 +10,7 @@ import TableFooter from "./TableFooter";
 
 import { Message } from "components/common/Message";
 
-import { getProjects } from "redux/actions/projectAction";
+import { getProjects, addProject } from "redux/actions/projectAction";
 import { clearMessage } from "redux/actions/msgAction";
 
 import { theme } from "assets/css/Common";
@@ -23,7 +23,15 @@ import {
   STATUS,
   INITIAL_PAGE,
   INITIAL_ROWS_PER_PAGE,
+  DEFAULT_PROJECT,
+  PROJECT_NAME,
+  CLIENT_NAME,
+  COLOR,
+  TEXT_COLOR,
+  COLOR_PATTERN,
 } from "constants/index";
+
+import * as _ from "underscore";
 
 export default function Projects() {
   const classes = useStyles();
@@ -49,6 +57,10 @@ export default function Projects() {
   const [order, setOrder] = useState(false);
 
   const [orderBy, setOrderBy] = useState("");
+
+  const [project, setProject] = useState(DEFAULT_PROJECT);
+
+  const [isOpenDialog, setOpenDialog] = useState(false);
 
   const setProjectParams = (
     searchNameParam = searched,
@@ -133,6 +145,32 @@ export default function Projects() {
     return;
   };
 
+  const handleOpenDialog = (project = null) => {
+    setProject(
+      project
+        ? {
+            name: _.get(project, PROJECT_NAME),
+            clientName: _.get(project, CLIENT_NAME),
+            color: _.get(project, COLOR),
+            textColor: _.get(project, TEXT_COLOR),
+            colorPattern: _.get(project, COLOR_PATTERN),
+          }
+        : DEFAULT_PROJECT
+    );
+
+    setOpenDialog(true);
+  };
+
+  const handleCreateProject = () => {
+    dispatch(addProject(id, project))
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length);
 
   return (
@@ -143,6 +181,12 @@ export default function Projects() {
         cancelSearch={cancelSearch}
         status={status}
         handleChangeDropdown={handleChangeDropdown}
+        project={project}
+        setProject={setProject}
+        isOpenDialog={isOpenDialog}
+        setOpenDialog={setOpenDialog}
+        handleOpenDialog={handleOpenDialog}
+        handleCreateProject={handleCreateProject}
       />
 
       <Box className={classes.boxTable}>

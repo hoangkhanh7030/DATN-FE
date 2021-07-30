@@ -141,3 +141,14 @@ export const DURATION = "DURATION";
 export const DOWNLOAD = "download";
 export const RESPONSE_TYPE = "blob";
 export const RESOURCES_CSV = "Resources.csv";
+
+
+export const DEFAULT_BOOKING = {
+  id: "",
+  startDate: "",
+  endDate: "",
+  projectId: "",
+  resourceId: "",
+  percentage: 100,
+  duration: 8,
+};

@@ -10,7 +10,6 @@ import { commonStyle } from "assets/css/Common";
 import {
   ENABLE,
   ARCHIVE,
-  IS_ACTIVE,
   IS_PENDING,
   STATUS_NAME,
   RE_INVITE,

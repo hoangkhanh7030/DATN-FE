@@ -1,5 +1,5 @@
 import Snackbar from "@material-ui/core/Snackbar";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import * as colors from "assets/css/Common";
 

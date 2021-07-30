@@ -86,6 +86,19 @@ export default function reducer(state = initialState, action) {
     case actionTypes.IMPORT_RESOURCES_FAILED:
       return { ...state, status: payload.status, isLoading: false };
 
+    case actionTypes.ARCHIVE_RESOURCE:
+      return { ...state, isLoading: true };
+
+    case actionTypes.ARCHIVE_RESOURCE_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.ARCHIVE_RESOURCE_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     case actionTypes.GET_RESOURCES_BOOKING:
       return { ...state, data: [], isLoading: true };
 

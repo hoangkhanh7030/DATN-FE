@@ -13,6 +13,7 @@ import CustomizedTab from "components/dashboard/dialog/Tab";
 import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
 import {
   DEFAULT_PROJECT,
+  DEFAULT_RESOURCE,
   END_DATE,
   IMAGES_URL,
   PROJECT_ID,
@@ -33,12 +34,6 @@ import { useStyles } from "./style";
 const DIALOGTITLE = "New Project";
 const BUTTONTEXT = "CONFIRM";
 
-const DEFAULT_RESOURCE = {
-  avatar: "",
-  name: "",
-  teamId: "",
-  positionId: "",
-};
 export default function BookingDialog(props) {
   const {
     openDialog = false,

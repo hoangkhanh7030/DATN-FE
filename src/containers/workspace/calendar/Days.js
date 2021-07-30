@@ -1,6 +1,5 @@
 import React from "react";
 import { Typography, Grid } from "@material-ui/core";
-import * as _ from "underscore";
 
 import { useStyles } from "../style";
 import { DAY_FMT, DATE_FMT, MAX_VIEW } from "../others/constants";

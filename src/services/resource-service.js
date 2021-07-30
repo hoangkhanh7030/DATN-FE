@@ -103,3 +103,18 @@ export const importResourcesService = (id, file) => {
       return response.data;
     });
 };
+
+export const archiveResourceService = (id, resourceId) => {
+  return axios
+    .put(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${RESOURCES_URL}/${resourceId}/archive`,
+      null,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { ThemeProvider, Grid, Box, Typography } from "@material-ui/core";
+import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
 
 import { Progress } from "components/common/Progress";
@@ -28,15 +28,8 @@ import BookingDialog from "./dialog/BookingDialog";
 import { addBooking, editBooking } from "redux/actions/bookingAction";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
-const INITIAL_BOOKING = {
-  id: "",
-  startDate: "",
-  endDate: "",
-  projectId: "",
-  resourceId: "",
-  percentage: 100,
-  duration: 8,
-};
+import { DEFAULT_BOOKING } from "constants/index";
+
 export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -202,7 +195,7 @@ export default function Workspace() {
             duration: _.get(booking, "duration"),
           }
         : {
-            ...INITIAL_BOOKING,
+            ...DEFAULT_BOOKING,
             startDate: startDate.isBefore(endDate) ? startDate : endDate,
             endDate: endDate.isAfter(startDate) ? endDate : startDate,
             resourceId,

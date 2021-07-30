@@ -3,41 +3,30 @@ import { theme } from "assets/css/Common";
 import { Message } from "components/common/Message";
 import {
   ASC,
+  DEFAULT_RESOURCE,
   DESC,
   IMAGES_URL,
   INITIAL_PAGE,
   INITIAL_ROWS_PER_PAGE,
   SIZE_OPTION,
   STATUS,
-  STATUS_OPTION,
+  STATUS_OPTION
 } from "constants/index";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage, setMessage } from "redux/actions/msgAction";
 import {
-  getResources,
-  addResource,
-  editResource,
-  deleteResource,
-  exportResources,
-  importResources,
+  addResource, archiveResource, deleteResource, editResource, exportResources, getResources, importResources
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
 import * as _ from "underscore";
+import { storage } from "../../firebase";
 import ResourceDialog from "./dialog/ResourceDialog";
 import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
-import { storage } from "../../firebase";
-
-const DEFAULT_RESOURCE = {
-  avatar: "",
-  name: "",
-  teamId: "",
-  positionId: "",
-};
 
 export default function Resources() {
   const { id } = useParams();
@@ -224,9 +213,7 @@ export default function Resources() {
     setStatus(STATUS);
   };
 
-  const handelDeleteResource = (resourceId, handleCloseDeleteDialog) => {
-    handleCloseDeleteDialog();
-
+  const handelDeleteResource = (resourceId) => {
     dispatch(deleteResource(id, resourceId))
       .then(() => {
         fetchResources(setResourceParams());
@@ -262,6 +249,19 @@ export default function Resources() {
     }
   };
 
+  const callApiArchiveResource = (projectId) => {
+    dispatch(archiveResource(id, projectId))
+      .then(() => {
+        dispatch(fetchResources(setResourceParams())).catch(() => {
+          setOpenMessage(true);
+        });
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <TableToolbar
@@ -282,6 +282,7 @@ export default function Resources() {
         isLoading={storeResources.isLoading || isUploading}
         handleOpenDialog={handleOpenDialog}
         handelDeleteResource={handelDeleteResource}
+        callApiArchiveResource={callApiArchiveResource}
       />
       <TableFooter
         page={page}

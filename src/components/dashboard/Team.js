@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Typography, Box, IconButton } from "@material-ui/core";
 import * as _ from "underscore";
 import { makeStyles } from "@material-ui/core/styles";
-import { TEAM_ID, ID } from "constants/index";
+import { TEAM_ID, ID, DEFAULT_RESOURCE } from "constants/index";
 import TeamOptions from "./TeamOptions";
 import TeamDialog from "./TeamDialog";
 import ResourceDialog from "containers/resources/dialog/ResourceDialog";
@@ -37,13 +37,6 @@ const useStyles = makeStyles({
     padding: 2,
   },
 });
-
-const DEFAULT_RESOURCE = {
-  avatar: "",
-  name: "",
-  teamId: "",
-  positionId: "",
-};
 
 export default function Team({
   team = {},

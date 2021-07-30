@@ -19,6 +19,7 @@ import {
   getResources,
   addResource,
   editResource,
+  deleteResource,
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
@@ -219,6 +220,19 @@ export default function Resources() {
     setStatus(STATUS);
   };
 
+  const handelDeleteResource = (resourceId, handleCloseDeleteDialog) => {
+    handleCloseDeleteDialog();
+
+    dispatch(deleteResource(id, resourceId))
+      .then(() => {
+        fetchResources(setResourceParams());
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+  
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
 
   return (
@@ -238,6 +252,7 @@ export default function Resources() {
         handleSort={handleSort}
         isLoading={storeResources.isLoading || isUploading}
         handleOpenDialog={handleOpenDialog}
+        handelDeleteResource={handelDeleteResource}
       />
       <TableFooter
         page={page}

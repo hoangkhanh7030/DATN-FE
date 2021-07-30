@@ -10,7 +10,7 @@ import React from "react";
 import * as _ from "underscore";
 import { StyledTableRow, StyledTableCell, useStyles } from "./style";
 export default function EnhancedTableRow(props) {
-  const { row, handleOpenDialog } = props;
+  const { row, handleOpenDialog, handleOpenDeleteDialog } = props;
   const classes = useStyles();
 
   const isArchived = _.get(row, IS_ARCHIVED);
@@ -51,7 +51,10 @@ export default function EnhancedTableRow(props) {
           <IconButton className={`${isArchivedStyle}`}></IconButton>
         </Tooltip>
         <Tooltip title="Delete resource">
-          <IconButton className={`far fa-trash-alt`}></IconButton>
+          <IconButton
+            className={`far fa-trash-alt`}
+            onClick={() => handleOpenDeleteDialog(_.get(row, "id"))}
+          ></IconButton>
         </Tooltip>
       </StyledTableCell>
     </StyledTableRow>

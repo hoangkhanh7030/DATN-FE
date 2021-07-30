@@ -15,3 +15,17 @@ export const getProjectsService = (id, projectParams) => {
       return response.data;
     });
 };
+
+export const addProjectService = (id, data) => {
+  return axios
+    .post(
+      `${process.env.REACT_APP_API_URL}${WORKSPACES_URL}/${id}${PROJECTS_URL}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

@@ -75,5 +75,8 @@ export const theme = createMuiTheme({
       marginTop: 10,
       fontWeight: 600,
     },
+    h6: {
+      fontWeight: 600,
+    },
   },
 });

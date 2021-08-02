@@ -54,7 +54,6 @@ export default function Resources() {
   const [resourceId, setResourceId] = useState(null);
   const [resource, setResource] = useState(INITIAL_RESOURCE);
 
-  const [teams, setTeams] = useState([]);
   const storeTeams = useSelector((state) => state.teams);
 
   const handleOpenDialog = (resource = null) => {
@@ -77,7 +76,8 @@ export default function Resources() {
     pageParam = page,
     sizeParam = rowsPerPage,
     sortColumnParam = orderBy,
-    typeParam = order
+    typeParam = order,
+    isArchivedParam = status
   ) => {
     return {
       page: pageParam - 1,
@@ -85,8 +85,7 @@ export default function Resources() {
       sortColumn: sortColumnParam,
       keyword: keywordParam,
       type: typeParam ? ASC : DESC,
-      teamName: "",
-      posName: "",
+      isArchived: isArchivedParam === STATUS ? "" : status,
     };
   };
 
@@ -106,16 +105,15 @@ export default function Resources() {
     );
     fetchResources(resourceParams);
     dispatch(getTeams(id));
-  }, [dispatch, page, rowsPerPage, orderBy, order, status]);
+  }, [dispatch, id, page, rowsPerPage, orderBy, order, status]);
 
   useEffect(() => {
-    if (!storeResources.data || !storeTeams.data) {
+    if (!storeResources.data) {
       return;
     }
 
     setResources(storeResources.data);
-    setTeams(storeTeams.data);
-  }, [storeResources.data, storeTeams.data]);
+  }, [storeResources.data]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -225,7 +223,7 @@ export default function Resources() {
         isOpenDialog={isOpenDialog}
         resource={resource}
         resourceId={resourceId}
-        teams={teams}
+        teams={storeTeams.data || []}
         setResource={setResource}
         setIsOpenDialog={setIsOpenDialog}
         callApiAddResource={callApiAddResource}

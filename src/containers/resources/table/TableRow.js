@@ -1,11 +1,23 @@
 import { Avatar, Button, IconButton, Tooltip } from "@material-ui/core";
-import { IS_ACTIVATED, ACTIVE, ARCHIVED } from "constants/index";
+import {
+  IS_ARCHIVED,
+  ACTIVE,
+  ARCHIVED,
+  ARCHIVE,
+  ENABLE,
+} from "constants/index";
 import React from "react";
 import * as _ from "underscore";
 import { StyledTableRow, StyledTableCell, useStyles } from "./style";
 export default function EnhancedTableRow(props) {
   const { row, handleOpenDialog } = props;
   const classes = useStyles();
+
+  const isArchived = _.get(row, IS_ARCHIVED);
+  const isArchivedText = isArchived ? ARCHIVED : ACTIVE;
+  const isArchivedStyle = isArchived ? `fas fa-undo` : `fas fa-inbox`;
+  const isArchivedToolTip = isArchived ? ENABLE : ARCHIVE;
+
   return (
     <StyledTableRow key={row.id}>
       <StyledTableCell align="center">
@@ -22,10 +34,10 @@ export default function EnhancedTableRow(props) {
         <Button
           disabled
           className={`${classes.status}  ${
-            _.get(row, IS_ACTIVATED) ? classes.active : classes.inactive
+            isArchived ? classes.inactive : classes.active
           }`}
         >
-          {_.get(row, IS_ACTIVATED) ? ACTIVE : ARCHIVED}
+          {isArchivedText}
         </Button>
       </StyledTableCell>
       <StyledTableCell align="center">
@@ -35,8 +47,8 @@ export default function EnhancedTableRow(props) {
             onClick={() => handleOpenDialog(row)}
           ></IconButton>
         </Tooltip>
-        <Tooltip title="Archive resource">
-          <IconButton className={`fas fa-inbox`}></IconButton>
+        <Tooltip title={isArchivedToolTip} arrow>
+          <IconButton className={`${isArchivedStyle}`}></IconButton>
         </Tooltip>
         <Tooltip title="Delete resource">
           <IconButton className={`far fa-trash-alt`}></IconButton>

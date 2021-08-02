@@ -9,6 +9,7 @@ import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
 
 import { STATUS } from "constants/index";
 import { useStyles } from "./style";
+import { ResetBtn } from "components/common/ResetBtn";
 
 const DIALOGTITLE = "New Project";
 const BUTTONTEXT = "CONFIRM";
@@ -25,6 +26,7 @@ export default function ProjectsHeader({
   setOpenDialog,
   handleOpenDialog,
   handleCreateProject,
+  handleReset,
 }) {
   const classes = useStyles();
 
@@ -52,6 +54,7 @@ export default function ProjectsHeader({
           status={status}
           handleChangeDropdown={handleChangeDropdown}
         />
+        <ResetBtn onClick={handleReset} />
       </Box>
 
       <Box>

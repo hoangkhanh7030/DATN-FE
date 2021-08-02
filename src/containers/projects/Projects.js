@@ -171,6 +171,11 @@ export default function Projects() {
       });
   };
 
+  const handleReset = () => {
+    setSearched("");
+    setStatus(STATUS);
+  };
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length);
 
   return (
@@ -187,6 +192,7 @@ export default function Projects() {
         setOpenDialog={setOpenDialog}
         handleOpenDialog={handleOpenDialog}
         handleCreateProject={handleCreateProject}
+        handleReset={handleReset}
       />
 
       <Box className={classes.boxTable}>

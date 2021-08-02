@@ -94,6 +94,9 @@ export const useToolbarStyles = makeStyles({
     fontSize: 14,
   },
   selectInput: { margin: "0 10px" },
+  resetBtn: {
+    padding: `8px !important`,
+  },
 });
 
 export const useFooterStyles = makeStyles({

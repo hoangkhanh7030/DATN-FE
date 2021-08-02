@@ -15,6 +15,8 @@ import { STATUS, STATUSES } from "constants/index";
 import SearchBar from "material-ui-search-bar";
 import React, { useState } from "react";
 import { MenuProps, useToolbarStyles } from "./style";
+import { ResetBtn } from "components/common/ResetBtn";
+
 export default function TableToolbar(props) {
   const {
     keyword = "",
@@ -23,6 +25,7 @@ export default function TableToolbar(props) {
     cancelSearch,
     handleChangeDropdown,
     handleOpenDialog,
+    handleReset,
   } = props;
   const classes = useToolbarStyles();
 
@@ -63,6 +66,7 @@ export default function TableToolbar(props) {
               ))}
             </Select>
           </FormControl>
+          <ResetBtn resetBtn={classes.resetBtn} onClick={handleReset} />
         </Box>
         <Box>
           <Button

@@ -52,7 +52,7 @@ export default function Resources() {
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [resourceId, setResourceId] = useState(null);
-  const [resource, setResource] = useState(INITIAL_RESOURCE);
+  const [resource, setResource] = useState(null);
 
   const storeTeams = useSelector((state) => state.teams);
 
@@ -193,6 +193,11 @@ export default function Resources() {
     });
   };
 
+  const handleReset = () => {
+    setKeyword("");
+    setStatus(STATUS);
+  };
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
 
   return (
@@ -204,6 +209,7 @@ export default function Resources() {
         status={status}
         handleChangeDropdown={handleChangeDropdown}
         handleOpenDialog={handleOpenDialog}
+        handleReset={handleReset}
       />
       <ResourcesTable
         data={resources}
@@ -219,16 +225,20 @@ export default function Resources() {
         handleChangePage={handleChangePage}
         handleChangeDropdown={handleChangeDropdown}
       />
-      <ResourceDialog
-        isOpenDialog={isOpenDialog}
-        resource={resource}
-        resourceId={resourceId}
-        teams={storeTeams.data || []}
-        setResource={setResource}
-        setIsOpenDialog={setIsOpenDialog}
-        callApiAddResource={callApiAddResource}
-        getUploadedImageUrl={getUploadedImageUrl}
-      />
+      {!resource ? (
+        <></>
+      ) : (
+        <ResourceDialog
+          isOpenDialog={isOpenDialog}
+          resource={resource}
+          resourceId={resourceId}
+          teams={storeTeams.data || []}
+          setResource={setResource}
+          setIsOpenDialog={setIsOpenDialog}
+          callApiAddResource={callApiAddResource}
+          getUploadedImageUrl={getUploadedImageUrl}
+        />
+      )}
       {message && (
         <Message
           message={message}

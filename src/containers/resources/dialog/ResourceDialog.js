@@ -16,10 +16,7 @@ import { HelperText } from "components/common/HelperText";
 import { POSITION_ID, RESOURCE_NAME, TEAM_ID } from "constants/index";
 import { MenuProps } from "containers/layouts/header/style";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { clearMessage } from "redux/actions/msgAction";
-import { getPositions } from "redux/actions/positionAction";
 import * as _ from "underscore";
 import { DialogTitle, Placeholder } from "./Common";
 import { useStyles } from "./style";
@@ -36,18 +33,16 @@ export default function ResourceDialog(props) {
     getUploadedImageUrl,
   } = props;
   const { id } = useParams();
-  const dispatch = useDispatch();
 
   const classes = useStyles();
-
-  const [positions, setPositions] = useState([]);
-  const storePositions = useSelector((state) => state.positions);
 
   const [invalidName, setInvalidName] = useState("");
   const [invalidTeam, setInvalidTeam] = useState("");
   const [invalidPosition, setInvalidPosition] = useState("");
 
   const [avatarFile, setAvatarFile] = useState(null);
+
+  const [positions, setPositions] = useState(null);
 
   const hasSelectedValue = (value) => {
     return value !== "";
@@ -60,25 +55,19 @@ export default function ResourceDialog(props) {
   };
 
   useEffect(() => {
-    dispatch(clearMessage());
-    if (!_.get(resource, "teamId")) return;
-    dispatch(getPositions(id, _.get(resource, "teamId")));
-  }, [dispatch, id, resource]);
-
-  useEffect(() => {
-    if (!storePositions.data) return;
-    setPositions(storePositions.data);
-  }, [storePositions.data]);
+    if (hasSelectedValue(_.get(resource, "teamId"))) {
+      const selectedTeam = teams.find(
+        (item) => item.id === _.get(resource, "teamId")
+      );
+      setPositions(selectedTeam.positions);
+    }
+  }, [_.get(resource, "teamId")]);
 
   const handleChange = (event) => {
     setInvalidName(getInvalidValue(event.target));
     setInvalidTeam(getInvalidValue(event.target));
     setInvalidPosition(getInvalidValue(event.target));
-
-    _.get(resource, "positionId") === "" ||
-    positions.includes(_.get(resource, "positionId"))
-      ? setResource({ ...resource, [event.target.name]: event.target.value })
-      : setResource({ ...resource, positionId: "" });
+    setResource({ ...resource, [event.target.name]: event.target.value });
   };
 
   const handleCloseDialog = () => {
@@ -164,7 +153,7 @@ export default function ResourceDialog(props) {
           <Typography variant="h4">
             TEAM <span className={classes.obligatedText}>*</span>
           </Typography>
-          {teams.length <= 0 ? (
+          {teams.length === 0 ? (
             <Typography className={classes.text}>Please add teams</Typography>
           ) : (
             <FormControl fullWidth>
@@ -209,7 +198,7 @@ export default function ResourceDialog(props) {
               </Typography>
 
               <FormControl fullWidth>
-                {positions.length <= 0 ? (
+                {!positions || positions?.length === 0 ? (
                   <Typography className={classes.text}>
                     Please add positions
                   </Typography>

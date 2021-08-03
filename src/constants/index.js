@@ -21,6 +21,7 @@ export const ACTIVE = "active";
 export const ARCHIVED = "archived";
 export const STATUSES = [STATUS, ACTIVE, ARCHIVED];
 export const IS_ACTIVATED = "isActivate";
+export const IS_ARCHIVED = "isArchived";
 export const ENABLE = "enable";
 export const ARCHIVE = "archive";
 
@@ -42,7 +43,8 @@ export const PROJECTS_URL = "/projects";
 export const RESOURCES_URL = "/resources";
 export const REPORT_URL = "/report";
 export const WORKSPACE_URL = "/workspaces/:id";
-export const TEAMS_URL = "/team";
+export const TEAM_URL = "/team";
+export const TEAMS_URL = "/teams";
 export const POSITIONS_URL = "/position";
 export const IMAGES_URL = "/images/";
 

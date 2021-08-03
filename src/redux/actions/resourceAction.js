@@ -1,7 +1,10 @@
 import * as actionTypes from "redux/constants";
 import * as _ from "underscore";
 
-import { getResourcesService, addResourceService } from "services/resource-service";
+import {
+  getResourcesService,
+  addResourceService,
+} from "services/resource-service";
 
 export const getResources = (id, resourceParams) => (dispatch) => {
   dispatch({

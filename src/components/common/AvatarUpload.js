@@ -41,7 +41,12 @@ const BigAvatar = styled(MuiAvatar)`
   box-shadow: 0 0 1px 0 ${grey[500]} inset, 0 0 1px 0 ${grey[500]};
 `;
 
-const AvatarUpload = ({ avatar = "", setAvatarFile }) => {
+const AvatarUpload = ({
+  avatar = "",
+  setAvatarFile,
+  resource = {},
+  setResource,
+}) => {
   const classes = useStyles();
 
   const [image, setImage] = useState(avatar);
@@ -71,17 +76,14 @@ const AvatarUpload = ({ avatar = "", setAvatarFile }) => {
     if (image) {
       event.preventDefault();
       setImageUrl(null);
+      setAvatarFile(null);
+      setResource({ ...resource, avatar: "" });
     }
   };
 
   return (
     <CenteredContent>
-      <BigAvatar
-        className={classes.large}
-        $withBorder
-        alt="Avatar"
-        src={image}
-      />
+      <BigAvatar className={classes.large} $withBorder alt="" src={image} />
       <input
         ref={inputFileRef}
         accept="image/*"

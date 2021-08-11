@@ -6,9 +6,11 @@ import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { LOGIN_URL } from "constants/index";
 import Workspaces from "containers/workspaces/Workspaces";
+import Workspace from "containers/workspace/Workspace";
 
 export default function TheLayout(Component = Workspaces) {
   const classes = useStyles();
+  const style = Component === Workspace ? classes.dashboard : classes.root;
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
@@ -16,7 +18,7 @@ export default function TheLayout(Component = Workspaces) {
     ? (props) => (
         <Fragment>
           <TheHeader />
-          <Container maxWidth={false} className={classes.root}>
+          <Container maxWidth={false} className={style}>
             <Component {...props} />
           </Container>
         </Fragment>

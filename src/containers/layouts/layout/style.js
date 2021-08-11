@@ -8,4 +8,10 @@ export const useStyles = makeStyles({
     backgroundColor: colors.bgColor,
     minHeight: "100vh",
   },
+  dashboard: {
+    padding: "80px 0",
+    margin: 0,
+    backgroundColor: colors.secondaryColor,
+    minHeight: "100vh",
+  },
 });

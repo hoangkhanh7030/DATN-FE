@@ -33,6 +33,7 @@ export const STATUS_NAME = "status";
 
 export const TEAM_ID = "teamId";
 export const POSITION_ID = "positionId";
+export const ID = "id";
 
 /* ----------------------- paths ----------------------- */
 export const HOMEPAGE = "/";

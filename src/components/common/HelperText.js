@@ -1,7 +1,11 @@
 import { Typography } from "@material-ui/core";
 import { commonStyle } from "assets/css/Common";
 
-export const HelperText = ({ errorValue, errorName }) => {
+export const HelperText = ({
+  errorValue,
+  errorName,
+  message = "This field is required !",
+}) => {
   const commonClasses = commonStyle();
   return (
     <Typography
@@ -10,7 +14,7 @@ export const HelperText = ({ errorValue, errorName }) => {
         display: errorName === errorValue ? "block" : "none",
       }}
     >
-      This field is required !
+      {message}
     </Typography>
   );
 };

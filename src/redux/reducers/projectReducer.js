@@ -1,6 +1,6 @@
 import * as actionTypes from "redux/constants";
 
-const initialState = { data: [], numPage: 1, status: null, isLoading: false };
+const initialState = { data: null, numPage: 1, status: null, isLoading: false };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -32,7 +32,19 @@ export default function reducer(state = initialState, action) {
 
     case actionTypes.ADD_PROJECT_FAILED:
       return { ...state, status: payload.status, isLoading: false };
-      
+
+    case actionTypes.GET_PROJECTS_BOOKING:
+      return { ...state, isLoading: true };
+
+    case actionTypes.GET_PROJECTS_BOOKING_SUCCEED:
+      return {
+        ...state,
+        data: payload,
+        isLoading: false,
+      };
+
+    case actionTypes.GET_PROJECTS_BOOKING_FAILED:
+      return { ...state, isLoading: false };
     default:
       return state;
   }

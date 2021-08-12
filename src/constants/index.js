@@ -47,6 +47,7 @@ export const TEAM_URL = "/team";
 export const TEAMS_URL = "/teams";
 export const POSITIONS_URL = "/position";
 export const IMAGES_URL = "/images/";
+export const BOOKINGS_URL = "/bookings";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";
@@ -75,3 +76,12 @@ export const DEFAULT_PROJECT = {
   textColor: "#000",
   colorPattern: "#ff00",
 };
+
+export const PROJECT_ID = "projectId";
+export const RESOURCE_ID = "resourceId";
+
+export const START_DATE = "START DATE";
+export const END_DATE = "END DATE";
+
+export const PERCENTAGE = "PERCENTAGE";
+export const DURATION = "DURATION";

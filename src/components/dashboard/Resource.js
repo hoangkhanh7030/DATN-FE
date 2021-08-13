@@ -29,13 +29,16 @@ const useStyles = makeStyles({
     color: "#929292",
   },
   textPosition: {
-    fontSize: 10,
+    fontSize: 11,
     paddingRight: 5,
     flex: 7,
   },
   textPercentage: {
-    fontSize: 10,
-    flex: 4,
+    fontSize: 11,
+    flex: 5,
+  },
+  percentRed: {
+    color: "red",
   },
 });
 
@@ -57,7 +60,17 @@ export default function Resource({ resource = {} }) {
           <Typography noWrap className={classes.textPosition}>
             {_.get(resource, "position")}
           </Typography>
-          <Typography className={classes.textPercentage}>| {_.get(resource, "percent")}%</Typography>
+          <Typography className={classes.textPercentage}>
+            |{" "}
+            <Box
+              component="span"
+              className={
+                _.get(resource, "percent") < 100 ? null : classes.percentRed
+              }
+            >
+              {_.get(resource, "percent")}%
+            </Box>
+          </Typography>
         </Box>
       </Box>
     </Container>

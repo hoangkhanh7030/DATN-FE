@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
+import { Progress } from "components/common/Progress";
 
 import Header from "./header/Header";
 import CalendarHeader from "./calendar/CalendarHeader";
@@ -33,6 +34,8 @@ const INITIAL_BOOKING = {
 
 export default function Workspace() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const storeDashboard = useSelector((state) => state.dashboard);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [booking, setBooking] = useState(null);
@@ -44,8 +47,6 @@ export default function Workspace() {
 
   const [projectSearch, setProjectSearch] = useState("");
   const [resourceSearch, setResourceSearch] = useState("");
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchProjects(projectSearch);
@@ -124,7 +125,6 @@ export default function Workspace() {
 
     setOpenDialog(true);
   };
-  const storeDashboard = useSelector((state) => state.dashboard);
 
   const [teams, setTeams] = useState([]);
   const [resources, setResources] = useState([]);
@@ -132,16 +132,15 @@ export default function Workspace() {
   const [calendar, setCalendar] = useState([]);
   const [today, setToday] = useState(moment());
 
-  const [searched, setSearch] = useState("");
+  const [searched, setSearched] = useState("");
   const [view, setView] = useState(VIEWS[0].value);
 
   const classes = useStyles({ view });
 
-  const setParams = (searched, startDate, endDate) => {
-    return { startDate, endDate, searchName: searched };
+  const setParams = (searchName = searched, startDate, endDate) => {
+    return { startDate, endDate, searchName };
   };
   const fetchBookings = (params) => {
-    console.log(params);
     dispatch(getBookings(id, params));
   };
 
@@ -165,6 +164,29 @@ export default function Workspace() {
     setTeams(_.get(storeDashboard, ["data", "teams"]));
   }, [storeDashboard]);
 
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      const params = _.isEmpty(calendar)
+        ? setParams(
+            searched,
+            moment().startOf("week").format("YYYY-MM-DD"),
+            moment().startOf("week").format("YYYY-MM-DD")
+          )
+        : setParams(
+            searched,
+            _.first(calendar).format("YYYY-MM-DD"),
+            _.last(calendar).format("YYYY-MM-DD")
+          );
+      fetchBookings(params);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searched]);
+
+  const cancelSearch = () => {
+    setSearched("");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Header
@@ -173,6 +195,9 @@ export default function Workspace() {
         setToday={setToday}
         view={view}
         setView={setView}
+        searched={searched}
+        setSearched={setSearched}
+        cancelSearch={cancelSearch}
       />
       <Box className={classes.calendar}>
         <Grid container>
@@ -209,7 +234,8 @@ export default function Workspace() {
         />
       ) : (
         <></>
-      )}
+      )}{" "}
+      <Progress isOpen={storeDashboard.isLoading} />
     </ThemeProvider>
   );
 }

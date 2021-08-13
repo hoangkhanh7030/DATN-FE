@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
@@ -9,19 +10,14 @@ import CalendarHeader from "./calendar/CalendarHeader";
 import CalendarBody from "./calendar/CalendarBody";
 import buildCalendar, { isToday, isWeekend } from "./others/buildCalendar";
 
-import {
-  EMPTY_TEAMS,
-  EMPTY_RESOURCES,
-  TEAMS,
-  RESOURCES,
-  VIEWS,
-} from "./others/constants";
+import { getBookings } from "redux/actions/dashboardAction";
+
+import { VIEWS } from "./others/constants";
 
 import { theme } from "assets/css/Common";
 
 import BookingDialog from "./dialog/BookingDialog";
 import { useStyles } from "./style";
-import { useDispatch, useSelector } from "react-redux";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
 
@@ -37,27 +33,6 @@ const INITIAL_BOOKING = {
 
 export default function Workspace() {
   const { id } = useParams();
-  const mockBooking = {
-    id: 12,
-    startDate: "2021-08-09",
-    endDate: "2021-08-19",
-    percentage: 100.0,
-    duration: 8.0,
-    projectDTO: {
-      id: 4,
-      createdDate: "2021-08-06T04:18:10.292+00:00",
-      createdBy: 3,
-      modifiedDate: null,
-      modifiedBy: null,
-      name: "CES thesis",
-      clientName: "CES",
-      color: "#fff",
-      textColor: "#000",
-      colorPattern: "#ff00",
-      isActivate: true,
-    },
-    hourTotal: 8.0,
-  };
 
   const [openDialog, setOpenDialog] = useState(false);
   const [booking, setBooking] = useState(null);
@@ -124,26 +99,46 @@ export default function Workspace() {
 
     setOpenDialog(true);
   };
+  const storeDashboard = useSelector((state) => state.dashboard);
 
   const [teams, setTeams] = useState([]);
-
   const [resources, setResources] = useState([]);
 
   const [calendar, setCalendar] = useState([]);
-
   const [today, setToday] = useState(moment());
 
+  const [searched, setSearch] = useState("");
   const [view, setView] = useState(VIEWS[0].value);
 
   const classes = useStyles({ view });
 
+  const setParams = (searched, startDate, endDate) => {
+    return { startDate, endDate, searchName: searched };
+  };
+  const fetchBookings = (params) => {
+    console.log(params);
+    dispatch(getBookings(id, params));
+  };
+
   useEffect(() => {
-    setCalendar(buildCalendar(today, view));
-    setTeams(TEAMS);
-    setResources(RESOURCES);
-    // setTeams(EMPTY_TEAMS);
-    // setResources(EMPTY_RESOURCES);
+    const thisCalendar = buildCalendar(today, view);
+    const params = setParams(
+      searched,
+      _.first(thisCalendar).format("YYYY-MM-DD"),
+      _.last(thisCalendar).format("YYYY-MM-DD")
+    );
+
+    setCalendar(thisCalendar);
+    fetchBookings(params);
   }, [today, view]);
+
+  useEffect(() => {
+    if (!storeDashboard.data) {
+      return;
+    }
+    setResources(_.get(storeDashboard, ["data", "resources"]));
+    setTeams(_.get(storeDashboard, ["data", "teams"]));
+  }, [storeDashboard]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -161,8 +156,8 @@ export default function Workspace() {
             isToday={isToday}
             isWeekend={isWeekend}
             view={view}
-            teamAmount={teams.length}
-            rscAmount={resources.length}
+            teamAmount={_.size(teams)}
+            rscAmount={_.size(resources)}
           />
 
           <CalendarBody
@@ -175,25 +170,6 @@ export default function Workspace() {
           />
         </Grid>
       </Box>{" "}
-      {/* <Typography variant="h1">Workspace {id}</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <Paper
-            className={classes.paper}
-            onClick={() => handleOpenDialog(moment(), 97)}
-          >
-            xs=6
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper
-            className={classes.paper}
-            onClick={() => handleOpenDialog(null, 97, mockBooking)}
-          >
-            xs=6
-          </Paper>
-        </Grid>
-      </Grid> */}
       {openDialog && storeProjects.data && storeResources.data ? (
         <BookingDialog
           openDialog={openDialog}

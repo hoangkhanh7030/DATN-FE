@@ -7,7 +7,7 @@ import * as _ from "underscore";
 
 import { useStyles } from "../style";
 
-export default function TeamRow({ calendar = [], team = {}, view = 1 }) {
+export default function TeamRow({ calendar = [], team = {}, view = 1,  resources={} }) {
   const classes = useStyles({ view });
   return (
     <>
@@ -17,7 +17,7 @@ export default function TeamRow({ calendar = [], team = {}, view = 1 }) {
           classes.calendarDay
         } ${_.isEmpty(team) ? classes.emptyTeam : null}`}
       >
-        {_.isEmpty(team) ? null : <Team team={team} />}
+        {_.isEmpty(team) ? null : <Team team={team}  resources={resources}/>}
       </Grid>
 
       {calendar.length > 0

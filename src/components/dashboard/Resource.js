@@ -1,5 +1,5 @@
 import React from "react";
-
+import * as _ from "underscore";
 import { Typography, Box, Avatar, Container } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -45,19 +45,19 @@ export default function Resource({ resource = {} }) {
   return (
     <Container className={classes.container}>
       <Avatar
-        src="https://i.pravatar.cc/300"
+        src={_.get(resource, "avatar")}
         className={classes.avatar}
       ></Avatar>
 
       <Box className={classes.textBox}>
         <Typography noWrap className={classes.textName}>
-          {resource.name}
+          {_.get(resource, "name")}
         </Typography>
         <Box className={classes.textPosBox}>
           <Typography noWrap className={classes.textPosition}>
-            {resource.position}
+            {_.get(resource, "position")}
           </Typography>
-          <Typography className={classes.textPercentage}>| 100%</Typography>
+          <Typography className={classes.textPercentage}>| {_.get(resource, "percent")}%</Typography>
         </Box>
       </Box>
     </Container>

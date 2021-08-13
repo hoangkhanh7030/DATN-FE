@@ -61,12 +61,16 @@ export default function Event({
 }) {
   const days = _.isEmpty(booking)
     ? 0
-    : moment(booking.endDate).diff(moment(booking.startDate), "days");
+    : moment(_.get(booking, "endDate")).diff(
+        moment(_.get(booking, "startDate")),
+        "days"
+      );
 
   const isHiddenHour = view === 4 && days === 0;
 
-  const projectColor = _.isEmpty(booking) ? "white" : booking.project.color;
-  const textColor = _.isEmpty(booking) ? "black" : booking.project.textColor;
+  const projectColor = _.get(booking, ["projectDTO", "color"]);
+  const textColor = _.get(booking, ["projectDTO", "textColor"]);
+
   const classes = useStyles({ days, view, index, projectColor, textColor });
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -79,8 +83,13 @@ export default function Event({
   };
 
   const content = [
-    [{ title: PROJECT_TITLE, detail: booking.project.name }],
-    [{ title: CLIENT_TITLE, detail: booking.project.clientName }],
+    [{ title: PROJECT_TITLE, detail: _.get(booking, ["projectDTO", "name"]) }],
+    [
+      {
+        title: CLIENT_TITLE,
+        detail: _.get(booking, ["projectDTO", "clientName"]),
+      },
+    ],
   ];
 
   const handleOpenEdit = (booking) => {
@@ -98,16 +107,18 @@ export default function Event({
       {isHiddenHour ? null : (
         <Box className={classes.side}>
           <i className="fas fa-laptop-code"></i>
-          <Typography className={classes.textHour}>{booking.id}</Typography>
+          <Typography className={classes.textHour}>
+            {_.get(booking, "hourTotal")}
+          </Typography>
         </Box>
       )}
 
       <Box className={classes.textBox}>
         <Typography noWrap className={classes.textProject}>
-          {booking.project.name}
+          {_.get(booking, ["projectDTO", "name"])}
         </Typography>
         <Typography noWrap className={classes.textClient}>
-          {booking.project.clientName}
+          {_.get(booking, ["projectDTO", "clientName"])}
         </Typography>
       </Box>
 

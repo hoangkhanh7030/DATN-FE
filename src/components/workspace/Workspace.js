@@ -14,7 +14,10 @@ import {
   IconButton,
   ThemeProvider,
   Icon,
+  CardContent,
+  Divider,
   Typography,
+  Box,
 } from "@material-ui/core";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -24,6 +27,7 @@ import WorkspaceDialog from "./dialog/Dialog";
 import AlertDialog from "components/common/AlertDialog";
 import { useHistory } from "react-router-dom";
 import { WORKSPACES_URL } from "constants/index";
+import analyze from "assets/images/analyze.png";
 
 export default function Workspace(props) {
   const {
@@ -101,10 +105,20 @@ export default function Workspace(props) {
     prevOpen.current = openOption;
   }, [openOption]);
 
+  function HoursAccount() {
+    return (
+      <Box className={classes.hours}>
+        <Typography variant="h1">{Math.floor(Math.random() * 100)}</Typography>
+        <Typography variant="caption">HOURS</Typography>
+      </Box>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <Card className={classes.root}>
+      <Card className={classes.root} elevation={0}>
         <CardHeader
+          className={classes.cardHeader}
           action={
             noPermission(workspace) ? (
               <></>
@@ -125,6 +139,12 @@ export default function Workspace(props) {
           subheader={subHeader}
           titleTypographyProps={{ variant: "h2" }}
         />
+        <CardContent className={classes.cardContent}>
+          <img src={analyze} alt="" height="auto" />
+          <Divider orientation="vertical" flexItem />
+          <HoursAccount />
+        </CardContent>
+
         <Popper
           open={openOption}
           anchorEl={anchorRef.current}

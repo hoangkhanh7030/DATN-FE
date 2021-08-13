@@ -78,5 +78,9 @@ export const theme = createMuiTheme({
     h6: {
       fontWeight: 600,
     },
+    h5: {
+      fontSize: "13px",
+      fontWeight: 600,
+    },
   },
 });

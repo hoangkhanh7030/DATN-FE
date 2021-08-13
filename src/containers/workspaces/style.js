@@ -9,6 +9,10 @@ export const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     height: "170px",
+    border: "1px solid #E0E0E0",
+    "& .MuiIconButton-root":{
+      padding: 0,
+    }
   },
   addIcon: {
     fontSize: "50px",

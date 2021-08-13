@@ -170,7 +170,7 @@ export default function Workspace() {
         ? setParams(
             searched,
             moment().startOf("week").format("YYYY-MM-DD"),
-            moment().startOf("week").format("YYYY-MM-DD")
+            moment().endOf("week").format("YYYY-MM-DD")
           )
         : setParams(
             searched,

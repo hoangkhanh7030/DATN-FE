@@ -13,14 +13,15 @@ export default function ResourceRow({
   team = {},
   indexTeam = 1,
 }) {
-  resources = resources.length > 0 ? resources : Array(3).fill({});
+  resources = _.isEmpty(resources) ? Array(3).fill({}) : resources;
   return resources
-    .filter((resource) => _.get(resource, "idTeam") === _.get(team, "id"))
+    .filter((resource) => _.get(resource, "teamId") === _.get(team, "id"))
     .map((resource, index) => {
       return (
         <>
           <ResourceCell
             resource={resource}
+            team={team}
             lastRsc={indexTeam === 1 && index === 2}
           />
 

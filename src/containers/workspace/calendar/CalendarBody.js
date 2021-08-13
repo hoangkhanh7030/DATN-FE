@@ -14,7 +14,7 @@ export default function CalendarBody({
   return teams.map((team, index) => {
     return (
       <>
-        <TeamRow team={team} calendar={calendar} view={view} />
+        <TeamRow team={team} calendar={calendar} view={view}  resources={resources} />
 
         <ResourceRow
           team={team}

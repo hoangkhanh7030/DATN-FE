@@ -32,7 +32,7 @@ export default function EventRow({ calendar = [], view = 1, resource = {} }) {
           ></Box>
           {_.isEmpty(resource)
             ? null
-            : resource.booking.map((rowBooking, index) =>
+            : resource.bookings.map((rowBooking, index) =>
                 rowBooking
                   .filter(
                     (col) =>

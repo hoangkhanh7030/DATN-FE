@@ -46,13 +46,14 @@ export default function Workspace() {
   const [resourceSearch, setResourceSearch] = useState("");
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProjectsBooking(id, projectSearch));
-  }, [dispatch, id, projectSearch]);
 
   useEffect(() => {
-    dispatch(getResourcesBooking(id, resourceSearch));
-  }, [dispatch, id, resourceSearch]);
+    fetchProjects(projectSearch);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    fetchResources(resourceSearch);
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (!storeResources.data) {
@@ -70,6 +71,30 @@ export default function Workspace() {
     setPrjList(storeProjects.data);
   }, [storeProjects.data]);
 
+  const fetchProjects = (projectSearch) => {
+    dispatch(getProjectsBooking(id, projectSearch));
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchProjects(projectSearch);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [projectSearch]);
+
+  const fetchResources = (resourceSearch) => {
+    dispatch(getResourcesBooking(id, resourceSearch));
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchResources(resourceSearch);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [resourceSearch]);
+
   const handleOpenDialog = (
     startDate = null,
     resourceId = "",
@@ -84,7 +109,7 @@ export default function Workspace() {
             id: _.get(booking, "id"),
             startDate: moment(_.get(booking, "startDate")),
             endDate: moment(_.get(booking, "endDate")),
-            projectId: _.get(booking, ["project", "id"]),
+            projectId: _.get(booking, ["projectDTO", "id"]),
             resourceId: resourceId,
             percentage: _.get(booking, "percentage"),
             duration: _.get(booking, "duration"),

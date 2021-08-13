@@ -31,6 +31,9 @@ export default function BookingDialog(props) {
   } = props;
 
   console.log(booking);
+
+  const oldPercentage=booking.percentage
+  const oldDuration=booking.duration
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -67,9 +70,15 @@ export default function BookingDialog(props) {
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
-    // tabValue === 0
-    //   ? setBookingData({ ...bookingData, duration: 8 })
-    //   : setBookingData({ ...bookingData, percentage: 100 });
+    tabValue === 0
+      ? setBookingData({
+          ...bookingData,
+          duration: bookingData.id ? oldDuration : 8,
+        })
+      : setBookingData({
+          ...bookingData,
+          percentage: bookingData.id ? oldPercentage : 100,
+        });
   };
 
   const handleChangeSelectItem = (value, name) => {
@@ -130,9 +139,7 @@ export default function BookingDialog(props) {
           .catch(() => {
             // setOpenMessage(true);
           })
-      : dispatch(
-          addBooking(id,data)
-        )
+      : dispatch(addBooking(id, data))
           .then(() => {
             console.log("add success");
             // window.location.reload();

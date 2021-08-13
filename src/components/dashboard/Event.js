@@ -102,7 +102,7 @@ export default function Event({
       className={classes.container}
       onMouseEnter={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
-      onClick={() => handleOpenDialog(booking.startDate, resource.idResource, booking)}
+      onClick={() => handleOpenDialog(booking.startDate, resource.id, booking)}
     >
       {isHiddenHour ? null : (
         <Box className={classes.side}>

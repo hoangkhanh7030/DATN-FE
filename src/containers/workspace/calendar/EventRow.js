@@ -10,9 +10,14 @@ import { D_M_Y } from "containers/workspace/others/constants";
 import { isWeekend } from "../others/buildCalendar";
 import { useStyles } from "../style";
 
-export default function EventRow({ calendar = [], view = 1, resource = {}, handleOpenDialog }) {
+export default function EventRow({
+  calendar = [],
+  view = 1,
+  resource = {},
+  handleOpenDialog,
+}) {
   const classes = useStyles({ view });
- 
+
   const handleOpenAdd = (date) => {
     console.log(date);
     console.log(resource);
@@ -29,7 +34,7 @@ export default function EventRow({ calendar = [], view = 1, resource = {}, handl
             className={`${classes.silbingGrid} ${
               isWeekend(day) ? classes.weekend : null
             }`}
-            onClick={() => handleOpenDialog(day)}
+            onClick={() => handleOpenDialog(day, resource.id)}
           ></Box>
           {_.isEmpty(resource)
             ? null

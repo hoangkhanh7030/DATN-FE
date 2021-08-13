@@ -4,6 +4,8 @@ import { Typography, Box, IconButton } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import * as _ from "underscore";
+
 const useStyles = makeStyles({
   container: {
     display: "flex",
@@ -28,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Team({ team = {} }) {
+export default function Team({ team = {}, resources = {} }) {
   const classes = useStyles();
   const [show, setShow] = useState(false);
   return (
@@ -44,7 +46,13 @@ export default function Team({ team = {} }) {
         <Typography noWrap className={classes.text}>
           {team.name}
         </Typography>
-        <Typography className={classes.text}>(2)</Typography>
+        <Typography className={classes.text}>
+          ({
+            resources.filter(
+              (resource) => _.get(resource, "teamId") === _.get(team, "id")
+            ).length
+          })
+        </Typography>
       </Box>
 
       {show ? (

@@ -42,6 +42,7 @@ export default function CalendarHeader({
             className={`${isToday(day) ? classes.todayText : classes.dayText}`}
           >
             {day.format(DAY_FMT).toUpperCase()}
+            {isToday(day) && view !== 4 ? " (TODAY)" : ""}
           </Typography>
         </Grid>
       ))}

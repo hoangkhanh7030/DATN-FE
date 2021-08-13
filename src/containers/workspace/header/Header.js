@@ -21,14 +21,17 @@ export default function Header({
   today = moment(),
   setView,
   setToday,
+  searched = "",
+  setSearched,
+  cancelSearch,
 }) {
   const classes = useStyles();
 
   const rangeDays =
     calendar.length > 0
-      ? `${calendar[0].format(DMY)} - ${calendar[
-          calendar.length - 1
-        ].format(DMY)}`
+      ? `${calendar[0].format(DMY)} - ${calendar[calendar.length - 1].format(
+          DMY
+        )}`
       : null;
 
   function prevWeek() {
@@ -46,7 +49,12 @@ export default function Header({
   return (
     <Box className={`${classes.header} ${classes.flexBasic}`}>
       <Box className={classes.searchBox}>
-        <SearchBar value={""} className={classes.searchBar} />
+        <SearchBar
+          value={searched}
+          className={classes.searchBar}
+          onCancelSearch={cancelSearch}
+          onChange={(newValue) => setSearched(newValue)}
+        />
       </Box>
 
       <Box className={`${classes.flexBasic}`}>

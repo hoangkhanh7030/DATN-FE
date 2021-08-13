@@ -28,9 +28,13 @@ const rscStyles = makeStyles({
   },
 });
 
-export default function ResourceCell({ resource = {}, lastRsc = false }) {
+export default function ResourceCell({
+  resource = {},
+  team = {},
+  lastRsc = false,
+}) {
   const isEmptyRsc = _.isEmpty(resource);
-  const rowHeight = isEmptyRsc ? 1 : resource.booking.length;
+  const rowHeight = isEmptyRsc ? 1 : _.size(_.get(resource, "bookings"));
 
   const classes = useStyles();
   const rscClasses = rscStyles({ rowHeight });
@@ -50,7 +54,7 @@ export default function ResourceCell({ resource = {}, lastRsc = false }) {
   const content = [
     [{ title: "name", detail: _.get(resource, "name") }],
     [{ title: "position", detail: _.get(resource, "position") }],
-    [{ title: "team", detail: "PASS TEAM" }],
+    [{ title: "team", detail: _.get(team, "name") }],
   ];
 
   return (

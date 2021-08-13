@@ -1,5 +1,5 @@
 import React from "react";
-
+import * as _ from "underscore";
 import { Typography, Box, Avatar, Container } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -29,13 +29,16 @@ const useStyles = makeStyles({
     color: "#929292",
   },
   textPosition: {
-    fontSize: 10,
+    fontSize: 11,
     paddingRight: 5,
     flex: 7,
   },
   textPercentage: {
-    fontSize: 10,
-    flex: 4,
+    fontSize: 11,
+    flex: 5,
+  },
+  percentRed: {
+    color: "red",
   },
 });
 
@@ -45,19 +48,29 @@ export default function Resource({ resource = {} }) {
   return (
     <Container className={classes.container}>
       <Avatar
-        src="https://i.pravatar.cc/300"
+        src={_.get(resource, "avatar")}
         className={classes.avatar}
       ></Avatar>
 
       <Box className={classes.textBox}>
         <Typography noWrap className={classes.textName}>
-          {resource.name}
+          {_.get(resource, "name")}
         </Typography>
         <Box className={classes.textPosBox}>
           <Typography noWrap className={classes.textPosition}>
-            {resource.position}
+            {_.get(resource, "position")}
           </Typography>
-          <Typography className={classes.textPercentage}>| 100%</Typography>
+          <Typography className={classes.textPercentage}>
+            |{" "}
+            <Box
+              component="span"
+              className={
+                _.get(resource, "percent") < 100 ? null : classes.percentRed
+              }
+            >
+              {_.get(resource, "percent")}%
+            </Box>
+          </Typography>
         </Box>
       </Box>
     </Container>

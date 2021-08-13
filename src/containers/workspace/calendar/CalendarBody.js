@@ -8,6 +8,7 @@ export default function CalendarBody({
   view = 1,
   teams = [],
   resources = [],
+  handleOpenDialog
 }) {
   teams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
 
@@ -22,6 +23,7 @@ export default function CalendarBody({
           calendar={calendar}
           view={view}
           resources={resources}
+          handleOpenDialog={handleOpenDialog}
         />
       </>
     );

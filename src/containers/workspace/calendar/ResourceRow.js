@@ -12,6 +12,7 @@ export default function ResourceRow({
   view = 1,
   team = {},
   indexTeam = 1,
+  handleOpenDialog,
 }) {
   resources = resources.length > 0 ? resources : Array(3).fill({});
   return resources
@@ -29,6 +30,7 @@ export default function ResourceRow({
             calendar={calendar}
             view={view}
             resource={resource}
+            handleOpenDialog={handleOpenDialog}
           />
         </>
       );

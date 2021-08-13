@@ -57,6 +57,7 @@ export default function Event({
   booking = {},
   view = 1,
   resource = {},
+  handleOpenDialog,
 }) {
   const days = _.isEmpty(booking)
     ? 0
@@ -92,7 +93,7 @@ export default function Event({
       className={classes.container}
       onMouseEnter={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
-      onClick={() => handleOpenEdit(booking)}
+      onClick={() => handleOpenDialog(booking.startDate, resource.idResource, booking)}
     >
       {isHiddenHour ? null : (
         <Box className={classes.side}>

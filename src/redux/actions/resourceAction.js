@@ -5,6 +5,7 @@ import {
   getResourcesService,
   addResourceService,
 } from "services/resource-service";
+import { getResourcesBookingService } from "containers/workspace/dialog/api";
 
 export const getResources = (id, resourceParams) => (dispatch) => {
   dispatch({
@@ -59,6 +60,37 @@ export const addResource = (id, data) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ADD_RESOURCE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const getResourcesBooking = (id, searchName) => (dispatch) => {
+  dispatch({
+    type: actionTypes.GET_RESOURCES_BOOKING,
+  });
+
+  return getResourcesBookingService(id, searchName).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.GET_RESOURCES_BOOKING_SUCCEED,
+        payload: data,
+      });
+
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+
+      dispatch({
+        type: actionTypes.GET_RESOURCES_BOOKING_FAILED,
       });
 
       dispatch({

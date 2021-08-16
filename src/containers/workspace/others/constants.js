@@ -11,9 +11,14 @@ export const WEEK = "week";
 export const DAY_FMT = "ddd";
 export const DATE_FMT = "DD";
 export const DMY = "DD MMM YYYY";
+export const Y_M_D = "YYYY-MM-DD";
 
 export const SUN = "Sun";
 export const WEEKENDS = ["Sat", "Sun"];
+
+export const DATA = "data";
+export const TEAMS = "teams";
+export const RESOURCES = "resources";
 
 export const STARTDATE = "startDate";
 export const ENDDATE = "endDate";

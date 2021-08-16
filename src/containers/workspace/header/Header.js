@@ -21,6 +21,10 @@ export default function Header({
   today = moment(),
   setView,
   setToday,
+  searched = "",
+  setSearched,
+  keyUp,
+  cancelSearch,
 }) {
   const classes = useStyles();
 
@@ -43,7 +47,13 @@ export default function Header({
   return (
     <Box className={`${classes.header} ${classes.flexBasic}`}>
       <Box className={classes.searchBox}>
-        <SearchBar value="" className={classes.searchBar} />
+        <SearchBar
+          value={searched}
+          className={classes.searchBar}
+          onCancelSearch={cancelSearch}
+          onKeyUp={keyUp}
+          onChange={(newValue) => setSearched(newValue)}
+        />
       </Box>
 
       <Box className={`${classes.flexBasic}`}>

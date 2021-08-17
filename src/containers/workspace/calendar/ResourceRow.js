@@ -10,6 +10,7 @@ export default function ResourceRow({
   view = 1,
   team = {},
   indexTeam = 1,
+  handleDeleteBooking,
 }) {
   resources = _.isEmpty(resources) ? Array(3).fill({}) : resources;
   return resources
@@ -28,6 +29,7 @@ export default function ResourceRow({
             calendar={calendar}
             view={view}
             resource={resource}
+            handleDeleteBooking={handleDeleteBooking}
           />
         </Fragment>
       );

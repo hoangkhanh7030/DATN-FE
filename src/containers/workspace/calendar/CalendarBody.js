@@ -9,6 +9,7 @@ export default function CalendarBody({
   teams = [],
   resources = [],
   handleRenameTeam,
+  handleDeleteBooking,
 }) {
   teams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
 
@@ -29,6 +30,7 @@ export default function CalendarBody({
           calendar={calendar}
           view={view}
           resources={resources}
+          handleDeleteBooking={handleDeleteBooking}
         />
       </Fragment>
     );

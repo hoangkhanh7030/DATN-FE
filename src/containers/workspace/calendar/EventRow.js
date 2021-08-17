@@ -10,7 +10,7 @@ import { DAY } from "containers/workspace/others/constants";
 import { isWeekend } from "../others/buildCalendar";
 import { useStyles } from "../style";
 
-const Events = ({ day, resource, view }) => {
+const Events = ({ day, resource, view, handleDeleteBooking }) => {
   return _.isEmpty(resource)
     ? null
     : resource.bookings.map((rowBooking, index) =>
@@ -23,12 +23,18 @@ const Events = ({ day, resource, view }) => {
               booking={event}
               view={view}
               resource={resource}
+              handleDeleteBooking={handleDeleteBooking}
             />
           ))
       );
 };
 
-export default function EventRow({ calendar = [], view = 1, resource = {} }) {
+export default function EventRow({
+  calendar = [],
+  view = 1,
+  resource = {},
+  handleDeleteBooking,
+}) {
   const classes = useStyles({ view });
   const handleOpenAdd = (date) => {};
 
@@ -49,7 +55,12 @@ export default function EventRow({ calendar = [], view = 1, resource = {} }) {
             onClick={() => handleOpenAdd(day)}
           ></Box>
 
-          <Events day={day} view={view} resource={resource} />
+          <Events
+            day={day}
+            view={view}
+            resource={resource}
+            handleDeleteBooking={handleDeleteBooking}
+          />
         </Grid>
       ));
 }

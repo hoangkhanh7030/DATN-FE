@@ -16,6 +16,19 @@ export const getBookingsService = (id, dashboardParams) => {
     });
 };
 
+export const deleteBookingService = (id, bookingId) => {
+  return axios
+    .delete(
+      `${process.env.REACT_APP_API_URL}${WORKSPACES_URL}/${id}${DASHBOARD_URL}/${bookingId}`,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
 export const renameTeamService = (id, params) => {
   const data = { name: params.name };
 

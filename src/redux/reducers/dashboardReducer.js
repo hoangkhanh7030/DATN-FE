@@ -19,6 +19,15 @@ export default function reducer(state = initialState, action) {
     case actionTypes.GET_BOOKINGS_FAILED:
       return { ...state, isLoading: false };
 
+    case actionTypes.DELETE_BOOKING:
+      return { ...state, isLoading: true };
+
+    case actionTypes.DELETE_BOOKING_SUCCEED:
+      return { ...state, data: payload, isLoading: false };
+
+    case actionTypes.DELETE_BOOKING_FAILED:
+      return { ...state, data: payload, isLoading: false };
+
     case actionTypes.RENAME_TEAM:
       return { ...state, isLoading: true };
 

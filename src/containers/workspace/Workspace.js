@@ -13,7 +13,11 @@ import CalendarBody from "./calendar/CalendarBody";
 import buildCalendar from "./others/buildCalendar";
 
 import { VIEWS, Y_M_D, DATA, TEAMS, RESOURCES } from "./others/constants";
-import { getBookings, renameTeam } from "redux/actions/dashboardAction";
+import {
+  getBookings,
+  deleteBooking,
+  renameTeam,
+} from "redux/actions/dashboardAction";
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
@@ -84,6 +88,17 @@ export default function Workspace() {
       });
   };
 
+  const handleDeleteBooking = (bookingId) => {
+    dispatch(deleteBooking(id, bookingId))
+      .then(() => {
+        setOpenMessage(true);
+        fetchBookings(calendar);
+      })
+      .catch(() => {
+        setOpenMessage(false);
+      });
+  };
+
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -120,6 +135,7 @@ export default function Workspace() {
             teams={teams}
             resources={resources}
             handleRenameTeam={handleRenameTeam}
+            handleDeleteBooking={handleDeleteBooking}
           />
         </Grid>
       </Box>

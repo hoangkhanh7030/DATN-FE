@@ -16,12 +16,12 @@ export const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 15,
+    margin: ({ dialogStyle }) => (dialogStyle ? "24px 0" : "15px 0 0 0"),
   },
 
   dialogActions: {
     background: colors.bgColor,
     borderTop: `1px solid ${colors.borderColor}`,
-    padding: "20px 24px",
+    padding: ({ dialogStyle }) => (dialogStyle ? "24px 24px" : "20px 24px"),
   },
 }));

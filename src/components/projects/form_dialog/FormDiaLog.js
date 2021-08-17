@@ -34,8 +34,9 @@ export const FormDialog = ({
   handleActionDialog,
   dialogTitle = "",
   buttonText = "",
+  dialogStyle = false,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({dialogStyle});
 
   const [invalidName, setInvalidName] = useState("");
   const [invalidClient, setInvalidClient] = useState("");
@@ -89,7 +90,11 @@ export const FormDialog = ({
       fullWidth
       maxWidth="xs"
     >
-      <DialogTitle id="form-dialog-title" onClose={handleCloseDialog}>
+      <DialogTitle
+        id="form-dialog-title"
+        onClose={handleCloseDialog}
+        dialogStyle={dialogStyle}
+      >
         {dialogTitle}
       </DialogTitle>
       <DialogContent>
@@ -128,7 +133,7 @@ export const FormDialog = ({
           />
         </Box>
       </DialogContent>
-      <DialogActions className={classes.dialogActions}>
+      <DialogActions className={`${classes.dialogActions} `}>
         <Button onClick={handleCloseDialog} variant="outlined">
           Cancel
         </Button>

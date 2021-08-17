@@ -21,6 +21,8 @@ import BookingDialog from "./dialog/BookingDialog";
 import { useStyles } from "./style";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
+import { Message } from "components/common/Message";
+import { addBooking, editBooking } from "redux/actions/bookingAction";
 
 const INITIAL_BOOKING = {
   id: "",
@@ -48,29 +50,30 @@ export default function Workspace() {
   const [projectSearch, setProjectSearch] = useState("");
   const [resourceSearch, setResourceSearch] = useState("");
 
-  useEffect(() => {
-    fetchProjects(projectSearch);
-  }, [dispatch, id]);
+  const { message } = useSelector((state) => state.message);
+  const [openMessage, setOpenMessage] = useState(false);
+  const { status } = useSelector((state) => state.booking);
+
+  const handleCloseMessage = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenMessage(false);
+  };
 
   useEffect(() => {
+    fetchProjects(projectSearch);
     fetchResources(resourceSearch);
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!storeResources.data) {
+    if (!storeResources.data && !storeProjects.data) {
       return;
     }
 
     setRscList(storeResources.data);
-  }, [storeResources.data]);
-
-  useEffect(() => {
-    if (!storeProjects.data) {
-      return;
-    }
-
     setPrjList(storeProjects.data);
-  }, [storeProjects.data]);
+  }, [storeResources.data, storeProjects.data]);
 
   const fetchProjects = (projectSearch) => {
     dispatch(getProjectsBooking(id, projectSearch));
@@ -99,7 +102,8 @@ export default function Workspace() {
   const handleOpenDialog = (
     startDate = null,
     resourceId = "",
-    booking = null
+    booking = null,
+    endDate = null
   ) => {
     console.log(startDate);
     console.log(resourceId);
@@ -118,12 +122,38 @@ export default function Workspace() {
         : {
             ...INITIAL_BOOKING,
             startDate,
-            endDate: startDate,
+            endDate: endDate ? endDate : startDate,
             resourceId,
           }
     );
 
     setOpenDialog(true);
+  };
+
+  const handleAddBooking = (data) => {
+    dispatch(addBooking(id, data))
+      .then(() => {
+        setOpenDialog(false);
+        setOpenMessage(true);
+        console.log("add success");
+        reloadBookings();
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+  const handleEditBooking = (data) => {
+    console.log(booking);
+    dispatch(editBooking(id, data))
+      .then(() => {
+        setOpenDialog(false);
+        setOpenMessage(true);
+        console.log("edit success");
+        reloadBookings();
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
   };
 
   const [teams, setTeams] = useState([]);
@@ -142,6 +172,18 @@ export default function Workspace() {
   };
   const fetchBookings = (params) => {
     dispatch(getBookings(id, params));
+  };
+
+  const reloadBookings = () => {
+    const thisCalendar = buildCalendar(today, view);
+    const params = setParams(
+      searched,
+      _.first(thisCalendar).format("YYYY-MM-DD"),
+      _.last(thisCalendar).format("YYYY-MM-DD")
+    );
+
+    setCalendar(thisCalendar);
+    fetchBookings(params);
   };
 
   useEffect(() => {
@@ -219,23 +261,37 @@ export default function Workspace() {
             handleOpenDialog={handleOpenDialog}
           />
         </Grid>
-      </Box>{" "}
+      </Box>
       {openDialog && storeProjects.data && storeResources.data ? (
         <BookingDialog
           openDialog={openDialog}
           booking={booking}
+          setBooking={setBooking}
           setOpenDialog={setOpenDialog}
           projects={prjList}
           resources={rscList}
+          handleAddBooking={handleAddBooking}
+          handleEditBooking={handleEditBooking}
           projectSearch={projectSearch}
           setProjectSearch={setProjectSearch}
           resourceSearch={resourceSearch}
           setResourceSearch={setResourceSearch}
+          fetchBookings={reloadBookings}
         />
       ) : (
         <></>
-      )}{" "}
+      )}
       <Progress isOpen={storeDashboard.isLoading} />
+      {message ? (
+        <Message
+          message={message}
+          isOpen={openMessage}
+          handleCloseMessage={handleCloseMessage}
+          type={status === 200 ? "success" : "error"}
+        />
+      ) : (
+        <></>
+      )}
     </ThemeProvider>
   );
 }

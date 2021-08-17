@@ -30,6 +30,7 @@ export const CustomizedSelect = (props) => {
     invalidStyle = "",
     errorName = "",
     errorValue = "",
+    handleOpenDialog
   } = props;
 
   const title = name === PROJECT_ID ? "Project" : "Resource";
@@ -107,7 +108,7 @@ export const CustomizedSelect = (props) => {
                   disableElevation
                   size="small"
                   onClick={(e) => {
-                    stopImmediatePropagation(e);
+                    handleOpenDialog()
                   }}
                 >
                   New

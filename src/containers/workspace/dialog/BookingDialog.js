@@ -10,17 +10,46 @@ import { CustomizedDatePicker } from "components/dashboard/dialog/CustomizedDate
 import { CustomizedSelect } from "components/dashboard/dialog/CustomizedSelect";
 import { DialogTitle } from "components/dashboard/dialog/DialogTitle";
 import CustomizedTab from "components/dashboard/dialog/Tab";
-import { END_DATE, PROJECT_ID, RESOURCE_ID, START_DATE } from "constants/index";
+import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
+import {
+  END_DATE,
+  IMAGES_URL,
+  PROJECT_ID,
+  RESOURCE_ID,
+  START_DATE,
+} from "constants/index";
+import ResourceDialog from "containers/resources/dialog/ResourceDialog";
+import { storage } from "firebase/index";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { addBooking, editBooking } from "redux/actions/bookingAction";
+import { addProject, getProjectsBooking } from "redux/actions/projectAction";
+import { addResource, getResourcesBooking } from "redux/actions/resourceAction";
+import { getTeams } from "redux/actions/teamAction";
+import { SET_MESSAGE } from "redux/constants";
 import { useStyles } from "./style";
 
+export const DEFAULT_PROJECT = {
+  name: "",
+  clientName: "",
+  color: "#fff",
+  textColor: "#000",
+  colorPattern: "#ff00",
+};
+const DIALOGTITLE = "New Project";
+const BUTTONTEXT = "CONFIRM";
+
+const INITIAL_RESOURCE = {
+  avatar: "",
+  name: "",
+  teamId: "",
+  positionId: "",
+};
 export default function BookingDialog(props) {
   const {
     openDialog = false,
     booking = {},
+    setBooking,
     setOpenDialog,
     projects = [],
     resources = [],
@@ -28,41 +57,62 @@ export default function BookingDialog(props) {
     setProjectSearch,
     resourceSearch = "",
     setResourceSearch,
+    handleAddBooking,
+    handleEditBooking,
   } = props;
 
-  console.log(booking);
+  const btnLoading = useSelector((state) => state.booking.isLoading);
 
-  const oldPercentage=booking.percentage
-  const oldDuration=booking.duration
+  const oldPercentage = booking.percentage;
+  const oldDuration = booking.duration;
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const classes = useStyles();
 
-  const [bookingData, setBookingData] = useState(booking);
-
   const [tabValue, setTabValue] = useState(0);
 
   const [dateMessage, setDateMessage] = useState("");
 
+  const [openPrj, setOpenPrj] = useState(false);
+  const [openRsc, setOpenRsc] = useState(false);
+  const [project, setProject] = useState(DEFAULT_PROJECT);
+  const [resource, setResource] = useState(INITIAL_RESOURCE);
+  const [resourceId, setResourceId] = useState(null);
+
+  const storeTeams = useSelector((state) => state.teams);
+
+  const handleOpenPrjDialog = () => {
+    setOpenPrj(!openPrj);
+  };
+
+  const handleOpenRscDialog = () => {
+    dispatch(getTeams(id));
+    setResourceId("");
+
+    setOpenRsc(!openRsc);
+  };
+
+  //
   const [invalidValue, setInvalidValue] = useState({
     projectId: "",
     resourceId: "",
   });
 
   const handleStartDateChange = (value) => {
-    setBookingData({ ...bookingData, startDate: value });
+    console.log(value);
+    setBooking({ ...booking, startDate: value });
     setDateMessage(
-      bookingData.endDate.isBefore(value)
+      booking.endDate.isBefore(value)
         ? "Start date must not be after end date"
         : ""
     );
   };
 
   const handleEndDateChange = (value) => {
-    setBookingData({ ...bookingData, endDate: value });
+    setBooking({ ...booking, endDate: value });
     setDateMessage(
-      value.isBefore(bookingData.startDate, "day")
+      value.isBefore(booking.startDate, "day")
         ? "Start date must not be after end date"
         : ""
     );
@@ -71,30 +121,30 @@ export default function BookingDialog(props) {
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
     tabValue === 0
-      ? setBookingData({
-          ...bookingData,
-          duration: bookingData.id ? oldDuration : 8,
+      ? setBooking({
+          ...booking,
+          duration: booking.id ? oldDuration : 8,
         })
-      : setBookingData({
-          ...bookingData,
-          percentage: bookingData.id ? oldPercentage : 100,
+      : setBooking({
+          ...booking,
+          percentage: booking.id ? oldPercentage : 100,
         });
   };
 
   const handleChangeSelectItem = (value, name) => {
-    setBookingData({ ...bookingData, [name]: value });
+    setBooking({ ...booking, [name]: value });
     setInvalidValue({ ...invalidValue, [name]: "" });
     name === PROJECT_ID ? setProjectSearch("") : setResourceSearch("");
   };
 
   const handleChangeTabInput = (event) => {
     tabValue === 0
-      ? setBookingData({
-          ...bookingData,
+      ? setBooking({
+          ...booking,
           percentage: parseFloat(event.target.value),
         })
-      : setBookingData({
-          ...bookingData,
+      : setBooking({
+          ...booking,
           duration: parseFloat(event.target.value),
         });
   };
@@ -110,146 +160,189 @@ export default function BookingDialog(props) {
 
   // handle submit dialog
   const handleSubmitDialog = () => {
-    if (
-      !Boolean(bookingData.projectId && bookingData.resourceId && !dateMessage)
-    ) {
+    if (!Boolean(booking.projectId && booking.resourceId && !dateMessage)) {
       setInvalidValue({
         ...invalidValue,
-        projectId: !bookingData.projectId ? PROJECT_ID : "",
-        resourceId: !bookingData.resourceId ? RESOURCE_ID : "",
+        projectId: !booking.projectId ? PROJECT_ID : "",
+        resourceId: !booking.resourceId ? RESOURCE_ID : "",
       });
 
       return;
     }
     const data = {
-      ...bookingData,
-      startDate: bookingData.startDate.format("YYYY-MM-DD"),
-      endDate: bookingData.endDate.format("YYYY-MM-DD"),
-      percentage: tabValue === 0 ? bookingData.percentage : "",
-      duration: tabValue === 1 ? bookingData.duration : "",
+      ...booking,
+      startDate: booking.startDate.format("YYYY-MM-DD"),
+      endDate: booking.endDate.format("YYYY-MM-DD"),
+      percentage: tabValue === 0 ? booking.percentage : "",
+      duration: tabValue === 1 ? booking.duration : "",
     };
+    booking.id ? handleEditBooking(data) : handleAddBooking(data);
+  };
 
-    data.id
-      ? dispatch(editBooking(id, data))
-          .then(() => {
-            console.log("edit success");
-            // window.location.reload();
-            setOpenDialog(false);
-          })
-          .catch(() => {
-            // setOpenMessage(true);
-          })
-      : dispatch(addBooking(id, data))
-          .then(() => {
-            console.log("add success");
-            // window.location.reload();
-            setOpenDialog(false);
-          })
-          .catch(() => {
-            // setOpenMessage(true);
+  const handleCreateProject = () => {
+    dispatch(addProject(id, project)).then(() => {
+      dispatch(getProjectsBooking(id, projectSearch));
+    });
+  };
+
+  const callApiAddResource = (id, resource) => {
+    dispatch(addResource(id, resource)).then(() => {
+      dispatch(getResourcesBooking(id, projectSearch));
+    });
+  };
+
+  const getUploadedImageUrl = async (avatarFile) => {
+    return new Promise((resolve, reject) => {
+      const uploadTask = storage
+        .ref(`${IMAGES_URL}${avatarFile.name}`)
+        .put(avatarFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          dispatch({
+            type: SET_MESSAGE,
+            payload: error,
           });
+          reject(error);
+        },
+        async () => {
+          const imgURL = await uploadTask.snapshot.ref.getDownloadURL();
+          resolve(imgURL);
+          return imgURL;
+        }
+      );
+    });
   };
 
   return (
-    <Dialog
-      open={openDialog}
-      onClose={handleCloseDialog}
-      fullWidth
-      maxWidth="xs"
-    >
-      <DialogTitle onClose={handleCloseDialog}>
-        {bookingData.id ? "Edit Booking" : "New Booking"}
-      </DialogTitle>
-      <DialogContent>
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <CustomizedDatePicker
-              classes={classes}
-              title={START_DATE}
-              dateValue={bookingData.startDate}
-              handleDateChange={handleStartDateChange}
-              dateMessage={dateMessage}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <CustomizedDatePicker
-              classes={classes}
-              title={END_DATE}
-              dateValue={bookingData.endDate}
-              startDate={bookingData.startDate}
-              handleDateChange={handleEndDateChange}
-            />
-          </Grid>
-          {!dateMessage ? (
-            <></>
-          ) : (
-            <Grid item xs={12} className={classes.errorText}>
-              {
-                <HelperText
-                  dateError={classes.dateError}
-                  message={dateMessage}
-                />
-              }
+    <>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle onClose={handleCloseDialog}>
+          {booking.id ? "Edit Booking" : "New Booking"}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <CustomizedDatePicker
+                classes={classes}
+                title={START_DATE}
+                dateValue={booking.startDate}
+                handleDateChange={handleStartDateChange}
+                dateMessage={dateMessage}
+              />
             </Grid>
-          )}
-        </Grid>
+            <Grid item xs={6}>
+              <CustomizedDatePicker
+                classes={classes}
+                title={END_DATE}
+                dateValue={booking.endDate}
+                startDate={booking.startDate}
+                handleDateChange={handleEndDateChange}
+              />
+            </Grid>
+            {!dateMessage ? (
+              <></>
+            ) : (
+              <Grid item xs={12} className={classes.errorText}>
+                {
+                  <HelperText
+                    dateError={classes.dateError}
+                    message={dateMessage}
+                  />
+                }
+              </Grid>
+            )}
+          </Grid>
 
-        <CustomizedTab
-          classes={classes}
-          tabValue={tabValue}
-          percentage={bookingData.percentage}
-          duration={bookingData.duration}
-          startDate={bookingData.startDate}
-          endDate={bookingData.endDate}
-          handleChangeTab={handleChangeTab}
-          handleChangeTabInput={handleChangeTabInput}
-        />
+          <CustomizedTab
+            classes={classes}
+            tabValue={tabValue}
+            percentage={booking.percentage}
+            duration={booking.duration}
+            startDate={booking.startDate}
+            endDate={booking.endDate}
+            handleChangeTab={handleChangeTab}
+            handleChangeTabInput={handleChangeTabInput}
+          />
 
-        <CustomizedSelect
-          classes={classes}
-          name={PROJECT_ID}
-          selectValue={bookingData.projectId}
-          items={projects}
-          searchName={projectSearch}
-          setSearchName={setProjectSearch}
-          handleChangeSelectItem={handleChangeSelectItem}
-          invalidStyle={invalidValue.projectId === PROJECT_ID}
-          errorName={PROJECT_ID}
-          errorValue={invalidValue.projectId}
-        />
+          <CustomizedSelect
+            classes={classes}
+            name={PROJECT_ID}
+            selectValue={booking.projectId}
+            items={projects}
+            searchName={projectSearch}
+            setSearchName={setProjectSearch}
+            handleChangeSelectItem={handleChangeSelectItem}
+            invalidStyle={invalidValue.projectId === PROJECT_ID}
+            errorName={PROJECT_ID}
+            errorValue={invalidValue.projectId}
+            handleOpenDialog={handleOpenPrjDialog}
+          />
 
-        <CustomizedSelect
-          classes={classes}
-          name={RESOURCE_ID}
-          selectValue={bookingData.resourceId}
-          items={resources}
-          searchName={resourceSearch}
-          setSearchName={setResourceSearch}
-          handleChangeSelectItem={handleChangeSelectItem}
-          invalidStyle={invalidValue.resourceId === RESOURCE_ID}
-          errorName={RESOURCE_ID}
-          errorValue={invalidValue.resourceId}
-        />
-      </DialogContent>
+          <CustomizedSelect
+            classes={classes}
+            name={RESOURCE_ID}
+            selectValue={booking.resourceId}
+            items={resources}
+            searchName={resourceSearch}
+            setSearchName={setResourceSearch}
+            handleChangeSelectItem={handleChangeSelectItem}
+            invalidStyle={invalidValue.resourceId === RESOURCE_ID}
+            errorName={RESOURCE_ID}
+            errorValue={invalidValue.resourceId}
+            handleOpenDialog={handleOpenRscDialog}
+          />
+        </DialogContent>
 
-      <DialogActions className={classes.dialogActions}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setOpenDialog(false);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-          disableElevation
-          onClick={handleSubmitDialog}
-        >
-          {bookingData.id ? "Update" : "Confirm"}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <DialogActions className={classes.dialogActions}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOpenDialog(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            disableElevation
+            onClick={handleSubmitDialog}
+            disabled={btnLoading}
+          >
+            {booking.id ? "Update" : "Confirm"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <FormDialog
+        project={project}
+        setProject={setProject}
+        isOpenDialog={openPrj}
+        setOpenDialog={handleOpenPrjDialog}
+        handleActionDialog={handleCreateProject}
+        dialogTitle={DIALOGTITLE}
+        buttonText={BUTTONTEXT}
+        dialogStyle={true}
+      />
+
+      <ResourceDialog
+        isOpenDialog={openRsc}
+        resource={resource}
+        resourceId={resourceId}
+        teams={storeTeams.data || []}
+        setResource={setResource}
+        setIsOpenDialog={handleOpenRscDialog}
+        callApiAddResource={callApiAddResource}
+        getUploadedImageUrl={getUploadedImageUrl}
+        setOpenDialog={setOpenDialog}
+      />
+    </>
   );
 }

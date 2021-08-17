@@ -7,6 +7,7 @@ import resources from "./resourceReducer";
 import teams from "./teamReducer";
 import positions from "./positionReducer";
 import dashboard from "./dashboardReducer";
+import booking from "./bookingReducer";
 
 export default combineReducers({
   auth,
@@ -17,4 +18,5 @@ export default combineReducers({
   teams,
   positions,
   dashboard,
+  booking
 });

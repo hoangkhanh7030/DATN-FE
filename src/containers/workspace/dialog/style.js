@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme) => ({
   dialogActions: {
     background: colors.bgColor,
     borderTop: `1px solid ${colors.borderColor}`,
-    padding: "20px 24px",
+    padding: "12px 24px",
   },
   selected: {
     "& .MuiListItem-root.Mui-selected": {

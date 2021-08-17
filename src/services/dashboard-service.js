@@ -15,3 +15,19 @@ export const getBookingsService = (id, dashboardParams) => {
       return response.data;
     });
 };
+
+export const renameTeamService = (id, params) => {
+  const data = { name: params.name };
+
+  return axios
+    .put(
+      `${process.env.REACT_APP_API_URL}${WORKSPACES_URL}/${id}/team/${params.teamId}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

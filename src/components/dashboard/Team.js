@@ -3,6 +3,8 @@ import { Typography, Box, IconButton } from "@material-ui/core";
 import * as _ from "underscore";
 import { makeStyles } from "@material-ui/core/styles";
 import { TEAM_ID, ID } from "constants/index";
+import TeamOptions from "./TeamOptions";
+import TeamDialog from "./TeamDialog";
 
 const useStyles = makeStyles({
   container: {
@@ -28,12 +30,29 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Team({ team = {}, resources = [] }) {
+export default function Team({ team = {}, resources = [], handleRenameTeam }) {
   const classes = useStyles();
 
   const rscAmount = resources.filter(
     (resource) => _.get(resource, TEAM_ID) === _.get(team, ID)
   ).length;
+
+  const [openRename, setOpenRename] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClickOption = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseOption = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenRenameTeam = () => {
+    handleCloseOption();
+    setOpenRename(true);
+  };
 
   return (
     <Box className={classes.container}>
@@ -47,7 +66,24 @@ export default function Team({ team = {}, resources = [] }) {
         <Typography className={classes.text}>{`(${rscAmount})`}</Typography>
       </Box>
 
-      <IconButton className={`fas fa-ellipsis-h ${classes.icon}`}></IconButton>
+      <IconButton
+        aria-controls={_.get(team, "id")}
+        aria-haspopup="true"
+        className={`fas fa-ellipsis-h ${classes.icon}`}
+        onClick={handleClickOption}
+      ></IconButton>
+      <TeamOptions
+        anchorEl={anchorEl}
+        handleCloseOption={handleCloseOption}
+        handleOpenRenameTeam={handleOpenRenameTeam}
+      />
+
+      <TeamDialog
+        team={team}
+        isOpenDialog={openRename}
+        setOpenDialog={setOpenRename}
+        handleRenameTeam={handleRenameTeam}
+      />
     </Box>
   );
 }

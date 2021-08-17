@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, InputBase, Paper } from "@material-ui/core";
+import { Typography, InputBase, Paper, Box } from "@material-ui/core";
 
 import { useStyles } from "./style";
 
@@ -18,7 +18,12 @@ export const DialogInput = ({
       }`}
       elevation={0}
     >
-      <Typography variant="h4">{title} *</Typography>
+      <Typography variant="h4">
+        {title}{" "}
+        <Box component="span" style={{ color: "red" }}>
+          *
+        </Box>
+      </Typography>
       <InputBase
         name={inputName}
         defaultValue={inputValue}

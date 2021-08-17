@@ -6,13 +6,14 @@ import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
 
 import { Progress } from "components/common/Progress";
+import { Message } from "components/common/Message";
 import Header from "./header/Header";
 import CalendarHeader from "./calendar/CalendarHeader";
 import CalendarBody from "./calendar/CalendarBody";
 import buildCalendar from "./others/buildCalendar";
 
 import { VIEWS, Y_M_D, DATA, TEAMS, RESOURCES } from "./others/constants";
-import { getBookings } from "redux/actions/dashboardAction";
+import { getBookings, renameTeam } from "redux/actions/dashboardAction";
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
@@ -21,6 +22,9 @@ export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const storeDashboard = useSelector((state) => state.dashboard);
+  const status = _.get(storeDashboard, ["data", "status"]);
+  const { message } = useSelector((state) => state.message);
+  const [hasMessage, setOpenMessage] = useState(false);
 
   const [teams, setTeams] = useState([]);
   const [resources, setResources] = useState([]);
@@ -68,6 +72,25 @@ export default function Workspace() {
     fetchBookings(calendar, "");
   };
 
+  const handleRenameTeam = (teamId, name) => {
+    const params = { teamId, name };
+    dispatch(renameTeam(id, params))
+      .then(() => {
+        setOpenMessage(true);
+        fetchBookings(calendar);
+      })
+      .catch(() => {
+        setOpenMessage(false);
+      });
+  };
+
+  const handleCloseMessage = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenMessage(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Header
@@ -96,9 +119,20 @@ export default function Workspace() {
             view={view}
             teams={teams}
             resources={resources}
+            handleRenameTeam={handleRenameTeam}
           />
         </Grid>
       </Box>
+      {message ? (
+        <Message
+          message={message}
+          isOpen={hasMessage}
+          handleCloseMessage={handleCloseMessage}
+          type={status === 200 ? "success" : "error"}
+        />
+      ) : (
+        <></>
+      )}
       <Progress isOpen={storeDashboard.isLoading} />
     </ThemeProvider>
   );

@@ -1,7 +1,10 @@
 import * as actionTypes from "redux/constants";
 import * as _ from "underscore";
 
-import { getBookingsService } from "services/dashboard-service";
+import {
+  getBookingsService,
+  renameTeamService,
+} from "services/dashboard-service";
 
 export const getBookings = (id, params) => (dispatch) => {
   dispatch({
@@ -21,6 +24,40 @@ export const getBookings = (id, params) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.GET_BOOKINGS_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const renameTeam = (id, params) => (dispatch) => {
+  dispatch({
+    type: actionTypes.RENAME_TEAM,
+  });
+
+  return renameTeamService(id, params).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.RENAME_TEAM_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: _.get(data, "message"),
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.RENAME_TEAM_FAILED,
       });
 
       dispatch({

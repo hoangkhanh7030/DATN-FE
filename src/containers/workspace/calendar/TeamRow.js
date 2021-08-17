@@ -24,6 +24,7 @@ export default function TeamRow({
   team = {},
   resources = [],
   view = 1,
+  handleRenameTeam,
 }) {
   const classes = useStyles({ view });
 
@@ -35,7 +36,13 @@ export default function TeamRow({
           classes.calendarDay
         } ${_.isEmpty(team) ? classes.emptyTeam : null}`}
       >
-        {_.isEmpty(team) ? null : <Team team={team} resources={resources} />}
+        {_.isEmpty(team) ? null : (
+          <Team
+            team={team}
+            resources={resources}
+            handleRenameTeam={handleRenameTeam}
+          />
+        )}
       </Grid>
 
       <TeamCell classes={classes} calendar={calendar} />

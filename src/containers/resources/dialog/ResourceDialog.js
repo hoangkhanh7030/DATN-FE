@@ -31,6 +31,7 @@ export default function ResourceDialog(props) {
     setIsOpenDialog,
     callApiAddResource,
     getUploadedImageUrl,
+    callApiEditResource,
   } = props;
   const { id } = useParams();
 
@@ -60,8 +61,15 @@ export default function ResourceDialog(props) {
         (item) => item.id === _.get(resource, "teamId")
       );
       setPositions(selectedTeam.positions);
+      const isEdit = selectedTeam.positions.some(
+        (e) => e.id === _.get(resource, "positionId")
+      );
+      setResource({
+        ...resource,
+        positionId: isEdit ? _.get(resource, "positionId") : "",
+      });
     }
-  }, [_.get(resource, "teamId")]);
+  }, [_.get(resource, "teamId"), teams]);
 
   const handleChange = (event) => {
     setInvalidName(getInvalidValue(event.target));
@@ -98,12 +106,17 @@ export default function ResourceDialog(props) {
       hasEmptyValue(_.get(resource, "positionId"))
     )
       return;
-    callApiAddResource(id, {
-      ...resource,
-      avatar: avatarFile ? await getUploadedImageUrl(avatarFile) : "",
-    });
     handleCloseDialog();
-    setIsOpenDialog(false);
+    const updatedResource = {
+      ...resource,
+      avatar: avatarFile
+        ? await getUploadedImageUrl(avatarFile)
+        : _.get(resource, "avatar"),
+    };
+
+    resourceId
+      ? callApiEditResource(id, resourceId, updatedResource)
+      : callApiAddResource(id, updatedResource);
   };
 
   return (
@@ -121,6 +134,8 @@ export default function ResourceDialog(props) {
           <AvatarUpload
             avatar={_.get(resource, "avatar")}
             setAvatarFile={setAvatarFile}
+            resource={resource}
+            setResource={setResource}
           />
         </Box>
         <Paper

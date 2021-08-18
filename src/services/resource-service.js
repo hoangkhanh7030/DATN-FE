@@ -29,3 +29,18 @@ export const addResourceService = (id, data) => {
       return response.data;
     });
 };
+
+export const editResourceService = (id, resourceId, data) => {
+  return axios
+    .put(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${RESOURCES_URL}/${resourceId}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

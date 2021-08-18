@@ -15,7 +15,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage } from "redux/actions/msgAction";
-import { getResources, addResource } from "redux/actions/resourceAction";
+import {
+  getResources,
+  addResource,
+  editResource,
+} from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
 import * as _ from "underscore";
@@ -55,6 +59,8 @@ export default function Resources() {
   const [resource, setResource] = useState(null);
 
   const storeTeams = useSelector((state) => state.teams);
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleOpenDialog = (resource = null) => {
     setResource(
@@ -162,6 +168,18 @@ export default function Resources() {
           type: GET_RESOURCES,
         });
         window.location.reload();
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
+  const callApiEditResource = (id, resourceId, resource) => {
+    dispatch(editResource(id, resourceId, resource))
+      .then(() => {
+        fetchResources(setResourceParams());
+        setOpenMessage(true);
       })
       .catch(() => {
         setOpenMessage(true);
@@ -176,7 +194,9 @@ export default function Resources() {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => {
+          setIsUploading(true);
+        },
         (error) => {
           dispatch({
             type: SET_MESSAGE,
@@ -187,6 +207,7 @@ export default function Resources() {
         async () => {
           const imgURL = await uploadTask.snapshot.ref.getDownloadURL();
           resolve(imgURL);
+          setIsUploading(false);
           return imgURL;
         }
       );
@@ -215,7 +236,7 @@ export default function Resources() {
         data={resources}
         emptyRows={emptyRows}
         handleSort={handleSort}
-        isLoading={storeResources.isLoading}
+        isLoading={storeResources.isLoading || isUploading}
         handleOpenDialog={handleOpenDialog}
       />
       <TableFooter
@@ -237,9 +258,12 @@ export default function Resources() {
           setIsOpenDialog={setIsOpenDialog}
           callApiAddResource={callApiAddResource}
           getUploadedImageUrl={getUploadedImageUrl}
+          callApiEditResource={callApiEditResource}
         />
       )}
-      {message && (
+      {!message ? (
+        <></>
+      ) : (
         <Message
           message={message}
           isOpen={openMessage}

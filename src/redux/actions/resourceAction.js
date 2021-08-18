@@ -4,6 +4,7 @@ import * as _ from "underscore";
 import {
   getResourcesService,
   addResourceService,
+  editResourceService,
 } from "services/resource-service";
 
 export const getResources = (id, resourceParams) => (dispatch) => {
@@ -59,6 +60,40 @@ export const addResource = (id, data) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ADD_RESOURCE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const editResource = (id, resourceId, data) => (dispatch) => {
+  dispatch({
+    type: actionTypes.EDIT_RESOURCE,
+  });
+
+  return editResourceService(id, resourceId, data).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.EDIT_RESOURCE_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.EDIT_RESOURCE_FAILED,
       });
 
       dispatch({

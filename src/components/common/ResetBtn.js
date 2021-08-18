@@ -15,7 +15,7 @@ export const ResetBtn = ({ resetBtn = "", onClick }) => {
   return (
     <Tooltip title="reset" arrow>
       <IconButton className={`${classes.btn} ${resetBtn}`} onClick={onClick}>
-        <i class="fas fa-undo-alt"></i>
+        <i className="fas fa-undo-alt"></i>
       </IconButton>
     </Tooltip>
   );

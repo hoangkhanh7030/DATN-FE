@@ -4,8 +4,8 @@ export default function TeamOptions({
   anchorEl,
   handleCloseOption,
   handleOpenRenameTeam,
+  handleOpenDialog,
 }) {
-  
   return (
     <Menu
       anchorEl={anchorEl}
@@ -22,7 +22,7 @@ export default function TeamOptions({
       }}
       elevation={5}
     >
-      <MenuItem key="new" value="new">
+      <MenuItem key="new" value="new" onClick={handleOpenDialog}>
         add member
       </MenuItem>
       <MenuItem key="rename" value="rename" onClick={handleOpenRenameTeam}>

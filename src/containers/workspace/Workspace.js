@@ -21,12 +21,14 @@ import {
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
+import { addResource } from "redux/actions/resourceAction";
 
 export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const storeDashboard = useSelector((state) => state.dashboard);
   const status = _.get(storeDashboard, ["data", "status"]);
+  const [isUploading, setUploading] = useState(false);
   const { message } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
 
@@ -99,6 +101,18 @@ export default function Workspace() {
       });
   };
 
+  const handleAddResource = (id, resource) => {
+    console.log(resource);
+    dispatch(addResource(id, resource))
+      .then(() => {
+        setOpenMessage(true);
+        fetchBookings(calendar);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -136,6 +150,8 @@ export default function Workspace() {
             resources={resources}
             handleRenameTeam={handleRenameTeam}
             handleDeleteBooking={handleDeleteBooking}
+            handleAddResource={handleAddResource}
+            setUploading={setUploading}
           />
         </Grid>
       </Box>
@@ -149,7 +165,7 @@ export default function Workspace() {
       ) : (
         <></>
       )}
-      <Progress isOpen={storeDashboard.isLoading} />
+      <Progress isOpen={storeDashboard.isLoading || isUploading} />
     </ThemeProvider>
   );
 }

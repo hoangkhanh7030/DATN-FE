@@ -10,6 +10,8 @@ export default function CalendarBody({
   resources = [],
   handleRenameTeam,
   handleDeleteBooking,
+  handleAddResource,
+  setUploading,
 }) {
   teams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
 
@@ -22,6 +24,8 @@ export default function CalendarBody({
           view={view}
           resources={resources}
           handleRenameTeam={handleRenameTeam}
+          handleAddResource={handleAddResource}
+          setUploading={setUploading}
         />
 
         <ResourceRow

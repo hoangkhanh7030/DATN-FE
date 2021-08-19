@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Typography, Box, IconButton } from "@material-ui/core";
 import * as _ from "underscore";
 import { makeStyles } from "@material-ui/core/styles";
 import { TEAM_ID, ID } from "constants/index";
 import TeamOptions from "./TeamOptions";
 import TeamDialog from "./TeamDialog";
+import ResourceDialog from "containers/resources/dialog/ResourceDialog";
+import { getTeams } from "redux/actions/teamAction";
+
+import { IMAGES_URL } from "constants/index";
+import { storage } from "firebase/index";
+import { setMessage } from "redux/actions/msgAction";
 
 const useStyles = makeStyles({
   container: {
@@ -30,7 +38,28 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Team({ team = {}, resources = [], handleRenameTeam }) {
+const INITIAL_RESOURCE = {
+  avatar: "",
+  name: "",
+  teamId: "",
+  positionId: "",
+};
+
+export default function Team({
+  team = {},
+  resources = [],
+  handleRenameTeam,
+  handleAddResource,
+  setUploading,
+}) {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const storeTeams = useSelector((state) => state.teams);
+
+  useEffect(() => {
+    dispatch(getTeams(id));
+  }, [id]);
+
   const classes = useStyles();
 
   const rscAmount = resources.filter(
@@ -52,6 +81,40 @@ export default function Team({ team = {}, resources = [], handleRenameTeam }) {
   const handleOpenRenameTeam = () => {
     handleCloseOption();
     setOpenRename(true);
+  };
+
+  const [resource, setResource] = useState(INITIAL_RESOURCE);
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setResource({ ...INITIAL_RESOURCE, teamId: _.get(team, ID) });
+    handleCloseOption();
+    setIsOpenDialog(true);
+  };
+
+  const getUploadedImageUrl = async (avatarFile) => {
+    return new Promise((resolve, reject) => {
+      const uploadTask = storage
+        .ref(`${IMAGES_URL}${avatarFile.name}`)
+        .put(avatarFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          setUploading(true);
+        },
+        (error) => {
+          dispatch(setMessage(error));
+          reject(error);
+        },
+        async () => {
+          const imgURL = await uploadTask.snapshot.ref.getDownloadURL();
+          resolve(imgURL);
+          setUploading(false);
+          return imgURL;
+        }
+      );
+    });
   };
 
   return (
@@ -76,6 +139,7 @@ export default function Team({ team = {}, resources = [], handleRenameTeam }) {
         anchorEl={anchorEl}
         handleCloseOption={handleCloseOption}
         handleOpenRenameTeam={handleOpenRenameTeam}
+        handleOpenDialog={handleOpenDialog}
       />
 
       <TeamDialog
@@ -83,6 +147,16 @@ export default function Team({ team = {}, resources = [], handleRenameTeam }) {
         isOpenDialog={openRename}
         setOpenDialog={setOpenRename}
         handleRenameTeam={handleRenameTeam}
+      />
+
+      <ResourceDialog
+        isOpenDialog={isOpenDialog}
+        resource={resource}
+        teams={storeTeams.data || []}
+        setResource={setResource}
+        setIsOpenDialog={setIsOpenDialog}
+        callApiAddResource={handleAddResource}
+        getUploadedImageUrl={getUploadedImageUrl}
       />
     </Box>
   );

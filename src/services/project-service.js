@@ -29,3 +29,18 @@ export const addProjectService = (id, data) => {
       return response.data;
     });
 };
+
+export const editProjectService = (id, projectID, data) => {
+  return axios
+    .put(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${PROJECTS_URL}/${projectID}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

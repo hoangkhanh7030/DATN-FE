@@ -5,14 +5,10 @@ import { Button, Box } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
 import { StatusFilter } from "components/projects/toolbar/StatusFilter";
 import { MoreOptions } from "components/projects/toolbar/MoreOptions";
-import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
 
 import { STATUS } from "constants/index";
 import { useStyles } from "./style";
 import { ResetBtn } from "components/common/ResetBtn";
-
-const DIALOGTITLE = "New Project";
-const BUTTONTEXT = "CONFIRM";
 
 export default function ProjectsHeader({
   searched = "",
@@ -20,12 +16,7 @@ export default function ProjectsHeader({
   setSearched,
   cancelSearch,
   handleChangeDropdown,
-  project,
-  setProject,
-  isOpenDialog,
-  setOpenDialog,
   handleOpenDialog,
-  handleCreateProject,
   handleReset,
 }) {
   const classes = useStyles();
@@ -74,16 +65,6 @@ export default function ProjectsHeader({
           New Project
         </Button>
       </Box>
-
-      <FormDialog
-        project={project}
-        setProject={setProject}
-        isOpenDialog={isOpenDialog}
-        setOpenDialog={setOpenDialog}
-        handleActionDialog={handleCreateProject}
-        dialogTitle={DIALOGTITLE}
-        buttonText={BUTTONTEXT}
-      />
     </Box>
   );
 }

@@ -7,6 +7,13 @@ export const PASSWORD_ERROR = "password is required";
 export const EMPTY_ERROR = "this field is required";
 
 export const USER = "user";
+export const ID = "id";
+export const ACTION_STATUS = "status";
+export const DATA = "data";
+export const SUCCESS = "success";
+export const ERROR = "error";
+export const BTN_SAVE = "SAVE";
+export const BTN_CONFIRM = "CONFIRM";
 
 /* ----------------------- table ----------------------- */
 export const STATUS_OPTION = "status";

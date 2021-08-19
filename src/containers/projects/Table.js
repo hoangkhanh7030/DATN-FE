@@ -16,7 +16,13 @@ import { EmptyRows } from "components/projects/table/EmptyRows";
 import * as _ from "underscore";
 import { PROJECT_NAME, CLIENT_NAME, IS_ACTIVATED } from "constants/index";
 
-const ProjectsTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
+const ProjectsTable = ({
+  rows = [],
+  emptyRows = 5,
+  handleSort,
+  isLoading,
+  handleOpenDialog,
+}) => {
   const classes = useStyles({ emptyRows });
 
   return (
@@ -63,7 +69,11 @@ const ProjectsTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
           ) : (
             <>
               {rows.map((row) => (
-                <ProjectRow key={_.get(row, "id")} project={row} />
+                <ProjectRow
+                  key={_.get(row, "id")}
+                  project={row}
+                  handleOpenDialog={handleOpenDialog}
+                />
               ))}
 
               <EmptyRows

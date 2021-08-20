@@ -83,4 +83,11 @@ export const theme = createMuiTheme({
       fontWeight: 600,
     },
   },
+  overrides: {
+    MuiButton: {
+      outlined: {
+        backgroundColor: secondaryColor,
+      },
+    },
+  },
 });

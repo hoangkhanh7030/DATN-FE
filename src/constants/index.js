@@ -55,6 +55,7 @@ export const TEAMS_URL = "/teams";
 export const POSITIONS_URL = "/position";
 export const IMAGES_URL = "/images/";
 export const USERS_URL = "/users";
+export const EMAILS_URL = "/emails";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";

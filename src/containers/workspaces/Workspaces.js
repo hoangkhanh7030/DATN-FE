@@ -40,6 +40,7 @@ export default function Workspaces() {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openInvite, setOpenInvite] = useState(false);
 
   const [dialogError, setDialogError] = useState("");
 
@@ -174,6 +175,7 @@ export default function Workspaces() {
                 workspace={workspace}
                 open={openEdit}
                 openDelete={openDelete}
+                openInvite={openInvite}
                 content={EDIT_WORKSPACE_DIALOG}
                 name={_.get(workspace, "name")}
                 handleCloseDialog={handleCloseEditDialog}
@@ -181,6 +183,7 @@ export default function Workspaces() {
                 handleOpenDeleteDialog={handleOpenDeleteDialog}
                 handleCloseDeleteDialog={handleCloseDeleteDialog}
                 handleInputName={handleInputName}
+                setOpenInvite={setOpenInvite}
                 error={dialogError}
                 onHandleSubmit={() =>
                   handleEditWorkspace(_.get(workspace, "id"))

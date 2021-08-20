@@ -119,8 +119,13 @@ export const useStyles = makeStyles((theme) => ({
     width: ({ view }) => `calc(100% - ${view}%)`,
     height: "98%",
     "&:hover": {
-      border: `1px solid ${colors.primaryColor}`,
+      backgroundColor: `#9BB7FA`,
       cursor: "pointer",
+      pointerEvents: "pointer",
+    },
+    "&:active": {
+      cursor: "pointer",
+      pointerEvents: "none",
     },
   },
 }));

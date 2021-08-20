@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   container: {
+    "-webkit-user-select": "none",
     position: "absolute",
     left: 10,
     top: ({ index }) => 8 + index * 50,

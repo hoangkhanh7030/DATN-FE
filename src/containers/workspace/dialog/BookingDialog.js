@@ -50,7 +50,7 @@ export default function BookingDialog(props) {
     openDialog = false,
     booking = {},
     setBooking,
-    setOpenDialog,
+    handleCloseDialog,
     projects = [],
     resources = [],
     projectSearch = "",
@@ -100,7 +100,6 @@ export default function BookingDialog(props) {
   });
 
   const handleStartDateChange = (value) => {
-    console.log(value);
     setBooking({ ...booking, startDate: value });
     setDateMessage(
       booking.endDate.isBefore(value)
@@ -147,10 +146,6 @@ export default function BookingDialog(props) {
           ...booking,
           duration: parseFloat(event.target.value),
         });
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
   };
 
   // const cancelSearch = (e) => {
@@ -304,9 +299,7 @@ export default function BookingDialog(props) {
         <DialogActions className={classes.dialogActions}>
           <Button
             variant="outlined"
-            onClick={() => {
-              setOpenDialog(false);
-            }}
+            onClick={handleCloseDialog}
           >
             Cancel
           </Button>
@@ -341,7 +334,6 @@ export default function BookingDialog(props) {
         setIsOpenDialog={handleOpenRscDialog}
         callApiAddResource={callApiAddResource}
         getUploadedImageUrl={getUploadedImageUrl}
-        setOpenDialog={setOpenDialog}
       />
     </>
   );

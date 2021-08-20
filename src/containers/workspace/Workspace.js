@@ -54,6 +54,8 @@ export default function Workspace() {
   const [openMessage, setOpenMessage] = useState(false);
   const { status } = useSelector((state) => state.booking);
 
+  const [selectedDays, setSelectedDays] = useState([]);
+
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -99,15 +101,21 @@ export default function Workspace() {
     return () => clearTimeout(delayDebounce);
   }, [resourceSearch]);
 
+  const handleCloseDialog = () => {
+    selectedDays?.forEach((element) => {
+      document.getElementById(`${element}`).style.backgroundColor = `white`;
+    });
+    setOpenDialog(false);
+  };
+
   const handleOpenDialog = (
     startDate = null,
     resourceId = "",
     booking = null,
-    endDate = null
+    endDate = null,
+    selectedDays = []
   ) => {
-    console.log(startDate);
-    console.log(resourceId);
-    console.log(booking);
+    setSelectedDays(selectedDays);
     setBooking(
       booking
         ? {
@@ -121,8 +129,8 @@ export default function Workspace() {
           }
         : {
             ...INITIAL_BOOKING,
-            startDate,
-            endDate: endDate ? endDate : startDate,
+            startDate: startDate.isBefore(endDate) ? startDate : endDate,
+            endDate: endDate.isAfter(startDate) ? endDate : startDate,
             resourceId,
           }
     );
@@ -133,23 +141,20 @@ export default function Workspace() {
   const handleAddBooking = (data) => {
     dispatch(addBooking(id, data))
       .then(() => {
-        setOpenDialog(false);
+        handleCloseDialog();
         setOpenMessage(true);
-        console.log("add success");
-        reloadBookings();
+        fetchBookings(calendar);
       })
       .catch(() => {
         setOpenMessage(true);
       });
   };
   const handleEditBooking = (data) => {
-    console.log(booking);
     dispatch(editBooking(id, data))
       .then(() => {
         setOpenDialog(false);
         setOpenMessage(true);
-        console.log("edit success");
-        reloadBookings();
+        fetchBookings(calendar);
       })
       .catch(() => {
         setOpenMessage(true);
@@ -170,32 +175,21 @@ export default function Workspace() {
   const setParams = (searchName = searched, startDate, endDate) => {
     return { startDate, endDate, searchName };
   };
-  const fetchBookings = (params) => {
+
+  const fetchBookings = (thisCalendar = [], searchValue = "") => {
+    const params = {
+      startDate: _.first(thisCalendar).format("YYYY-MM-DD"),
+      endDate: _.last(thisCalendar).format("YYYY-MM-DD"),
+      searchName: searchValue,
+    };
+
     dispatch(getBookings(id, params));
-  };
-
-  const reloadBookings = () => {
-    const thisCalendar = buildCalendar(today, view);
-    const params = setParams(
-      searched,
-      _.first(thisCalendar).format("YYYY-MM-DD"),
-      _.last(thisCalendar).format("YYYY-MM-DD")
-    );
-
-    setCalendar(thisCalendar);
-    fetchBookings(params);
   };
 
   useEffect(() => {
     const thisCalendar = buildCalendar(today, view);
-    const params = setParams(
-      searched,
-      _.first(thisCalendar).format("YYYY-MM-DD"),
-      _.last(thisCalendar).format("YYYY-MM-DD")
-    );
-
     setCalendar(thisCalendar);
-    fetchBookings(params);
+    fetchBookings(thisCalendar);
   }, [today, view]);
 
   useEffect(() => {
@@ -205,25 +199,6 @@ export default function Workspace() {
     setResources(_.get(storeDashboard, ["data", "resources"]));
     setTeams(_.get(storeDashboard, ["data", "teams"]));
   }, [storeDashboard]);
-
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      const params = _.isEmpty(calendar)
-        ? setParams(
-            searched,
-            moment().startOf("week").format("YYYY-MM-DD"),
-            moment().endOf("week").format("YYYY-MM-DD")
-          )
-        : setParams(
-            searched,
-            _.first(calendar).format("YYYY-MM-DD"),
-            _.last(calendar).format("YYYY-MM-DD")
-          );
-      fetchBookings(params);
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
-  }, [searched]);
 
   const cancelSearch = () => {
     setSearched("");
@@ -267,7 +242,7 @@ export default function Workspace() {
           openDialog={openDialog}
           booking={booking}
           setBooking={setBooking}
-          setOpenDialog={setOpenDialog}
+          handleCloseDialog={handleCloseDialog}
           projects={prjList}
           resources={rscList}
           handleAddBooking={handleAddBooking}
@@ -276,7 +251,6 @@ export default function Workspace() {
           setProjectSearch={setProjectSearch}
           resourceSearch={resourceSearch}
           setResourceSearch={setResourceSearch}
-          fetchBookings={reloadBookings}
         />
       ) : (
         <></>

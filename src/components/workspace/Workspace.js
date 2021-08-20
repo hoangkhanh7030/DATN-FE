@@ -46,6 +46,7 @@ export default function Workspace(props) {
     handleOpenDeleteDialog,
     handelDeleteWorkspace,
     setOpenInvite,
+    handleInvite,
   } = props;
 
   const history = useHistory();
@@ -180,7 +181,7 @@ export default function Workspace(props) {
                       handleCloseDialog={handleCloseDeleteDialog}
                       handelDeleteWorkspace={handelDeleteWorkspace}
                     />
-                    
+
                     <MenuItem
                       onClick={() => {
                         setOpenInvite(true);
@@ -194,6 +195,7 @@ export default function Workspace(props) {
                         isOpen={openInvite}
                         handleCloseDialog={setOpenInvite}
                         setOpenOption={setOpenOption}
+                        handleInvite={handleInvite}
                       />
                     ) : (
                       <Box></Box>

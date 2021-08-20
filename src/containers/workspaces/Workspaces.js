@@ -17,6 +17,7 @@ import {
   getWorkspaces,
   updateWorkspace,
   deleteWorkspace,
+  inviteToWorkspace,
 } from "redux/actions/workspaceAction";
 import * as constants from "constants/index";
 import Workspace from "components/workspace/Workspace";
@@ -155,6 +156,17 @@ export default function Workspaces() {
     setOpenDelete(false);
   };
 
+  const handleInvite = (workspaceId, data) => {
+    dispatch(inviteToWorkspace(workspaceId, data))
+      .then(() => {
+        setIsOpenMessage(true);
+      })
+      .catch(() => {
+        setIsOpenMessage(true);
+      });
+    setOpenInvite(false);
+  };
+
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -184,6 +196,7 @@ export default function Workspaces() {
                 handleCloseDeleteDialog={handleCloseDeleteDialog}
                 handleInputName={handleInputName}
                 setOpenInvite={setOpenInvite}
+                handleInvite={handleInvite}
                 error={dialogError}
                 onHandleSubmit={() =>
                   handleEditWorkspace(_.get(workspace, "id"))

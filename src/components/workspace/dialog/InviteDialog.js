@@ -19,6 +19,7 @@ export default function InviteDialog(props) {
     workspaceId = "",
     isOpen = false,
     handleCloseDialog,
+    handleInvite,
     setOpenOption,
   } = props;
 
@@ -70,6 +71,7 @@ export default function InviteDialog(props) {
       url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${workspaceId}`,
     };
 
+    handleInvite(workspaceId, submittedData);
     setOpenOption(false);
   };
 

@@ -6,6 +6,7 @@ import {
   getWorkspacesService,
   updateWorkspaceService,
   deleteWorkspaceService,
+  inviteToWorkspaceService,
 } from "services/workspace-service";
 
 export const getWorkspaces = () => (dispatch) => {
@@ -131,6 +132,41 @@ export const deleteWorkspace = (id) => (dispatch) => {
 
       dispatch({
         type: actionTypes.DELETE_WORKSPACE_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+
+export const inviteToWorkspace = (id, data) => (dispatch) => {
+  dispatch({
+    type: actionTypes.INVITE_TO_WORKSPACE,
+  });
+
+  return inviteToWorkspaceService(id, data).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.INVITE_TO_WORKSPACE_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.INVITE_TO_WORKSPACE_FAILED,
       });
 
       dispatch({

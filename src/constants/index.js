@@ -54,6 +54,7 @@ export const TEAM_URL = "/team";
 export const TEAMS_URL = "/teams";
 export const POSITIONS_URL = "/position";
 export const IMAGES_URL = "/images/";
+export const USERS_URL = "/users";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";
@@ -82,3 +83,10 @@ export const DEFAULT_PROJECT = {
   textColor: "#000",
   colorPattern: "#ff00",
 };
+
+/* ----------------------- users ----------------------- */
+export const CREATED_DATE = "createdDate";
+export const ROLE = "role";
+export const IS_ACTIVE = "GOOGLE";
+export const IS_PENDING = "PENDING";
+export const RE_INVITE = "re-invite";

@@ -13,7 +13,6 @@ import {
   MenuItem,
   IconButton,
   ThemeProvider,
-  Icon,
   CardContent,
   Divider,
   Typography,
@@ -22,12 +21,12 @@ import {
 
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useStyles } from "./style";
-import { theme, commonStyle } from "assets/css/Common";
+import { theme } from "assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
 import AlertDialog from "components/common/AlertDialog";
 import { useHistory } from "react-router-dom";
-import { WORKSPACES_URL } from "constants/index";
 import analyze from "assets/images/analyze.png";
+import { WORKSPACES_URL, USERS_URL } from "constants/index";
 
 export default function Workspace(props) {
   const {
@@ -48,7 +47,6 @@ export default function Workspace(props) {
 
   const history = useHistory();
   const classes = useStyles();
-  const iconClasses = commonStyle();
 
   const noPermission = (workspace) => {
     return _.get(workspace, "role") !== "EDIT";
@@ -162,12 +160,7 @@ export default function Workspace(props) {
                     autoFocusItem={openOption}
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleOpenDialog}>
-                      <Icon
-                        className={`${iconClasses.icon} fas fa-pen ${classes.icon}`}
-                      />
-                      Edit
-                    </MenuItem>
+                    <MenuItem onClick={handleOpenDialog}>Edit</MenuItem>
                     <WorkspaceDialog
                       open={open}
                       content={content}
@@ -177,18 +170,25 @@ export default function Workspace(props) {
                       onHandleSubmit={onHandleSubmit}
                       error={error}
                     />
-                    <MenuItem onClick={handleOpenDeleteDialog}>
-                      <Icon
-                        className={`${iconClasses.icon} fas fa-trash ${classes.icon}`}
-                      />
-                      Delete
-                    </MenuItem>
+                    <MenuItem onClick={handleOpenDeleteDialog}>Remove</MenuItem>
                     <AlertDialog
                       open={openDelete}
                       content={`Do you really want to delete ${name} workspace?`}
                       handleCloseDialog={handleCloseDeleteDialog}
                       handelDeleteWorkspace={handelDeleteWorkspace}
                     />
+                    <MenuItem
+                      onClick={() =>
+                        history.push(
+                          `${WORKSPACES_URL}/${_.get(
+                            workspace,
+                            "id"
+                          )}${USERS_URL}`
+                        )
+                      }
+                    >
+                      Manage Users
+                    </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

@@ -6,7 +6,9 @@ import { StyledTableCell } from "containers/projects/style";
 const COLS = [1, 2, 3, 4];
 const ROWS = [1, 2, 3, 4, 5];
 
-export const LoadingTable = () => {
+export const LoadingTable = ({ users }) => {
+  if (users) COLS.push(5);
+  
   return ROWS.map((el) => (
     <TableRow key={el} height={58}>
       {COLS.map((el) => (

@@ -14,12 +14,17 @@ import {
   INITIAL_ROWS_PER_PAGE,
   INITIAL_PAGE,
 } from "constants/index";
+import { clearMessage } from "redux/actions/msgAction";
+import { getUsers } from "redux/actions/userAction";
 
 export default function Users() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const storeUsers = useSelector((state) => state.users);
+
   const classes = useStyles();
   const [users, setUsers] = useState([]);
-
+  const [searched, setSearched] = useState("");
   const [params, setParams] = useState({
     page: INITIAL_PAGE,
     size: INITIAL_ROWS_PER_PAGE,
@@ -28,16 +33,31 @@ export default function Users() {
     type: false,
   });
 
-  useEffect(() => {}, [id, params]);
+  const fetchUsers = () => {
+    dispatch(getUsers(id, { ...params, searchName: searched }));
+  };
+
+  useEffect(() => {
+    dispatch(clearMessage());
+    fetchUsers();
+  }, [id, searched, params]);
+
+  useEffect(() => {
+    if (!storeUsers.data) {
+      return;
+    }
+
+    setUsers(storeUsers.data);
+  }, [storeUsers.data]);
 
   const keyUp = (event) => {
     if (event.keyCode === 13 || event.target.value === "") {
-      setParams({ ...params, searchName: event.target.value });
+      setSearched(event.target.value);
     }
   };
 
   const cancelSearch = () => {
-    setParams({ ...params, searchName: "" });
+    setSearched("");
   };
 
   const handleSort = (orderBy) => {
@@ -49,19 +69,32 @@ export default function Users() {
   };
 
   const handleChangeDropdown = (e) => {
-    setParams({ ...params, page: 0 });
     const { name, value } = e.target;
-    if (name === SIZE_OPTION) setParams({ ...params, size: value });
+    if (name === SIZE_OPTION)
+      setParams({ ...params, page: INITIAL_PAGE, size: value });
 
     return;
   };
-  const emptyRows = params.size - Math.min(params.size, users.length);
+
+  const handleReset = () => {
+    setParams({
+      ...params,
+      page: INITIAL_PAGE,
+      searchName: "",
+      sortName: "",
+      type: false,
+    });
+  };
+
+  const emptyRows = params.size - Math.min(params.size, _.size(users));
+
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
-        searched={params.searchName}
+        searched={searched}
         cancelSearch={cancelSearch}
         keyUp={keyUp}
+        handleReset={handleReset}
       />
 
       <Box className={classes.boxTable}>
@@ -71,6 +104,7 @@ export default function Users() {
           rowsPerPage={params.size}
           emptyRows={emptyRows}
           handleSort={handleSort}
+          isLoading={storeUsers.isLoading}
         />
       </Box>
 
@@ -78,7 +112,7 @@ export default function Users() {
         rowsPerPage={params.size}
         handleChangePage={handleChangePage}
         handleChangeDropdown={handleChangeDropdown}
-        numPage={5}
+        numPage={storeUsers.numPage}
         page={params.page}
       />
     </ThemeProvider>

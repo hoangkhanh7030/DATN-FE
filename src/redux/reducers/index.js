@@ -7,6 +7,7 @@ import resources from "./resourceReducer";
 import teams from "./teamReducer";
 import positions from "./positionReducer";
 import emails from "./emailReducer";
+import users from "./userReducer";
 
 export default combineReducers({
   auth,
@@ -16,5 +17,6 @@ export default combineReducers({
   resources,
   teams,
   positions,
-  emails
+  emails,
+  users,
 });

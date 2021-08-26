@@ -2,9 +2,9 @@ import React from "react";
 import { TableRow, Typography } from "@material-ui/core";
 import { StyledTableCell } from "containers/projects/style";
 
-const EMPTY_TABLE = "No projects to load.";
+export const EmptyRows = ({ isFullPage, isEmptyTable, rowHeight, users }) => {
+  const EMPTY_TABLE = users ? "No users to load." : "No projects to load.";
 
-export const EmptyRows = ({ isFullPage, isEmptyTable, rowHeight }) => {
   return isFullPage ? (
     <></>
   ) : (

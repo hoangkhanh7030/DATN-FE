@@ -18,7 +18,6 @@ import { EMAIL, STATUS_NAME, CREATED_DATE, ROLE } from "constants/index";
 
 const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
   const classes = useStyles({ emptyRows });
-
   return (
     <TableContainer component={Paper} elevation={0}>
       <Table className={classes.table} aria-label="customized table">
@@ -39,7 +38,7 @@ const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
                 Status
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  onClick={() => handleSort(STATUS_NAME)}
+                  onClick={() => handleSort("auth_provider")}
                 ></IconButton>
               </Typography>
             </StyledTableCell>
@@ -47,19 +46,15 @@ const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
             <StyledTableCell width="15%">
               <Typography variant="h3" className={classes.tableTitleCenter}>
                 Role
-                <IconButton
-                  className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  onClick={() => handleSort(ROLE)}
-                ></IconButton>
               </Typography>
             </StyledTableCell>
 
             <StyledTableCell width="15%">
               <Typography variant="h3" className={classes.tableTitleCenter}>
-                Invited Date
+                Created Date
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  onClick={() => handleSort(CREATED_DATE)}
+                  onClick={() => handleSort("create_date")}
                 ></IconButton>
               </Typography>
             </StyledTableCell>
@@ -75,14 +70,15 @@ const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
             <LoadingTable users={true} />
           ) : (
             <>
-              {rows.map((row) => (
-                <UserRow key={_.get(row, "id")} user={row} />
+              {rows.map((row, index) => (
+                <UserRow key={index} user={row} />
               ))}
 
               <EmptyRows
                 isFullPage={!emptyRows}
                 isEmptyTable={rows.length === 0}
                 rowHeight={classes.emptyRows}
+                users={true}
               />
             </>
           )}

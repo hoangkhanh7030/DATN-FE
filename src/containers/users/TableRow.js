@@ -16,6 +16,7 @@ import {
   EMAIL,
   ACTIVE,
   CREATED_DATE,
+  ROLE,
 } from "constants/index";
 import * as _ from "underscore";
 import moment from "moment";
@@ -24,6 +25,8 @@ export default function UserRow({ user = {} }) {
   const classes = useStyles();
   const commonClasses = commonStyle();
 
+  const role = _.get(user, ROLE).toLowerCase();
+  const date = _.get(user, CREATED_DATE);
   const status = _.get(user, STATUS_NAME);
   const isActive = status === IS_ACTIVE;
   const isPending = status === IS_PENDING;
@@ -34,7 +37,6 @@ export default function UserRow({ user = {} }) {
     : `fas fa-undo`;
 
   const optionToolTip = isPending ? RE_INVITE : isActive ? ARCHIVE : ENABLE;
-
   return (
     <StyledTableRow>
       <StyledTableCell align="center">{_.get(user, EMAIL)}</StyledTableCell>
@@ -50,9 +52,11 @@ export default function UserRow({ user = {} }) {
         </Button>
       </StyledTableCell>
 
-      <StyledTableCell align="center">{_.get(user, "role")}</StyledTableCell>
       <StyledTableCell align="center">
-        {moment(_.get(user, CREATED_DATE)).format("DD/MM/YYYY")}
+        {role[0].toUpperCase() + role.slice(1)}
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        {date ? moment(date).format("DD/MM/YYYY") : `--/--/----`}
       </StyledTableCell>
 
       <StyledTableCell align="center">

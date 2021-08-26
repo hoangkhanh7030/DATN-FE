@@ -22,7 +22,8 @@ const UsersTable = ({
   handleSort,
   isLoading,
   handleArchiveUser,
-  handleDeleteUser
+  handleDeleteUser,
+  handleReInviteUser
 }) => {
   const classes = useStyles({ emptyRows });
   return (
@@ -83,6 +84,7 @@ const UsersTable = ({
                   user={row}
                   handleArchiveUser={handleArchiveUser}
                   handleDeleteUser={handleDeleteUser}
+                  handleReInviteUser={handleReInviteUser}
                 />
               ))}
 

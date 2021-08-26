@@ -1,5 +1,11 @@
 import axios from "axios";
-import { WORKSPACES_URL, USERS_URL, ASC, DESC } from "constants/index";
+import {
+  WORKSPACES_URL,
+  USERS_URL,
+  ASC,
+  DESC,
+  RE_INVITE_URL,
+} from "constants/index";
 import authHeader from "./data-service";
 
 export const getUsersService = (id, params) => {
@@ -48,6 +54,20 @@ export const deleteUserService = (id, userID) => {
     )
     .then((response) => {
       console.log(response.data);
+      return response.data;
+    });
+};
+
+export const reInviteUserService = (data) => {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}${RE_INVITE_URL}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
       return response.data;
     });
 };

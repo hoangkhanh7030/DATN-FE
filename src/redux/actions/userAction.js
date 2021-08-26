@@ -5,6 +5,7 @@ import {
   getUsersService,
   archiveUserService,
   deleteUserService,
+  reInviteUserService,
 } from "services/user-service";
 
 export const getUsers = (id, params) => (dispatch) => {
@@ -93,6 +94,40 @@ export const deleteUser = (id, userID) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.DELETE_USER_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const reInviteUser = (updatedData) => (dispatch) => {
+  dispatch({
+    type: actionTypes.RE_INVITE_USER,
+  });
+
+  return reInviteUserService(updatedData).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.RE_INVITE_USER_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.RE_INVITE_USER_FAILED,
       });
 
       dispatch({

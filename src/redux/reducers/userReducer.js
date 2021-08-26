@@ -38,6 +38,15 @@ export default function reducer(state = initialState, action) {
     case actionTypes.DELETE_USER_FAILED:
       return { ...state, status: payload.status, isLoading: false };
 
+    case actionTypes.RE_INVITE_USER:
+      return { ...state, isLoading: true };
+
+    case actionTypes.RE_INVITE_USER_SUCCEED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.RE_INVITE_USER_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     default:
       return state;
   }

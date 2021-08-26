@@ -16,7 +16,12 @@ import {
   INITIAL_PAGE,
 } from "constants/index";
 import { clearMessage } from "redux/actions/msgAction";
-import { getUsers, archiveUser, deleteUser } from "redux/actions/userAction";
+import {
+  getUsers,
+  archiveUser,
+  deleteUser,
+  reInviteUser,
+} from "redux/actions/userAction";
 
 export default function Users() {
   const { id } = useParams();
@@ -40,7 +45,7 @@ export default function Users() {
   };
 
   useEffect(() => {
-    dispatch(clearMessage());
+    // dispatch(clearMessage());
     fetchUsers();
   }, [id, params]);
 
@@ -126,6 +131,17 @@ export default function Users() {
       });
   };
 
+  const handleReInviteUser = (updatedData) => {
+    dispatch(reInviteUser(updatedData))
+      .then(() => {
+        // fetchUsers();
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   const emptyRows = params.size - Math.min(params.size, _.size(users));
 
   return (
@@ -147,6 +163,7 @@ export default function Users() {
           isLoading={storeUsers.isLoading}
           handleArchiveUser={handleArchiveUser}
           handleDeleteUser={handleDeleteUser}
+          handleReInviteUser={handleReInviteUser}
         />
       </Box>
 

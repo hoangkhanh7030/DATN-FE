@@ -18,17 +18,21 @@ import {
   ACTIVE,
   CREATED_DATE,
   ROLE,
+  WORKSPACES_URL,
 } from "constants/index";
 import * as _ from "underscore";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 
 export default function UserRow({
   user = {},
   handleArchiveUser,
   handleDeleteUser,
+  handleReInviteUser,
 }) {
   const classes = useStyles();
   const commonClasses = commonStyle();
+  const { id } = useParams();
   const [openArchive, setOpenArchive] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -57,6 +61,16 @@ export default function UserRow({
   };
   const handleCloseDeleteDialog = () => {
     setOpenDelete(false);
+  };
+
+  const handleOnAction = (type) => {
+    type === RE_INVITE
+      ? handleReInviteUser({
+          id: _.get(user, "id"),
+          email: _.get(user, EMAIL),
+          url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${id}`,
+        })
+      : handleArchiveUser(_.get(user, "id"));
   };
 
   return (
@@ -103,7 +117,7 @@ export default function UserRow({
           EMAIL
         )} ?`}
         handleCloseDialog={handleCloseArchiveDialog}
-        handelDeleteWorkspace={() => handleArchiveUser(_.get(user, "id"))}
+        handelDeleteWorkspace={() => handleOnAction(optionToolTip)}
         btnText={optionToolTip}
       />
 

@@ -57,6 +57,7 @@ export const IMAGES_URL = "/images/";
 export const EMAILS_URL = "/emails";
 export const INVITE_URL = "/invitedemail";
 export const USERS_URL = "/manageUsers";
+export const RE_INVITE_URL = "/reinvited";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";

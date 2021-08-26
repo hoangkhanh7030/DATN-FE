@@ -20,3 +20,34 @@ export const getUsersService = (id, params) => {
       return response.data;
     });
 };
+
+export const archiveUserService = (userID) => {
+  return axios
+    .put(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/isActive/${userID}`,
+      null,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    });
+};
+
+export const deleteUserService = (id, userID) => {
+  return axios
+    .delete(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}/account/${userID}`,
+
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    });
+};

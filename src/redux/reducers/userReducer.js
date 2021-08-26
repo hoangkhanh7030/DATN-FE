@@ -20,6 +20,24 @@ export default function reducer(state = initialState, action) {
     case actionTypes.GET_USERS_FAILED:
       return { ...state, isLoading: false };
 
+    case actionTypes.ARCHIVE_USER:
+      return { ...state, isLoading: true };
+
+    case actionTypes.ARCHIVE_USER_SUCCEED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.ARCHIVE_USER_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.DELETE_USER:
+      return { ...state, isLoading: true };
+
+    case actionTypes.DELETE_USER_SUCCEED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.DELETE_USER_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     default:
       return state;
   }

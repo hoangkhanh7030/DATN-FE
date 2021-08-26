@@ -16,7 +16,14 @@ import { EmptyRows } from "components/projects/table/EmptyRows";
 import * as _ from "underscore";
 import { EMAIL, STATUS_NAME, CREATED_DATE, ROLE } from "constants/index";
 
-const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
+const UsersTable = ({
+  rows = [],
+  emptyRows = 5,
+  handleSort,
+  isLoading,
+  handleArchiveUser,
+  handleDeleteUser
+}) => {
   const classes = useStyles({ emptyRows });
   return (
     <TableContainer component={Paper} elevation={0}>
@@ -71,7 +78,12 @@ const UsersTable = ({ rows = [], emptyRows = 5, handleSort, isLoading }) => {
           ) : (
             <>
               {rows.map((row, index) => (
-                <UserRow key={index} user={row} />
+                <UserRow
+                  key={index}
+                  user={row}
+                  handleArchiveUser={handleArchiveUser}
+                  handleDeleteUser={handleDeleteUser}
+                />
               ))}
 
               <EmptyRows

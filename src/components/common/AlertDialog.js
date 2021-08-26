@@ -7,16 +7,28 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-
+import { makeStyles } from "@material-ui/core/styles";
 import { commonStyle } from "assets/css/Common";
+
+const useStyles = makeStyles((theme) => ({
+  text: {
+    color: "black",
+  },
+  action: {
+    borderTop: "1px solid lightgray",
+    padding: 20,
+  },
+}));
 
 export default function AlertDialog({
   open,
   content,
   handleCloseDialog,
   handelDeleteWorkspace,
+  btnText,
 }) {
   const commonClasses = commonStyle();
+  const classes = useStyles();
   return (
     <Fragment>
       <Dialog
@@ -24,6 +36,8 @@ export default function AlertDialog({
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth="true"
+        maxWidth="xs"
       >
         <DialogTitle id="alert-dialog-title">
           <i
@@ -32,12 +46,19 @@ export default function AlertDialog({
           Are you sure?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {content}
+          <DialogContentText
+            id="alert-dialog-description"
+            className={classes.text}
+          >
+            {`${content}`}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">
+        <DialogActions className={classes.action}>
+          <Button
+            onClick={handleCloseDialog}
+            color="secondary"
+            variant="outlined"
+          >
             Cancel
           </Button>
           <Button
@@ -47,7 +68,7 @@ export default function AlertDialog({
             autoFocus
             disableElevation
           >
-            Delete
+            {btnText ? btnText : "DELETE"}
           </Button>
         </DialogActions>
       </Dialog>

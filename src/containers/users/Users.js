@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { ThemeProvider, Box } from "@material-ui/core";
 import { theme } from "assets/css/Common";
+import { Message } from "components/common/Message";
 import TableHeader from "./TableHeader";
 import UsersTable from "./TableContent";
 import TableFooter from "containers/projects/TableFooter";
@@ -15,16 +16,17 @@ import {
   INITIAL_PAGE,
 } from "constants/index";
 import { clearMessage } from "redux/actions/msgAction";
-import { getUsers } from "redux/actions/userAction";
+import { getUsers, archiveUser, deleteUser } from "redux/actions/userAction";
 
 export default function Users() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const storeUsers = useSelector((state) => state.users);
+  const { message } = useSelector((state) => state.message);
+  const [hasMessage, setOpenMessage] = useState(false);
 
   const classes = useStyles();
   const [users, setUsers] = useState([]);
-  const [searched, setSearched] = useState("");
   const [params, setParams] = useState({
     page: INITIAL_PAGE,
     size: INITIAL_ROWS_PER_PAGE,
@@ -34,13 +36,13 @@ export default function Users() {
   });
 
   const fetchUsers = () => {
-    dispatch(getUsers(id, { ...params, searchName: searched }));
+    dispatch(getUsers(id, params));
   };
 
   useEffect(() => {
     dispatch(clearMessage());
     fetchUsers();
-  }, [id, searched, params]);
+  }, [id, params]);
 
   useEffect(() => {
     if (!storeUsers.data) {
@@ -51,13 +53,19 @@ export default function Users() {
   }, [storeUsers.data]);
 
   const keyUp = (event) => {
-    if (event.keyCode === 13 || event.target.value === "") {
-      setSearched(event.target.value);
+    const value = event.target.value;
+    if (event.keyCode === 13 || value === "") {
+      if (value !== params.searchName)
+        setParams({
+          ...params,
+          searchName: value,
+          page: INITIAL_PAGE,
+        });
     }
   };
 
   const cancelSearch = () => {
-    setSearched("");
+    setParams({ ...params, searchName: "", page: INITIAL_PAGE });
   };
 
   const handleSort = (orderBy) => {
@@ -86,12 +94,44 @@ export default function Users() {
     });
   };
 
+  const handleCloseMessage = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenMessage(false);
+  };
+
+  const handleArchiveUser = (userID) => {
+    dispatch(archiveUser(userID))
+      .then(() => {
+        fetchUsers();
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
+  const handleDeleteUser = (userID) => {
+    dispatch(deleteUser(id, userID))
+      .then(() => {
+        setParams({
+          ...params,
+          page: _.size(users) > 1 ? params.page : params.page - 1,
+        });
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   const emptyRows = params.size - Math.min(params.size, _.size(users));
 
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
-        searched={searched}
+        searched={params.searchName}
         cancelSearch={cancelSearch}
         keyUp={keyUp}
         handleReset={handleReset}
@@ -105,6 +145,8 @@ export default function Users() {
           emptyRows={emptyRows}
           handleSort={handleSort}
           isLoading={storeUsers.isLoading}
+          handleArchiveUser={handleArchiveUser}
+          handleDeleteUser={handleDeleteUser}
         />
       </Box>
 
@@ -115,6 +157,16 @@ export default function Users() {
         numPage={storeUsers.numPage}
         page={params.page}
       />
+      {message ? (
+        <Message
+          message={message}
+          isOpen={hasMessage}
+          handleCloseMessage={handleCloseMessage}
+          type={_.get(storeUsers, "status") === 200 ? "success" : "error"}
+        />
+      ) : (
+        <></>
+      )}
     </ThemeProvider>
   );
 }

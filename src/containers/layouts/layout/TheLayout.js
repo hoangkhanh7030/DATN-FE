@@ -12,6 +12,12 @@ export default function TheLayout(Component = Workspaces) {
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
+  const pathName = window.location.pathname;
+  localStorage.setItem(
+    "path",
+    !isLoggedIn && pathName !== LOGIN_URL ? pathName : ""
+  );
+
   return isLoggedIn
     ? (props) => (
         <Fragment>

@@ -24,5 +24,5 @@ export const loginWithGGService = (googleData) => {
 };
 
 export const logoutService = () => {
-  localStorage.removeItem(USER);
+  localStorage.clear();
 };

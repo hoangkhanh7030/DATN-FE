@@ -63,9 +63,10 @@ export default function Login() {
 
     if (!isValid()) return;
 
+    const path = localStorage.getItem("path");
     dispatch(login(loginData))
       .then(() => {
-        history.push(constants.WORKSPACES_URL);
+        path ? history.push(path) : history.push(constants.WORKSPACES_URL);
       })
       .catch(() => {
         setOpenError(true);
@@ -73,9 +74,11 @@ export default function Login() {
   };
 
   const handleLoginWithGG = (googleData) => {
+    const path = localStorage.getItem("path");
+
     dispatch(loginWithGG(googleData.profileObj))
       .then(() => {
-        history.push(constants.WORKSPACES_URL);
+        path ? history.push(path) : history.push(constants.WORKSPACES_URL);
       })
       .catch(() => {
         setOpenError(true);

@@ -19,7 +19,7 @@ import {
   Box,
 } from "@material-ui/core";
 
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
 import { theme } from "assets/css/Common";
 import WorkspaceDialog from "./dialog/Dialog";
@@ -32,16 +32,9 @@ import InviteDialog from "./dialog/InviteDialog";
 export default function Workspace(props) {
   const {
     workspace = {},
-    open = true,
     openDelete = true,
     openInvite = false,
-    content = {},
-    name = "",
     handleOpenDialog,
-    handleCloseDialog,
-    handleInputName,
-    error = "",
-    onHandleSubmit,
     handleCloseDeleteDialog,
     handleOpenDeleteDialog,
     handelDeleteWorkspace,
@@ -164,20 +157,13 @@ export default function Workspace(props) {
                     autoFocusItem={openOption}
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleOpenDialog}>Edit</MenuItem>
-                    <WorkspaceDialog
-                      open={open}
-                      content={content}
-                      name={name}
-                      handleCloseDialog={handleCloseDialog}
-                      handleInputName={handleInputName}
-                      onHandleSubmit={onHandleSubmit}
-                      error={error}
-                    />
+                    <MenuItem onClick={() => handleOpenDialog(workspace)}>
+                      Edit{" "}
+                    </MenuItem>
                     <MenuItem onClick={handleOpenDeleteDialog}>Remove</MenuItem>
                     <AlertDialog
                       open={openDelete}
-                      content={`Do you really want to delete ${name} workspace?`}
+                      content={`Do you really want to delete ${workspace.name} workspace?`}
                       handleCloseDialog={handleCloseDeleteDialog}
                       handelDeleteWorkspace={handelDeleteWorkspace}
                     />

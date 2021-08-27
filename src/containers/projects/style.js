@@ -36,8 +36,8 @@ export const useStyles = makeStyles((theme) => ({
 
   pagination: {
     "& .Mui-selected": {
-      backgroundColor: colors.blackColor,
-      color: colors.secondaryColor,
+      backgroundColor: `${colors.blackColor} !important`,
+      color: `${colors.secondaryColor} !important`,
     },
   },
 

@@ -106,12 +106,12 @@ export const deleteUser = (id, userID) => (dispatch) => {
   );
 };
 
-export const reInviteUser = (updatedData) => (dispatch) => {
+export const reInviteUser = (id, updatedData) => (dispatch) => {
   dispatch({
     type: actionTypes.RE_INVITE_USER,
   });
 
-  return reInviteUserService(updatedData).then(
+  return reInviteUserService(id, updatedData).then(
     (data) => {
       dispatch({
         type: actionTypes.RE_INVITE_USER_SUCCEED,

@@ -58,10 +58,10 @@ export const deleteUserService = (id, userID) => {
     });
 };
 
-export const reInviteUserService = (data) => {
+export const reInviteUserService = (id, data) => {
   return axios
     .post(
-      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}${RE_INVITE_URL}`,
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${RE_INVITE_URL}`,
       data,
       {
         headers: authHeader(),

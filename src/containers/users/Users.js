@@ -132,7 +132,7 @@ export default function Users() {
   };
 
   const handleReInviteUser = (updatedData) => {
-    dispatch(reInviteUser(updatedData))
+    dispatch(reInviteUser(id, updatedData))
       .then(() => {
         // fetchUsers();
         setOpenMessage(true);

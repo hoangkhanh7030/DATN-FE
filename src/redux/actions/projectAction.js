@@ -4,6 +4,7 @@ import * as _ from "underscore";
 import {
   getProjectsService,
   addProjectService,
+  editProjectService,
 } from "services/project-service";
 
 export const getProjects = (id, projectParams) => (dispatch) => {
@@ -58,6 +59,40 @@ export const addProject = (id, data) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ADD_PROJECT_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const editProject = (id, projectID, data) => (dispatch) => {
+  dispatch({
+    type: actionTypes.EDIT_PROJECT,
+  });
+
+  return editProjectService(id, projectID, data).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.EDIT_PROJECT_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.EDIT_PROJECT_FAILED,
       });
 
       dispatch({

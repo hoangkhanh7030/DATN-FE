@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-
+import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
 import { ThemeProvider, Box } from "@material-ui/core";
 
 import ProjectsTable from "./Table";
@@ -10,7 +10,11 @@ import TableFooter from "./TableFooter";
 
 import { Message } from "components/common/Message";
 
-import { getProjects, addProject } from "redux/actions/projectAction";
+import {
+  getProjects,
+  addProject,
+  editProject,
+} from "redux/actions/projectAction";
 import { clearMessage } from "redux/actions/msgAction";
 
 import { theme } from "assets/css/Common";
@@ -29,6 +33,13 @@ import {
   COLOR,
   TEXT_COLOR,
   COLOR_PATTERN,
+  IS_ACTIVATED,
+  ID,
+  ACTION_STATUS,
+  SUCCESS,
+  ERROR,
+  BTN_SAVE,
+  BTN_CONFIRM,
 } from "constants/index";
 
 import * as _ from "underscore";
@@ -51,6 +62,7 @@ export default function Projects() {
   const [hasMessage, setOpenMessage] = useState(false);
 
   const storeProjects = useSelector((state) => state.projects);
+  const actionStatus = _.get(storeProjects, ACTION_STATUS);
 
   const [status, setStatus] = useState(STATUS);
 
@@ -59,8 +71,9 @@ export default function Projects() {
   const [orderBy, setOrderBy] = useState("");
 
   const [project, setProject] = useState(DEFAULT_PROJECT);
-
+  const [projectID, setProjectID] = useState(null);
   const [isOpenDialog, setOpenDialog] = useState(false);
+  const [dialog, setDialog] = useState({});
 
   const setProjectParams = (
     searchNameParam = searched,
@@ -154,17 +167,34 @@ export default function Projects() {
             color: _.get(project, COLOR),
             textColor: _.get(project, TEXT_COLOR),
             colorPattern: _.get(project, COLOR_PATTERN),
+            isActivate: _.get(project, IS_ACTIVATED),
           }
         : DEFAULT_PROJECT
     );
-
+    setProjectID(_.get(project, ID));
+    setDialog({
+      dialogTitle: project ? "Edit project" : "Add project",
+      buttonText: project ? BTN_SAVE : BTN_CONFIRM,
+      actionDialog: project ? handleEditProject : handleCreateProject,
+    });
     setOpenDialog(true);
   };
 
-  const handleCreateProject = () => {
-    dispatch(addProject(id, project))
+  const handleCreateProject = (newProject) => {
+    dispatch(addProject(id, newProject))
       .then(() => {
         window.location.reload();
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
+  const handleEditProject = (editedProject, projectID) => {
+    dispatch(editProject(id, projectID, editedProject))
+      .then(() => {
+        setOpenMessage(true);
+        fetchProjects(setProjectParams());
       })
       .catch(() => {
         setOpenMessage(true);
@@ -186,12 +216,7 @@ export default function Projects() {
         cancelSearch={cancelSearch}
         status={status}
         handleChangeDropdown={handleChangeDropdown}
-        project={project}
-        setProject={setProject}
-        isOpenDialog={isOpenDialog}
-        setOpenDialog={setOpenDialog}
         handleOpenDialog={handleOpenDialog}
-        handleCreateProject={handleCreateProject}
         handleReset={handleReset}
       />
 
@@ -203,6 +228,7 @@ export default function Projects() {
           emptyRows={emptyRows}
           handleSort={handleSort}
           isLoading={storeProjects.isLoading}
+          handleOpenDialog={handleOpenDialog}
         />
       </Box>
 
@@ -219,11 +245,20 @@ export default function Projects() {
           message={message}
           isOpen={hasMessage}
           handleCloseMessage={handleCloseMessage}
-          type={"error"}
+          type={actionStatus === 200 ? SUCCESS : ERROR}
         />
       ) : (
         <></>
       )}
+
+      <FormDialog
+        project={project}
+        projectID={projectID}
+        setProject={setProject}
+        isOpenDialog={isOpenDialog}
+        setOpenDialog={setOpenDialog}
+        dialog={dialog}
+      />
     </ThemeProvider>
   );
 }

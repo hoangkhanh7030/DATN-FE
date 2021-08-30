@@ -24,4 +24,13 @@ export const useStyles = makeStyles(() => ({
     borderTop: `1px solid ${colors.borderColor}`,
     padding: "20px 24px",
   },
+
+  inputTitle: {
+    display: "flex",
+  },
+
+  required: {
+    color: "#D63B30",
+    padding: 5,
+  },
 }));

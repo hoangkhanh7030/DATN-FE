@@ -13,7 +13,7 @@ import {
 } from "constants/index";
 import * as _ from "underscore";
 
-export default function ProjectRow({ project = {} }) {
+export default function ProjectRow({ project = {}, handleOpenDialog }) {
   const projectColor = _.get(project, "color");
   const classes = useStyles({ projectColor });
   const commonClasses = commonStyle();
@@ -48,6 +48,7 @@ export default function ProjectRow({ project = {} }) {
         <Tooltip title="edit" arrow>
           <IconButton
             className={`fas fa-pencil-alt ${commonClasses.action}`}
+            onClick={() => handleOpenDialog(project)}
           ></IconButton>
         </Tooltip>
         <Tooltip title={isActivatedToolTip} arrow>

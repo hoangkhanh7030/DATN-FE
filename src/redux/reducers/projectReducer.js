@@ -32,7 +32,20 @@ export default function reducer(state = initialState, action) {
 
     case actionTypes.ADD_PROJECT_FAILED:
       return { ...state, status: payload.status, isLoading: false };
-      
+
+    case actionTypes.EDIT_PROJECT:
+      return { ...state, isLoading: true };
+
+    case actionTypes.EDIT_PROJECT_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.EDIT_PROJECT_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     default:
       return state;
   }

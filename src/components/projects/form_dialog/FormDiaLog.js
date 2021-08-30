@@ -19,21 +19,27 @@ import {
   CLIENT_NAME,
   PALETTE,
   DEFAULT_PROJECT,
+  COLOR,
+  TEXT_COLOR,
 } from "constants/index";
 
 import * as _ from "underscore";
 
 const PROJECT_TITLE = "PROJECT NAME";
 const CLIENT_TITLE = "CLIENT NAME";
+const CSS = "css";
+const BACKGROUND_COLOR = "backgroundColor";
+const DIALOG_TITLE = "dialogTitle";
+const ACTION_DIALOG = "actionDialog";
+const BUTTON_TEXT = "buttonText";
 
 export const FormDialog = ({
   project = {},
+  projectID = null,
   setProject,
   isOpenDialog = false,
   setOpenDialog,
-  handleActionDialog,
-  dialogTitle = "",
-  buttonText = "",
+  dialog,
 }) => {
   const classes = useStyles();
 
@@ -51,11 +57,11 @@ export const FormDialog = ({
   };
 
   const handleColorChange = (value) => {
-    setProject({ ...project, color: value.css.backgroundColor });
+    setProject({ ...project, color: value });
   };
 
   const handleTextColorChange = (value) => {
-    setProject({ ...project, textColor: value.css.backgroundColor });
+    setProject({ ...project, textColor: value });
   };
 
   const checkValidForm = () => {
@@ -76,8 +82,17 @@ export const FormDialog = ({
 
   const handleSubmitDialog = () => {
     if (checkValidForm()) {
+      const thisProject = {
+        ...project,
+        color:
+          _.get(project, [COLOR, CSS, BACKGROUND_COLOR]) ||
+          _.get(project, COLOR),
+        textColor:
+          _.get(project, [TEXT_COLOR, CSS, BACKGROUND_COLOR]) ||
+          _.get(project, TEXT_COLOR),
+      };
       handleCloseDialog();
-      handleActionDialog();
+      _.get(dialog, ACTION_DIALOG)(thisProject, projectID);
     }
     return;
   };
@@ -90,7 +105,7 @@ export const FormDialog = ({
       maxWidth="xs"
     >
       <DialogTitle id="form-dialog-title" onClose={handleCloseDialog}>
-        {dialogTitle}
+        {_.get(dialog, DIALOG_TITLE)}
       </DialogTitle>
       <DialogContent>
         <DialogInput
@@ -138,7 +153,7 @@ export const FormDialog = ({
           variant="contained"
           disableElevation
         >
-          {buttonText}
+          {_.get(dialog, BUTTON_TEXT)}
         </Button>
       </DialogActions>
     </Dialog>

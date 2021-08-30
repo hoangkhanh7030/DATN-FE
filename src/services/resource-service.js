@@ -44,3 +44,17 @@ export const editResourceService = (id, resourceId, data) => {
       return response.data;
     });
 };
+
+export const deleteResourceService = (id, resourceId) => {
+  return axios
+    .delete(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${RESOURCES_URL}/${resourceId}`,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

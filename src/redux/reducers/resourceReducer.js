@@ -51,6 +51,19 @@ export default function reducer(state = initialState, action) {
     case actionTypes.EDIT_RESOURCE_FAILED:
       return { ...state, status: payload.status, isLoading: false };
 
+    case actionTypes.DELETE_RESOURCE:
+      return { ...state, isLoading: true };
+
+    case actionTypes.DELETE_RESOURCE_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.DELETE_RESOURCE_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     default:
       return state;
   }

@@ -179,6 +179,7 @@ export default function Workspaces() {
         <WorkspaceDialog
           open={openDialog}
           workspace={workspace}
+          workspaces={workspaces}
           setWorkspace={setWorkspace}
           handleCloseDialog={handleDialog}
           handleAdd={handleCreateWorkspace}

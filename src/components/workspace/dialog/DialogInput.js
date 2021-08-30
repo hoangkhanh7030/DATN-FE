@@ -6,9 +6,7 @@ import { HelperText } from "components/common/HelperText";
 
 export const DialogInput = ({
   title = "",
-  invalidStyle = "",
   inputName = "",
-  invalidName = "",
   inputValue = "",
   handleTextChange,
   errMsg,
@@ -17,13 +15,16 @@ export const DialogInput = ({
   return (
     <>
       <Paper
-        className={`${classes.paper} ${
-          invalidStyle || errMsg ? classes.invalidBorder : null
-        }`}
+        className={`${classes.paper} ${errMsg ? classes.invalidBorder : null}`}
         elevation={0}
       >
         <Typography variant="h4">
-          {title} <span className={classes.obligatedText}>*</span>
+          {title}{" "}
+          {title === "Name" ? (
+            <span className={classes.obligatedText}>*</span>
+          ) : (
+            <></>
+          )}
         </Typography>
         <InputBase
           name={inputName}
@@ -36,10 +37,8 @@ export const DialogInput = ({
         />
       </Paper>
       <HelperText
-        errorName={inputName}
-        errorValue={invalidName}
         message={errMsg}
-        type={errMsg ? "workingDays" : ""}
+        type={errMsg ? "type" : ""}
       />
     </>
   );

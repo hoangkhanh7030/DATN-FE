@@ -24,41 +24,49 @@ export default function WorkspaceDialog(props) {
   const {
     open = false,
     workspace = {},
+    workspaces = [],
     setWorkspace,
     handleCloseDialog,
     handleAdd,
     handleEdit,
   } = props;
-  const [invalidValue, setInvalidValue] = useState({
-    name: "",
-    emailSuffix: "",
-  });
+
+  const [errMsgName, setErrMsgName] = useState("");
   const [errMsg, setErrMsg] = useState("");
+
   const isSubmit = () => {
     return (
       workspace.name &&
-      emailSuffixRegex.test(workspace.emailSuffix) &&
+      ((workspace.emailSuffix &&
+        emailSuffixRegex.test(workspace.emailSuffix)) ||
+        !workspace.emailSuffix) &&
       workspace.workDays.filter(Boolean).length > 1
     );
   };
 
   const handleTextChange = (e) => {
-    setInvalidValue({
-      ...invalidValue,
-      [e.target.name]: !e.target.value ? e.target.name : "",
-    });
     if (e.target.name === EMAIL_SUFFIX_NAME) {
       setErrMsg(
-        !emailSuffixRegex.test(e.target.value)
+        e.target.value && !emailSuffixRegex.test(e.target.value)
           ? "Please enter a valid email suffix !"
           : ""
       );
+    } else {
+      setErrMsgName(!e.target.value ? "This field is required !" : "");
     }
     setWorkspace({ ...workspace, [e.target.name]: e.target.value });
   };
 
+  const isExisted = () => {
+    return workspaces.findIndex((item) => item.name === workspace.name) + 1;
+  };
+
   // handle submit dialog
   const handleSubmitDialog = () => {
+    if (isExisted()) {
+      setErrMsgName("This workspace name is already existed ! ");
+      return;
+    }
     workspace.id ? handleEdit(workspace.id, workspace) : handleAdd(workspace);
     handleCloseDialog();
   };
@@ -71,17 +79,14 @@ export default function WorkspaceDialog(props) {
         <DialogContent>
           <DialogInput
             title={"Name"}
-            invalidStyle={invalidValue.name === WORKSPACE_NAME}
             inputName={WORKSPACE_NAME}
-            invalidName={invalidValue.name}
             inputValue={_.get(workspace, WORKSPACE_NAME)}
             handleTextChange={handleTextChange}
+            errMsg={errMsgName}
           />
           <DialogInput
             title={"Email Suffix"}
-            invalidStyle={invalidValue.emailSuffix === EMAIL_SUFFIX_NAME}
             inputName={EMAIL_SUFFIX_NAME}
-            invalidName={invalidValue.emailSuffix}
             inputValue={_.get(workspace, EMAIL_SUFFIX_NAME)}
             handleTextChange={handleTextChange}
             errMsg={errMsg}

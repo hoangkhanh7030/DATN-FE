@@ -93,3 +93,21 @@ export const ROLE = "role";
 export const IS_ACTIVE = "GOOGLE";
 export const IS_PENDING = "PENDING";
 export const RE_INVITE = "re-invite";
+
+export const VIEWS = [
+  { label: "Week", value: "week" },
+  { label: "Month", value: "month" },
+  { label: "Year", value: "year" },
+];
+
+export const DAY = "day";
+export const DAYS = "days";
+export const WEEK = "week";
+
+export const DAY_FMT = "ddd";
+export const DATE_FMT = "DD";
+export const DMY = "DD MMM YYYY";
+export const Y_M_D = "YYYY-MM-DD";
+
+export const SUN = "Sun";
+export const WEEKENDS = ["Sat", "Sun"];

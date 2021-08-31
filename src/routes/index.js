@@ -4,6 +4,7 @@ import * as constants from "constants/index";
 import Projects from "containers/projects/Projects";
 import Resources from "containers/resources/Resources";
 import Users from "containers/users/Users";
+import Report from "containers/report/Report";
 
 const routes = [
   { path: constants.WORKSPACES_URL, component: Workspaces, exact: true },
@@ -21,6 +22,11 @@ const routes = [
   {
     path: constants.WORKSPACE_URL + constants.USERS_URL,
     component: Users,
+    exact: true,
+  },
+  {
+    path: constants.WORKSPACE_URL + constants.REPORT_URL,
+    component: Report,
     exact: true,
   },
 ];

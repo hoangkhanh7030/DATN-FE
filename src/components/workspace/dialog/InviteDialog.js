@@ -92,7 +92,7 @@ export default function InviteDialog(props) {
               index={index}
               handleDeleteRow={handleDeleteRow}
               handleChangeRow={handleChangeRow}
-              emailSuffix={storeEmails?.emailSuffix}
+              emailSuffixes={storeEmails?.emailSuffixes}
             />
           ))}
         </Grid>

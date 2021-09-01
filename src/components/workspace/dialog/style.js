@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme) => ({
     minWidth: theme.spacing(4),
     borderRadius: "50%",
   },
+  workDays:{ margin: 12 },
   dialogActions: {
     background: colors.bgColor,
     borderTop: `1px solid ${colors.borderColor}`,
@@ -29,15 +30,6 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: 8,
     color: colors.primaryColor,
   },
-  dialogActions: {
-    background: colors.bgColor,
-    borderTop: `1px solid ${colors.borderColor}`,
-    padding: "20px 24px",
-    "& .Mui-disabled": {
-      backgroundColor: "#9BB7FA",
-      color: colors.secondaryColor,
-    },
-  },
   rowBox: {
     border: "1px solid rgba(0, 0, 0, 0.23)",
     width: "100%",
@@ -48,4 +40,9 @@ export const useStyles = makeStyles((theme) => ({
   emailCol: { margin: "8px !important" },
   deleteBtn: { position: "absolute", right: 8, top: 4 },
   helperText: { marginLeft: 0 },
+
+  chip:{
+    margin: "4px 4px 8px 0px !important",
+    height: 28
+  }
 }));

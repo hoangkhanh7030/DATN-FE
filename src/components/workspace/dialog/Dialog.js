@@ -13,11 +13,18 @@ import { DialogTitle } from "./DialogTitle";
 import { DialogInput } from "./DialogInput";
 import * as _ from "underscore";
 import { WorkingDays } from "./WorkingDays";
+import { EmailSuffix } from "./EmailSuffix";
+import {
+  EMAIL_SUFFIX_REGEX,
+  EMPTY_ERROR,
+  EMAIL_SUFFIX_ERROR,
+  WORKING_DAYS_ERROR,
+  WORKSPACE_NAME_ERROR,
+} from "constants/index";
 
 const WORKSPACE_NAME = "name";
-const EMAIL_SUFFIX_NAME = "emailSuffix";
-
-export const emailSuffixRegex = /^([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/;
+const EMAIL_SUFFIXES = "emailSuffixes";
+const WORK_DAYS = "workDays";
 
 export default function WorkspaceDialog(props) {
   const classes = useStyles();
@@ -31,42 +38,70 @@ export default function WorkspaceDialog(props) {
     handleEdit,
   } = props;
 
-  const [errMsgName, setErrMsgName] = useState("");
-  const [errMsg, setErrMsg] = useState("");
+  const [errName, setErrName] = useState("");
+  const [errSuffix, setErrSuffix] = useState("");
+  const [errWorkDays, setErrWorkDays] = useState("");
 
   const isSubmit = () => {
     return (
-      workspace.name &&
-      ((workspace.emailSuffix &&
-        emailSuffixRegex.test(workspace.emailSuffix)) ||
-        !workspace.emailSuffix) &&
-      workspace.workDays.filter(Boolean).length > 1
+      _.get(workspace, WORKSPACE_NAME) &&
+      _.get(workspace, WORK_DAYS).filter(Boolean).length > 1
     );
   };
 
-  const handleTextChange = (e) => {
-    if (e.target.name === EMAIL_SUFFIX_NAME) {
-      setErrMsg(
-        e.target.value && !emailSuffixRegex.test(e.target.value)
-          ? "Please enter a valid email suffix !"
-          : ""
-      );
-    } else {
-      setErrMsgName(!e.target.value ? "This field is required !" : "");
-    }
-    setWorkspace({ ...workspace, [e.target.name]: e.target.value });
+  const isExisted = () => {
+    return (
+      workspaces.findIndex(
+        (item) =>
+          item.name === _.get(workspace, WORKSPACE_NAME) &&
+          item.id !== _.get(workspace, "id")
+      ) + 1
+    );
   };
 
-  const isExisted = () => {
-    return workspaces.findIndex((item) => item.name === workspace.name) + 1;
+  const handleChangeName = (e) => {
+    setErrName(!e.target.value ? EMPTY_ERROR : "");
+    setWorkspace({ ...workspace, name: e.target.value });
+  };
+
+  const handleAddChip = (chip) => {
+    setErrSuffix("");
+    const newData = [..._.get(workspace, EMAIL_SUFFIXES), chip];
+    EMAIL_SUFFIX_REGEX.test(chip)
+      ? setWorkspace({ ...workspace, emailSuffixes: newData })
+      : setErrSuffix(EMAIL_SUFFIX_ERROR);
+  };
+
+  const handleDeleteChip = (chip, id) => {
+    const newData = _.get(workspace, EMAIL_SUFFIXES).filter(
+      (chip, i) => i !== id
+    );
+    if (!newData.length) setErrSuffix("");
+    setWorkspace({ ...workspace, emailSuffixes: newData });
+  };
+
+  const handleUpdateInput = (e) => {
+    !e.target.value || EMAIL_SUFFIX_REGEX.test(e.target.value)
+      ? setErrSuffix("")
+      : setErrSuffix(EMAIL_SUFFIX_ERROR);
+  };
+
+  const toggleDay = (index) => {
+    const newWorkDays = _.get(workspace, WORK_DAYS).slice();
+    newWorkDays[index] = !newWorkDays[index];
+    setErrWorkDays(
+      newWorkDays.filter(Boolean).length < 2 ? WORKING_DAYS_ERROR : ""
+    );
+    setWorkspace({ ...workspace, workDays: newWorkDays });
   };
 
   // handle submit dialog
   const handleSubmitDialog = () => {
     if (isExisted()) {
-      setErrMsgName("This workspace name is already existed ! ");
+      setErrName(WORKSPACE_NAME_ERROR);
       return;
     }
+
     workspace.id ? handleEdit(workspace.id, workspace) : handleAdd(workspace);
     handleCloseDialog();
   };
@@ -74,28 +109,25 @@ export default function WorkspaceDialog(props) {
     <ThemeProvider theme={theme}>
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
         <DialogTitle onClose={handleCloseDialog}>
-          {workspace.id ? "Edit workspace" : "Create new workspace"}
+          {_.get(workspace, "id") ? "Edit workspace" : "Create new workspace"}
         </DialogTitle>
         <DialogContent>
           <DialogInput
-            title={"Name"}
-            inputName={WORKSPACE_NAME}
             inputValue={_.get(workspace, WORKSPACE_NAME)}
-            handleTextChange={handleTextChange}
-            errMsg={errMsgName}
+            handleChangeName={handleChangeName}
+            errMsg={errName}
           />
-          <DialogInput
-            title={"Email Suffix"}
-            inputName={EMAIL_SUFFIX_NAME}
-            inputValue={_.get(workspace, EMAIL_SUFFIX_NAME)}
-            handleTextChange={handleTextChange}
-            errMsg={errMsg}
+          <EmailSuffix
+            emailSuffixes={_.get(workspace, EMAIL_SUFFIXES)}
+            handleAddChip={handleAddChip}
+            handleDeleteChip={handleDeleteChip}
+            handleUpdateInput={handleUpdateInput}
+            errMsg={errSuffix}
           />
-
           <WorkingDays
-            title="Working Days"
-            workspace={workspace}
-            setWorkspace={setWorkspace}
+            workDays={_.get(workspace, WORK_DAYS)}
+            toggleDay={toggleDay}
+            errMsg={errWorkDays}
           />
         </DialogContent>
         <DialogActions className={classes.dialogActions}>
@@ -109,7 +141,7 @@ export default function WorkspaceDialog(props) {
             disableElevation
             disabled={!isSubmit()}
           >
-            {workspace.id ? "Save" : "Create"}
+            {_.get(workspace, "id") ? "Save" : "Create"}
           </Button>
         </DialogActions>
       </Dialog>

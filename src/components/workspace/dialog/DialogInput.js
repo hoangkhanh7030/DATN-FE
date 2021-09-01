@@ -5,11 +5,9 @@ import { useStyles } from "./style";
 import { HelperText } from "components/common/HelperText";
 
 export const DialogInput = ({
-  title = "",
-  inputName = "",
   inputValue = "",
-  handleTextChange,
-  errMsg,
+  handleChangeName,
+  errMsg = "",
 }) => {
   const classes = useStyles();
   return (
@@ -19,27 +17,18 @@ export const DialogInput = ({
         elevation={0}
       >
         <Typography variant="h4">
-          {title}{" "}
-          {title === "Name" ? (
-            <span className={classes.obligatedText}>*</span>
-          ) : (
-            <></>
-          )}
+          Name <span className={classes.obligatedText}>*</span>
         </Typography>
         <InputBase
-          name={inputName}
           defaultValue={inputValue}
           margin="dense"
-          placeholder={title.toLowerCase()}
-          onChange={handleTextChange}
+          placeholder={"name"}
+          onChange={handleChangeName}
           fullWidth
           autoComplete="off"
         />
       </Paper>
-      <HelperText
-        message={errMsg}
-        type={errMsg ? "type" : ""}
-      />
+      <HelperText message={errMsg} />
     </>
   );
 };

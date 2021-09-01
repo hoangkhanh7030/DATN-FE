@@ -1,5 +1,6 @@
 import { Box, Grid, IconButton, TextField } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { INVITED_EMAIL_ERROR } from "constants/index";
 import React from "react";
 import { useStyles } from "./style";
 
@@ -9,17 +10,19 @@ export default function InviteRow(props) {
     index = "",
     handleDeleteRow,
     handleChangeRow,
-    emailSuffix = "",
+    emailSuffixes = [],
   } = props;
 
   const classes = useStyles();
 
-  const onChangeRow = (event) => {
+  const onChangeRow = (e) => {
     handleChangeRow(
       {
         ...data,
-        email: event.target.value,
-        error: event.target.value.split("@")[1] === emailSuffix ? false : true,
+        email: e.target.value,
+        error:
+          emailSuffixes.length &&
+          !emailSuffixes.includes(e.target.value.split("@")[1]),
         isInvited: false,
       },
       index
@@ -45,11 +48,11 @@ export default function InviteRow(props) {
             }}
             {...(data.error && {
               error: true,
-              helperText: `You only can invite with email suffix: ${emailSuffix}`,
+              helperText: `Email suffixes: ${emailSuffixes.join(", ")}`,
             })}
             {...(data.isInvited && {
               error: true,
-              helperText: "This email is invited before!",
+              helperText: INVITED_EMAIL_ERROR,
             })}
           />
         </Grid>

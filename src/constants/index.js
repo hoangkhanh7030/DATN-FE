@@ -5,6 +5,11 @@ export const EMAIL_REGEX =
 export const EMAIL_ERROR = "email is invalid";
 export const PASSWORD_ERROR = "password is required";
 export const EMPTY_ERROR = "this field is required";
+export const EMAIL_SUFFIX_REGEX = /^([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/;
+export const EMAIL_SUFFIX_ERROR = "please enter a valid email suffix !";
+export const INVITED_EMAIL_ERROR = "this email is invited before!";
+export const WORKING_DAYS_ERROR = "please choose number of working days at least 2 days !";
+export const WORKSPACE_NAME_ERROR = "this workspace name is already existed ! ";
 
 export const USER = "user";
 export const ID = "id";

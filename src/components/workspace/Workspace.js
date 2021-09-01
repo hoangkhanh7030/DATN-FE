@@ -22,7 +22,6 @@ import {
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { useStyles } from "./style";
 import { theme } from "assets/css/Common";
-import WorkspaceDialog from "./dialog/Dialog";
 import AlertDialog from "components/common/AlertDialog";
 import { useHistory } from "react-router-dom";
 import analyze from "assets/images/analyze.png";
@@ -32,7 +31,7 @@ import InviteDialog from "./dialog/InviteDialog";
 export default function Workspace(props) {
   const {
     workspace = {},
-    openDelete = true,
+    openDelete = false,
     openInvite = false,
     handleOpenDialog,
     handleCloseDeleteDialog,

@@ -28,7 +28,7 @@ import { clearMessage } from "redux/actions/msgAction";
 const INITIAL_WORKSPACE = {
   id: "",
   name: "",
-  emailSuffix: "",
+  emailSuffixes: [],
   workDays: [false, true, true, true, true, true, false],
 };
 

@@ -1,36 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { Typography, Paper, Grid, Button } from "@material-ui/core";
 import { useStyles } from "./style";
 import { HelperText } from "components/common/HelperText";
 
-export const WorkingDays = ({ title = "", workspace = {}, setWorkspace }) => {
+const DAY_IN_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
+
+export const WorkingDays = ({ workDays = [], toggleDay, errMsg = "" }) => {
   const classes = useStyles();
-
-  const dayInWeek = ["S", "M", "T", "W", "T", "F", "S"];
-  const [dayMsg, setDayMsg] = useState("");
-
-  const toggleDay = (index) => {
-    const temp = workspace.workDays.slice();
-    temp[index] = !temp[index];
-    setDayMsg(
-      temp.filter(Boolean).length < 2
-        ? "Please choose number of working days at least 2 days !"
-        : ""
-    );
-    setWorkspace({ ...workspace, workDays: temp });
-  };
-
+ 
   return (
     <>
       <Paper
-        className={`${classes.paper} ${dayMsg ? classes.invalidBorder : null}`}
+        className={`${classes.paper} ${errMsg ? classes.invalidBorder : null}`}
         elevation={0}
       >
         <Typography variant="h4">
-          {title} <span className={classes.obligatedText}>*</span>
+          Working Days <span className={classes.obligatedText}>*</span>
         </Typography>
-        <Grid container style={{ margin: 12 }}>
-          {workspace.workDays?.map((day, index) => (
+        <Grid container className={classes.workDays}>
+          {workDays?.map((day, index) => (
             <Grid item xs key={index}>
               <Button
                 className={classes.btnCircle}
@@ -39,13 +27,13 @@ export const WorkingDays = ({ title = "", workspace = {}, setWorkspace }) => {
                 onClick={() => toggleDay(index)}
                 disableElevation
               >
-                {dayInWeek[index]}
+                {DAY_IN_WEEK[index]}
               </Button>
             </Grid>
           ))}
         </Grid>
       </Paper>
-      <HelperText message={dayMsg} />
+      <HelperText message={errMsg} />
     </>
   );
 };

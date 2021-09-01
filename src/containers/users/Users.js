@@ -15,13 +15,14 @@ import {
   INITIAL_ROWS_PER_PAGE,
   INITIAL_PAGE,
 } from "constants/index";
-import { clearMessage } from "redux/actions/msgAction";
 import {
   getUsers,
   archiveUser,
   deleteUser,
   reInviteUser,
+  inviteToWorkspace,
 } from "redux/actions/userAction";
+import InviteDialog from "./dialog/InviteDialog";
 
 export default function Users() {
   const { id } = useParams();
@@ -32,6 +33,9 @@ export default function Users() {
 
   const classes = useStyles();
   const [users, setUsers] = useState([]);
+
+  const [openInvite, setOpenInvite] = useState(false);
+
   const [params, setParams] = useState({
     page: INITIAL_PAGE,
     size: INITIAL_ROWS_PER_PAGE,
@@ -45,7 +49,6 @@ export default function Users() {
   };
 
   useEffect(() => {
-    // dispatch(clearMessage());
     fetchUsers();
   }, [id, params]);
 
@@ -134,12 +137,23 @@ export default function Users() {
   const handleReInviteUser = (updatedData) => {
     dispatch(reInviteUser(id, updatedData))
       .then(() => {
-        // fetchUsers();
         setOpenMessage(true);
       })
       .catch(() => {
         setOpenMessage(true);
       });
+  };
+
+  const handleInvite = (data) => {
+    dispatch(inviteToWorkspace(id, data))
+      .then(() => {
+        fetchUsers();
+        setOpenMessage(true);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+    setOpenInvite(false);
   };
 
   const emptyRows = params.size - Math.min(params.size, _.size(users));
@@ -151,6 +165,8 @@ export default function Users() {
         cancelSearch={cancelSearch}
         keyUp={keyUp}
         handleReset={handleReset}
+        openInvite={openInvite}
+        setOpenInvite={setOpenInvite}
       />
 
       <Box className={classes.boxTable}>
@@ -174,6 +190,16 @@ export default function Users() {
         numPage={storeUsers.numPage}
         page={params.page}
       />
+      {openInvite ? (
+        <InviteDialog
+          workspaceId={id}
+          isOpen={openInvite}
+          setOpenInvite={setOpenInvite}
+          handleInvite={handleInvite}
+        />
+      ) : (
+        <Box></Box>
+      )}
       {message ? (
         <Message
           message={message}

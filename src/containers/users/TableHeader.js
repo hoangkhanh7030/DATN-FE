@@ -1,6 +1,6 @@
 import React from "react";
 import SearchBar from "material-ui-search-bar";
-import { Box } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { useStyles } from "containers/projects/style";
 import { ResetBtn } from "components/common/ResetBtn";
 
@@ -9,6 +9,8 @@ export default function TableHeader({
   cancelSearch,
   keyUp,
   handleReset,
+  openInvite = false,
+  setOpenInvite,
 }) {
   const classes = useStyles();
   return (
@@ -21,6 +23,19 @@ export default function TableHeader({
           onKeyUp={keyUp}
         />
         <ResetBtn onClick={handleReset} />
+      </Box>
+      <Box>
+        <Button
+          color="primary"
+          variant="contained"
+          disableElevation
+          className={classes.button}
+          onClick={() => {
+            setOpenInvite(true);
+          }}
+        >
+          Send invitations
+        </Button>
       </Box>
     </Box>
   );

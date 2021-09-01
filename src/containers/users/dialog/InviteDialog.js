@@ -18,9 +18,8 @@ export default function InviteDialog(props) {
   const {
     workspaceId = "",
     isOpen = false,
-    handleCloseDialog,
+    setOpenInvite,
     handleInvite,
-    setOpenOption,
   } = props;
 
   const dispatch = useDispatch();
@@ -71,13 +70,11 @@ export default function InviteDialog(props) {
       url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${workspaceId}`,
     };
 
-    handleInvite(workspaceId, submittedData);
-    setOpenOption(false);
+    handleInvite(submittedData);
   };
 
   const handleClose = () => {
-    handleCloseDialog(false);
-    setOpenOption(false);
+    setOpenInvite(false);
   };
 
   return (

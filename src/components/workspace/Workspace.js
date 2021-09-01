@@ -26,19 +26,15 @@ import AlertDialog from "components/common/AlertDialog";
 import { useHistory } from "react-router-dom";
 import analyze from "assets/images/analyze.png";
 import { WORKSPACES_URL, USERS_URL } from "constants/index";
-import InviteDialog from "./dialog/InviteDialog";
 
 export default function Workspace(props) {
   const {
     workspace = {},
     openDelete = false,
-    openInvite = false,
     handleOpenDialog,
     handleCloseDeleteDialog,
     handleOpenDeleteDialog,
     handelDeleteWorkspace,
-    setOpenInvite,
-    handleInvite,
   } = props;
 
   const history = useHistory();
@@ -166,25 +162,6 @@ export default function Workspace(props) {
                       handleCloseDialog={handleCloseDeleteDialog}
                       handelDeleteWorkspace={handelDeleteWorkspace}
                     />
-
-                    <MenuItem
-                      onClick={() => {
-                        setOpenInvite(true);
-                      }}
-                    >
-                      Invite
-                    </MenuItem>
-                    {openInvite ? (
-                      <InviteDialog
-                        workspaceId={workspace.id}
-                        isOpen={openInvite}
-                        handleCloseDialog={setOpenInvite}
-                        setOpenOption={setOpenOption}
-                        handleInvite={handleInvite}
-                      />
-                    ) : (
-                      <Box></Box>
-                    )}
                     <MenuItem
                       onClick={() =>
                         history.push(

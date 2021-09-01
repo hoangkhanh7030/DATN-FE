@@ -58,19 +58,6 @@ export default function reducer(state = initialState, action) {
     case actionTypes.DELETE_WORKSPACE_FAILED:
       return { ...state, isLoading: false };
 
-    case actionTypes.INVITE_TO_WORKSPACE:
-      return { ...state, isLoading: true };
-
-    case actionTypes.INVITE_TO_WORKSPACE_SUCCEED:
-      return {
-        ...state,
-        status: payload.status,
-        isLoading: false,
-      };
-
-    case actionTypes.INVITE_TO_WORKSPACE_FAILED:
-      return { ...state, isLoading: false };
-
     default:
       return state;
   }

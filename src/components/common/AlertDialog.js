@@ -36,7 +36,7 @@ export default function AlertDialog({
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        fullWidth="true"
+        fullWidth={true}
         maxWidth="xs"
       >
         <DialogTitle id="alert-dialog-title">

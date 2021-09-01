@@ -6,6 +6,7 @@ import {
   archiveUserService,
   deleteUserService,
   reInviteUserService,
+  inviteToWorkspaceService,
 } from "services/user-service";
 
 export const getUsers = (id, params) => (dispatch) => {
@@ -128,6 +129,40 @@ export const reInviteUser = (id, updatedData) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.RE_INVITE_USER_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const inviteToWorkspace = (id, data) => (dispatch) => {
+  dispatch({
+    type: actionTypes.INVITE_TO_WORKSPACE,
+  });
+
+  return inviteToWorkspaceService(id, data).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.INVITE_TO_WORKSPACE_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.INVITE_TO_WORKSPACE_FAILED,
       });
 
       dispatch({

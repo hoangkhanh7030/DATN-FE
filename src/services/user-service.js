@@ -5,6 +5,7 @@ import {
   ASC,
   DESC,
   RE_INVITE_URL,
+  INVITE_URL,
 } from "constants/index";
 import authHeader from "./data-service";
 
@@ -62,6 +63,20 @@ export const reInviteUserService = (id, data) => {
   return axios
     .post(
       process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${RE_INVITE_URL}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+export const inviteToWorkspaceService = (id, data) => {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${INVITE_URL}`,
       data,
       {
         headers: authHeader(),

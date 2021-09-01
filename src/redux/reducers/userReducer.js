@@ -47,6 +47,19 @@ export default function reducer(state = initialState, action) {
     case actionTypes.RE_INVITE_USER_FAILED:
       return { ...state, status: payload.status, isLoading: false };
 
+    case actionTypes.INVITE_TO_WORKSPACE:
+      return { ...state, isLoading: true };
+
+    case actionTypes.INVITE_TO_WORKSPACE_SUCCEED:
+      return {
+        ...state,
+        status: payload.status,
+        isLoading: false,
+      };
+
+    case actionTypes.INVITE_TO_WORKSPACE_FAILED:
+      return { ...state, isLoading: false };
+
     default:
       return state;
   }

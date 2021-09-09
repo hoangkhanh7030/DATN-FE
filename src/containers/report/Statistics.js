@@ -1,33 +1,38 @@
-import { Box, Typography } from "@material-ui/core";
-import CustomizedProgressBar from "./CustomizedProgressBar";
+import { Grid } from "@material-ui/core";
+import CommonStatistic from "./CommonStatistic";
+import DetailStatistic from "./DetailStatistic";
 import { useStyles } from "./style";
 
-export default function Statistics({ data = {} }) {
+export default function Statistics({
+  trafficTime = 0,
+  allocatedTime = 0,
+  overTime = 0,
+  type = "HOURS",
+}) {
+  console.log("🚀 ~ file: Statistics.js ~ line 7 ~ Statistics ~ Statistics");
+
   const classes = useStyles();
-  const calPercentage = (value) => {
-    return Math.round((value * 100) / data.scheduledDays);
-  };
 
+  const items = [
+    { title: "TOTAL ALLOCATED", amount: allocatedTime },
+    { title: "TOTAL AVAILABLE", amount: trafficTime - allocatedTime },
+    { title: "TOTAL OVERTIME", amount: overTime },
+  ];
+  const totalAmount = trafficTime;
   return (
-    <Box className={classes.statistics}>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography variant="body1">Scheduled Days</Typography>
-        <Typography variant="subtitle1" className={classes.days}>
-          {data.scheduledDays} days
-        </Typography>
-      </Box>
-
-      <CustomizedProgressBar
-        title={"Working Days"}
-        days={data.workingDays}
-        percentage={calPercentage(data.workingDays)}
-      />
-
-      <CustomizedProgressBar
-        title={"Overtime Days"}
-        days={data.overtimeDays}
-        percentage={calPercentage(data.overtimeDays)}
-      />
-    </Box>
+    <Grid container style={{  margin: "16px 0", padding: "0 48px" }}>
+      <Grid item xs={3}>
+        <CommonStatistic
+          totalAmount={totalAmount}
+          allocatedTime={allocatedTime}
+          type={type}
+        />
+      </Grid>
+      {items.map((item) => (
+        <Grid item xs={3}>
+          <DetailStatistic data={item} type={type} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }

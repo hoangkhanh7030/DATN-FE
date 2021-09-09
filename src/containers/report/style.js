@@ -43,13 +43,13 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: colors.bgColor,
     borderRadius: 8,
     padding: 24,
-    marginLeft: 24,
+    margin: 8,
+   
   },
-  days: { fontWeight: 600 },
+  hours: { fontWeight: 600 },
 
   progressBarBox: {
     marginTop: 40,
-    position: "relative",
   },
   leftText: {
     position: "absolute",
@@ -61,5 +61,6 @@ export const useStyles = makeStyles((theme) => ({
     right: 0,
     bottom: 20,
   },
-  progressBar: { height: 20 },
+
+  progressBar: { height: 10, borderRadius: 32 },
 }));

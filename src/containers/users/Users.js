@@ -41,7 +41,7 @@ export default function Users() {
     size: INITIAL_ROWS_PER_PAGE,
     searchName: "",
     sortName: "",
-    type: false,
+    type: true,
   });
 
   const fetchUsers = () => {

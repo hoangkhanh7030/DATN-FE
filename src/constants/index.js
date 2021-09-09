@@ -8,7 +8,8 @@ export const EMPTY_ERROR = "this field is required";
 export const EMAIL_SUFFIX_REGEX = /^([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/;
 export const EMAIL_SUFFIX_ERROR = "please enter a valid email suffix !";
 export const INVITED_EMAIL_ERROR = "this email is invited before!";
-export const WORKING_DAYS_ERROR = "please choose number of working days at least 2 days !";
+export const WORKING_DAYS_ERROR =
+  "please choose number of working days at least 2 days !";
 export const WORKSPACE_NAME_ERROR = "this workspace name is already existed ! ";
 
 export const USER = "user";
@@ -63,6 +64,7 @@ export const EMAILS_URL = "/emails";
 export const INVITE_URL = "/invitedemail";
 export const USERS_URL = "/manageUsers";
 export const RE_INVITE_URL = "/reinvited";
+export const REPORTS_URL = "/report";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";

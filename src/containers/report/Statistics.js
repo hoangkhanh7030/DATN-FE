@@ -20,7 +20,7 @@ export default function Statistics({
   ];
   const totalAmount = trafficTime;
   return (
-    <Grid container style={{  margin: "16px 0", padding: "0 48px" }}>
+    <Grid container style={{  margin: "16px 0", padding: "0 52px" }}>
       <Grid item xs={3}>
         <CommonStatistic
           totalAmount={totalAmount}

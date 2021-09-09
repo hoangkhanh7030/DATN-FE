@@ -5,7 +5,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getReport } from "redux/actions/reportAction";
+import { getReport, exportReport } from "redux/actions/reportAction";
 import * as _ from "underscore";
 import Project from "./Project";
 import Resource from "./Resource";
@@ -13,6 +13,7 @@ import Chart from "./Chart";
 import Statistics from "./Statistics";
 import { useStyles } from "./style";
 import Toolbar from "./Toolbar";
+import { Message } from "components/common/Message";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,12 +46,14 @@ export default function Report() {
   const [startDate, setStartDate] = useState(moment());
   const [endDate, setEndDate] = useState(moment());
   const [view, setView] = useState("week");
-
+  const [type, setType] = useState("DAY");
   const classes = useStyles();
 
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const [hasMessage, setOpenMessage] = useState(false);
+  const { message } = useSelector((state) => state.message);
   const storeReport = useSelector((state) => state.reports);
   const [projectReport, setProjectReport] = useState([]);
   const [resourceReport, setResourceReport] = useState([]);
@@ -59,7 +62,6 @@ export default function Report() {
   const [trafficTime, setTrafficTime] = useState(0);
   const [allocatedTime, setAllocatedTime] = useState(0);
 
-  const type = "DAYS";
   useEffect(() => {
     setStartDate(start());
     setEndDate(end());
@@ -68,14 +70,14 @@ export default function Report() {
     const params = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
-      type: "DAY",
+      type,
     };
 
     dispatch(getReport(id, params));
   };
   useEffect(() => {
     fetchReports();
-  }, [dispatch, id, startDate, endDate]);
+  }, [dispatch, id, startDate, endDate, type]);
 
   useEffect(() => {
     if (!storeReport.data) {
@@ -110,20 +112,28 @@ export default function Report() {
     return today.clone().endOf(view).add(isWeek, DAY);
   }
 
+  const handleCloseMessage = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenMessage(false);
+  };
+
+  const handleExport = () => {
+    const params = {
+      startDate: startDate.format("YYYY-MM-DD"),
+      endDate: endDate.format("YYYY-MM-DD"),
+      type: "DAY",
+    };
+    dispatch(exportReport(id, params))
+      .then(() => setOpenMessage(true))
+      .catch(() => setOpenMessage(true));
+  };
   console.log("projectReport", projectReport);
   console.log("resourceReport", resourceReport);
   return (
     <ThemeProvider theme={theme}>
-      <Paper
-        square
-        elevation={0}
-        className={`${classes.flexBasic} ${classes.header}`}
-      >
-        <Tabs value={value} indicatorColor="primary" onChange={handleChange}>
-          <Tab label="Projects" {...a11yProps(0)} />
-          <Tab label="Resources" {...a11yProps(1)} />
-        </Tabs>
-
+      <Paper square elevation={0} className={`${classes.header}`}>
         <Toolbar
           view={view}
           startDate={startDate}
@@ -131,6 +141,9 @@ export default function Report() {
           handleChangeDropdown={handleChangeDropdown}
           today={today}
           setToday={setToday}
+          handleExport={handleExport}
+          setType={setType}
+          type={type}
         />
       </Paper>
 
@@ -144,7 +157,7 @@ export default function Report() {
       <Paper
         square
         elevation={0}
-        className={`${classes.flexBasic} ${classes.header}`}
+        className={classes.tab}
       >
         <Tabs value={value} indicatorColor="primary" onChange={handleChange}>
           <Tab label="Projects" {...a11yProps(0)} />
@@ -160,6 +173,16 @@ export default function Report() {
         {/* <Resource /> */}
         <Chart reportData={resourceReport} reportType="resource" />
       </TabPanel>
+      {message ? (
+        <Message
+          message={message}
+          isOpen={hasMessage}
+          handleCloseMessage={handleCloseMessage}
+          type={storeReport.status === 200 ? "success" : "error"}
+        />
+      ) : (
+        <></>
+      )}
     </ThemeProvider>
   );
 }

@@ -9,9 +9,17 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   header: {
-    padding: "0px 20px",
+    paddingLeft: 24,
+    paddingRight: 30,
   },
-
+  
+  chart: {
+    paddingLeft: 24,
+    paddingRight: 30,
+  },
+  tab: {
+    padding: "0px 60px",
+  },
   moveIcon: {
     color: colors.primaryColor,
     fontSize: 16,
@@ -19,22 +27,25 @@ export const useStyles = makeStyles((theme) => ({
 
   actionBox: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
 
-  todayButton: {
-    fontSize: 12,
-    padding: "7px 15px",
+  type: {
+    fontSize: 14,
+    paddingRight: 8,
   },
 
   select: {
     "& .MuiTextField-root": {
       margin: 0,
       marginLeft: 10,
+      marginRight: 8,
     },
     "& .MuiSelect-outlined": {
       fontSize: 14,
+      paddingTop: 9,
+      paddingBottom: 9,
     },
   },
 
@@ -44,7 +55,6 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: 8,
     padding: 24,
     margin: 8,
-   
   },
   hours: { fontWeight: 600 },
 
@@ -63,4 +73,14 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   progressBar: { height: 10, borderRadius: 32 },
+
+  disable: {
+    background: "#F5F5F5",
+    "&:hover": {
+      background: "#E0E0E0",
+    },
+  },
+  current: {
+    pointerEvents: "none",
+  },
 }));

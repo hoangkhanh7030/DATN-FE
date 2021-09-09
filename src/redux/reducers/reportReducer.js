@@ -23,6 +23,15 @@ export default function reducer(state = initialState, action) {
     case actionTypes.GET_REPORT_FAILED:
       return { ...state, isLoading: false };
 
+    case actionTypes.EXPORT_REPORT:
+      return { ...state, isLoading: true };
+
+    case actionTypes.EXPORT_REPORT_SUCCEED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.EXPORT_REPORT_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
     default:
       return state;
   }

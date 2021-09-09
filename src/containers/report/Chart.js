@@ -119,10 +119,7 @@ export default function Chart({ reportData = [], reportType = "project" }) {
   };
 
   return (
-    <Box
-      className={classes.chart}
-        // style={{ padding: "0 24px" }}
-    >
+    <Box className={classes.chart}>
       <Bar
         data={data}
         width={null}

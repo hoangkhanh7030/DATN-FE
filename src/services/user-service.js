@@ -28,11 +28,13 @@ export const getUsersService = (id, params) => {
     });
 };
 
-export const archiveUserService = (userID) => {
+export const archiveUserService = (id, userID) => {
+  const data = { url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${id}` };
   return axios
     .put(
-      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/isActive/${userID}`,
-      null,
+      process.env.REACT_APP_API_URL + 
+        `${WORKSPACES_URL}/${id}/isActive/${userID}`,
+        data,
       {
         headers: authHeader(),
       }

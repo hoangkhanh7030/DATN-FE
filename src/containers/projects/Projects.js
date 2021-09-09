@@ -108,7 +108,7 @@ export default function Projects() {
       status
     );
     fetchProjects(projectParams);
-  }, [dispatch, page, rowsPerPage, orderBy, order, status]);
+  }, [id, dispatch, page, rowsPerPage, orderBy, order, status]);
 
   useEffect(() => {
     if (!storeProjects.data) {

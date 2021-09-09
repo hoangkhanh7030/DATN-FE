@@ -110,7 +110,7 @@ export default function Users() {
   };
 
   const handleArchiveUser = (userID) => {
-    dispatch(archiveUser(userID))
+    dispatch(archiveUser(id, userID))
       .then(() => {
         fetchUsers();
         setOpenMessage(true);

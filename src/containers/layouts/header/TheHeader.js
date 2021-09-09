@@ -133,6 +133,12 @@ export default function TheHeader() {
       : setWorkspaceId(event.target.value);
   };
 
+  const handlePathChange = (id) => {
+    let paths = window.location.pathname.split("/");
+    paths[2] = id;
+    return paths.join("/").trim();
+  };
+
   const handleCloseMessage = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -211,7 +217,7 @@ export default function TheHeader() {
               key={workspace.id}
               value={workspace.id}
               component={RouterLink}
-              to={`${WORKSPACES_URL}/${workspace.id}`}
+              to={() => handlePathChange(workspace.id)}
             >
               {workspace.name}
             </MenuItem>

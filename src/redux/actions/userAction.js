@@ -39,12 +39,12 @@ export const getUsers = (id, params) => (dispatch) => {
   );
 };
 
-export const archiveUser = (userID) => (dispatch) => {
+export const archiveUser = (id, userID) => (dispatch) => {
   dispatch({
     type: actionTypes.ARCHIVE_USER,
   });
 
-  return archiveUserService(userID).then(
+  return archiveUserService(id, userID).then(
     (data) => {
       dispatch({
         type: actionTypes.ARCHIVE_USER_SUCCEED,

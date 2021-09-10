@@ -14,6 +14,7 @@ import Statistics from "./Statistics";
 import { useStyles } from "./style";
 import Toolbar from "./Toolbar";
 import { Message } from "components/common/Message";
+import { Progress } from "components/common/Progress";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -154,26 +155,30 @@ export default function Report() {
         type={type}
       />
 
-      <Paper
-        square
-        elevation={0}
-        className={classes.tab}
-      >
+      <Paper square elevation={0} className={classes.tab}>
         <Tabs value={value} indicatorColor="primary" onChange={handleChange}>
-          <Tab label="Projects" {...a11yProps(0)} />
-          <Tab label="Resources" {...a11yProps(1)} />
+          <Tab label="Resources" {...a11yProps(0)} />
+          <Tab label="Projects" {...a11yProps(1)} />
         </Tabs>
       </Paper>
-
       <TabPanel value={value} index={0}>
-        {/* <Project /> */}
-        
-        <Chart reportData={projectReport} reportType="project" viewType={type} />
+        {/* <Resource /> */}
+        <Chart
+          reportData={resourceReport}
+          reportType="resource"
+          viewType={type}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {/* <Resource /> */}
-        <Chart reportData={resourceReport} reportType="resource" viewType={type}/>
+        {/* <Project /> */}
+
+        <Chart
+          reportData={projectReport}
+          reportType="project"
+          viewType={type}
+        />
       </TabPanel>
+
       {message ? (
         <Message
           message={message}
@@ -184,6 +189,7 @@ export default function Report() {
       ) : (
         <></>
       )}
+      <Progress isOpen={storeReport.isLoading} />
     </ThemeProvider>
   );
 }

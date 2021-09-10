@@ -30,7 +30,9 @@ export default function Workspace() {
     if (!storeUsers.data) {
       return;
     }
-    const tmp = storeUsers.data.map((item) => item.id);
+    const tmp = storeUsers.data
+      .filter((item) => item.role !== "INACTIVE")
+      .map((item) => item.id);
     tmp.push(storeUsers.adminId);
     const accountId = JSON.parse(localStorage.getItem("user")).accountDTO.id;
 
@@ -40,13 +42,10 @@ export default function Workspace() {
   return (
     <ThemeProvider theme={theme}>
       {" "}
-      <Typography variant="h1">Workspace {id}</Typography>
       {!storeUsers.isLoading ? (
-        <Typography variant="h1">
-          {!isAccess ? "Your invitation is expired" : ""}
-        </Typography>
+        <Typography variant="h1">{!isAccess ? "No permission" : ""}</Typography>
       ) : (
-        <></>
+        <Typography variant="h1">Workspace {id}</Typography>
       )}
     </ThemeProvider>
   );

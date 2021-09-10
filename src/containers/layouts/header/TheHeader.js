@@ -53,6 +53,9 @@ export default function TheHeader() {
   const open = Boolean(anchorEl);
 
   const workspaces = useSelector((state) => state.workspaces).data;
+  // const workspaces = useSelector((state) => state.workspaces).data.filter(
+  //   (item) => item.role !== "INACTIVE"
+  // );
   const { status } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
   const [isOpenMessage, setIsOpenMessage] = useState(false);
@@ -212,16 +215,18 @@ export default function TheHeader() {
           </span>
         </MenuItem>
         {workspaces &&
-          workspaces.map((workspace) => (
-            <MenuItem
-              key={workspace.id}
-              value={workspace.id}
-              component={RouterLink}
-              to={() => handlePathChange(workspace.id)}
-            >
-              {workspace.name}
-            </MenuItem>
-          ))}
+          workspaces
+            .filter((item) => item.role !== "INACTIVE")
+            .map((workspace) => (
+              <MenuItem
+                key={workspace.id}
+                value={workspace.id}
+                component={RouterLink}
+                to={() => handlePathChange(workspace.id)}
+              >
+                {workspace.name}
+              </MenuItem>
+            ))}
         <div className={classes.center}>
           <Button
             variant="outlined"

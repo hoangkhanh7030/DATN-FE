@@ -145,7 +145,7 @@ export default function Chart({
       <Bar
         data={data}
         width={null}
-        height={null}
+        height={80}
         options={options}
         plugins={plugins}
       />

@@ -131,20 +131,22 @@ export default function Workspaces() {
       </Typography>
       <Grid container spacing={5}>
         {workspaces &&
-          workspaces.map((workspace) => (
-            <Grid key={_.get(workspace, "id")} item xs={12} sm={4} md={3}>
-              <Workspace
-                workspace={workspace}
-                openDelete={openDelete}
-                handleOpenDialog={handleDialog}
-                handleOpenDeleteDialog={handleOpenDeleteDialog}
-                handleCloseDeleteDialog={handleCloseDeleteDialog}
-                handelDeleteWorkspace={() =>
-                  handelDeleteWorkspace(_.get(workspace, "id"))
-                }
-              />
-            </Grid>
-          ))}
+          workspaces.map((workspace) =>
+            _.get(workspace, "role") !== "INACTIVE" ? (
+              <Grid key={_.get(workspace, "id")} item xs={12} sm={4} md={3}>
+                <Workspace
+                  workspace={workspace}
+                  openDelete={openDelete}
+                  handleOpenDialog={handleDialog}
+                  handleOpenDeleteDialog={handleOpenDeleteDialog}
+                  handleCloseDeleteDialog={handleCloseDeleteDialog}
+                  handelDeleteWorkspace={() =>
+                    handelDeleteWorkspace(_.get(workspace, "id"))
+                  }
+                />
+              </Grid>
+            ) : null
+          )}
 
         <Grid item xs={12} sm={4} md={3}>
           <Paper className={classes.paper} elevation={0}>

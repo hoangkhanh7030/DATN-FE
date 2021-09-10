@@ -39,7 +39,7 @@ export default function UserRow({
   const role = _.get(user, ROLE).toLowerCase();
   const date = _.get(user, CREATED_DATE);
   const status = _.get(user, STATUS_NAME);
-  const isActive = status === IS_ACTIVE;
+  const isActive = role !== "inactive";
   const isPending = status === IS_PENDING;
   const optionStyle = isPending
     ? `far fa-paper-plane`
@@ -81,15 +81,23 @@ export default function UserRow({
         <Button
           disabled
           className={`${classes.status}  ${
-            isActive ? classes.active : classes.inactive
+            isPending
+              ? classes.inactive
+              : isActive
+              ? classes.active
+              : classes.inactive
           }`}
         >
-          {status === IS_ACTIVE ? ACTIVE : status}
+          {status === IS_PENDING
+            ? IS_PENDING
+            : role === "inactive"
+            ? "INACTIVE"
+            : ACTIVE}
         </Button>
       </StyledTableCell>
 
       <StyledTableCell align="center">
-        {role[0].toUpperCase() + role.slice(1)}
+        Viewer
       </StyledTableCell>
       <StyledTableCell align="center">
         {date ? moment(date).format("DD/MM/YYYY") : `--/--/----`}

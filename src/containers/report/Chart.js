@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { useStyles } from "./style";
 
-export default function Chart({ reportData = [], reportType = "project" }) {
+export default function Chart({
+  reportData = [],
+  reportType = "project",
+  viewType = "DAYS",
+}) {
   console.log(reportData);
   const classes = useStyles();
   const names = reportData?.map((item) => item.name);
@@ -25,8 +29,20 @@ export default function Chart({ reportData = [], reportType = "project" }) {
   }
 
   const workingDays = reportData?.map((item) => item.workingDays);
+  let max = Math.max(...workingDays);
+  console.log("🚀 ~ file: Chart.js ~ line 29 ~ Chart ~ max", max);
+  console.log(
+    "🚀 ~ file: Chart.js ~ line 28 ~ Chart ~ workingDays",
+    workingDays
+  );
   const overtimeDays = reportData?.map((item) => item.overtimeDays);
-
+  let max1 = Math.max(...overtimeDays);
+  console.log("🚀 ~ file: Chart.js ~ line 29 ~ Chart ~ max", max1);
+  console.log(
+    "🚀 ~ file: Chart.js ~ line 30 ~ Chart ~ overtimeDays",
+    overtimeDays
+  );
+  let sumMax = max + max1;
   const data = {
     labels: names,
     clients,
@@ -57,16 +73,16 @@ export default function Chart({ reportData = [], reportType = "project" }) {
     {
       afterDraw: function (chart) {
         if (
-          chart.data.datasets[0].data.length < 1 &&
-          chart.data.datasets[1].data.length < 1
+          !chart.data.datasets[0].data.length  &&
+          !chart.data.datasets[1].data.length 
         ) {
           let ctx = chart.ctx;
           let width = chart.width;
           let height = chart.height;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.font = "30px Arial";
-          ctx.fillText("No data to display", width / 2, height / 2);
+          ctx.font = "26px Arial";
+          ctx.fillText("No data to display", width / 2, height / 4);
           ctx.restore();
         }
       },
@@ -82,7 +98,9 @@ export default function Chart({ reportData = [], reportType = "project" }) {
       callbacks: {
         label: (tooltipItems, data) => {
           var type = tooltipItems.datasetIndex ? "Overtime" : "Working";
-          var multiStringText = [`${type} hours: ${tooltipItems.yLabel}`];
+          var multiStringText = [
+            `${type} ${viewType.toLowerCase()}s: ${tooltipItems.yLabel}`,
+          ];
 
           if (reportType === "project") {
             multiStringText.push(data.clients[tooltipItems.index]);
@@ -99,18 +117,22 @@ export default function Chart({ reportData = [], reportType = "project" }) {
     },
     type: "bar",
     scales: {
+      
+
       xAxes: [
         {
+          display: reportData.length,
           stacked: true,
         },
       ],
       yAxes: [
         {
+          display: reportData.length,
           stacked: true,
           ticks: {
             beginAtZero: true,
             min: 0,
-            max: 100,
+            max: Math.ceil(sumMax) + (Math.ceil(sumMax) % 2 ? 1 : 2) ,
             // stepSize: 20,
           },
         },

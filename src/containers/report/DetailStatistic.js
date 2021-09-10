@@ -6,9 +6,9 @@ export default function DetailStatistic({ data = {}, type = "HOURS" }) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.statistics} style={{paddingTop: 8,  paddingBottom: 67}}>
+    <Box className={classes.statistics} style={{  paddingBottom: 51}}>
       <Typography variant="h5" style={{ color: "#bdbdbd" }}>
-        {data.title.toUpperCase()} ({type})
+        {data.title.toUpperCase()} ({type}S)
       </Typography>
       <Typography
         variant="subtitle1"

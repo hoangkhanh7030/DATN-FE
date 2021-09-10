@@ -167,11 +167,12 @@ export default function Report() {
 
       <TabPanel value={value} index={0}>
         {/* <Project /> */}
-        <Chart reportData={projectReport} reportType="project" />
+        
+        <Chart reportData={projectReport} reportType="project" viewType={type} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         {/* <Resource /> */}
-        <Chart reportData={resourceReport} reportType="resource" />
+        <Chart reportData={resourceReport} reportType="resource" viewType={type}/>
       </TabPanel>
       {message ? (
         <Message

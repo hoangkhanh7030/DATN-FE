@@ -13,7 +13,7 @@ export default function CommonStatistic({
   return (
     <Box className={classes.statistics}>
       <Typography variant="h5" style={{ color: "#bdbdbd" }}>
-        TODAY TRAFFIC ({type})
+        TODAY TRAFFIC ({type}S)
       </Typography>
       <Typography
         component="span"
@@ -45,7 +45,7 @@ export default function CommonStatistic({
           <LinearProgress
             className={classes.progressBar}
             variant="determinate"
-            value={Math.round((allocatedTime * 100) / totalAmount)}
+            value={Math.round((allocatedTime * 100) / totalAmount) || 0}
           />
         </Grid>
       </Grid>

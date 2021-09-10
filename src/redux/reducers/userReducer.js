@@ -1,6 +1,6 @@
 import * as actionTypes from "redux/constants";
 
-const initialState = { data: [], numPage: 1, status: null, isLoading: false };
+const initialState = { data: [], numPage: 1, status: null, isLoading: false, adminId: null };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -14,6 +14,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         data: payload.manageUsers,
         numPage: payload.numberSize,
+        adminId: payload.adminId,
         isLoading: false,
       };
 

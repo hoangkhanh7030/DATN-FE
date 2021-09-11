@@ -24,7 +24,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, isLoading: false };
 
     case actionTypes.EXPORT_REPORT:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: false };
 
     case actionTypes.EXPORT_REPORT_SUCCEED:
       return { ...state, status: payload.status, isLoading: false };

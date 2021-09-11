@@ -119,16 +119,28 @@ export default function Report() {
     }
     setOpenMessage(false);
   };
+  const [exportLoading, setExportLoading] = useState(false);
 
   const handleExport = () => {
+    setExportLoading(true);
     const params = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
-      type: "DAY",
+      type: type,
     };
     dispatch(exportReport(id, params))
-      .then(() => setOpenMessage(true))
-      .catch(() => setOpenMessage(true));
+      .then(() => {
+        setOpenMessage(true);
+        setExportLoading(false);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+        setExportLoading(false);
+      })
+      .finally(() => {
+        setOpenMessage(true);
+        setExportLoading(false);
+      });
   };
   console.log("projectReport", projectReport);
   console.log("resourceReport", resourceReport);
@@ -189,7 +201,7 @@ export default function Report() {
       ) : (
         <></>
       )}
-      <Progress isOpen={storeReport.isLoading} />
+      <Progress isOpen={storeReport.isLoading || exportLoading} />
     </ThemeProvider>
   );
 }

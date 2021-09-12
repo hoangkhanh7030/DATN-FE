@@ -141,4 +141,7 @@ export const useStyles = makeStyles((theme) => ({
   emptyRows: {
     height: ({ emptyRows }) => emptyRows * 58,
   },
+  import: {
+    display: "none",
+  },
 }));

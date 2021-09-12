@@ -18,6 +18,7 @@ export default function ProjectsHeader({
   handleChangeDropdown,
   handleOpenDialog,
   handleReset,
+  handleImportProjects,
 }) {
   const classes = useStyles();
 
@@ -51,8 +52,10 @@ export default function ProjectsHeader({
       <Box>
         <MoreOptions
           anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
           handleClickOption={handleClickOption}
           handleCloseOption={handleCloseOption}
+          handleImportProjects={handleImportProjects}
         />
 
         <Button

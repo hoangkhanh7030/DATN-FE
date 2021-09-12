@@ -1,6 +1,6 @@
 import axios from "axios";
 import { WORKSPACES_URL, PROJECTS_URL } from "constants/index";
-import authHeader from "./data-service";
+import authHeader, { uploadHeader } from "./data-service";
 
 export const getProjectsService = (id, projectParams) => {
   return axios
@@ -67,6 +67,23 @@ export const archiveProjectService = (id, projectId) => {
       null,
       {
         headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+export const importProjectsService = (id, file) => {
+  const formData = new FormData();
+  formData.append("csvfile", file);
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${PROJECTS_URL}/import`,
+      formData,
+      {
+        headers: uploadHeader(),
       }
     )
     .then((response) => {

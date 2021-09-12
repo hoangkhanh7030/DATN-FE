@@ -7,6 +7,7 @@ import {
   editProjectService,
   deleteProjectService,
   archiveProjectService,
+  importProjectsService,
 } from "services/project-service";
 
 export const getProjects = (id, projectParams) => (dispatch) => {
@@ -163,6 +164,40 @@ export const archiveProject = (id, projectId) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.ARCHIVE_PROJECT_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const importProjects = (id, file) => (dispatch) => {
+  dispatch({
+    type: actionTypes.IMPORT_PROJECTS,
+  });
+
+  return importProjectsService(id, file).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.IMPORT_PROJECTS_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.IMPORT_PROJECTS_FAILED,
       });
 
       dispatch({

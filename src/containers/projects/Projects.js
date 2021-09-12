@@ -16,8 +16,9 @@ import {
   editProject,
   deleteProject,
   archiveProject,
+  importProjects,
 } from "redux/actions/projectAction";
-import { clearMessage } from "redux/actions/msgAction";
+import { setMessage, clearMessage } from "redux/actions/msgAction";
 
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
@@ -53,6 +54,7 @@ export default function Projects() {
   const { id } = useParams();
 
   const { message } = useSelector((state) => state.message);
+  const [errorImport, setErrorImport] = useState(false);
 
   const [projects, setProjects] = useState([]);
 
@@ -225,6 +227,24 @@ export default function Projects() {
       });
   };
 
+  const handleImportProjects = (file) => {
+    if (file.type === "application/vnd.ms-excel") {
+      dispatch(importProjects(id, file))
+        .then(() => {
+          fetchProjects(setProjectParams());
+          setOpenMessage(true);
+        })
+        .catch(() => {
+          setOpenMessage(true);
+        });
+    } else {
+      dispatch(setMessage("Wrong type of file. Please choose csv file!"));
+      setErrorImport(true);
+      setOpenMessage(true);
+      setErrorImport(false);
+    }
+  };
+
   const handleReset = () => {
     setSearched("");
     setStatus(STATUS);
@@ -242,6 +262,7 @@ export default function Projects() {
         handleChangeDropdown={handleChangeDropdown}
         handleOpenDialog={handleOpenDialog}
         handleReset={handleReset}
+        handleImportProjects={handleImportProjects}
       />
 
       <Box className={classes.boxTable}>

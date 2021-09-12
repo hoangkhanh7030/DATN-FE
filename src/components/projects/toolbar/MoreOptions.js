@@ -1,15 +1,23 @@
 import React from "react";
 
-import { Box, Button, Menu, MenuItem } from "@material-ui/core";
+import { Box, Button, Menu, MenuItem, TextField } from "@material-ui/core";
 import { useStyles } from "containers/projects/style";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 export const MoreOptions = ({
   anchorEl = null,
+  setAnchorEl,
   handleClickOption,
   handleCloseOption,
+  handleImportProjects,
 }) => {
   const classes = useStyles();
+  const onFileSelect = (e) => {
+    const file = e.target.files[0];
+
+    setAnchorEl(null);
+    handleImportProjects(file);
+  };
 
   return (
     <Box component="span">
@@ -41,7 +49,16 @@ export const MoreOptions = ({
         elevation={5}
       >
         <MenuItem key="import" value="import">
-          Import
+          <label htmlFor="btn-upload">
+            <TextField
+              type="file"
+              id="btn-upload"
+              name="btn-upload"
+              onChange={onFileSelect}
+              className={classes.import}
+            />
+            <Button component="span">Import</Button>
+          </label>
         </MenuItem>
         <MenuItem key="export" value="export">
           Export

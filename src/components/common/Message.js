@@ -36,7 +36,7 @@ export const Message = ({
     >
       <Alert
         variant="filled"
-        severity="success"
+        severity={type}
         onClose={handleCloseMessage}
         className={`${classes.text} ${status}`}
       >

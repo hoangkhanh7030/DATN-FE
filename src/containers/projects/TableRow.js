@@ -18,6 +18,7 @@ export default function ProjectRow({
   project = {},
   handleOpenDialog,
   handleDeleteProject,
+  handleArchiveProject,
 }) {
   const projectName = _.get(project, PROJECT_NAME);
   const projectColor = _.get(project, "color");
@@ -35,6 +36,14 @@ export default function ProjectRow({
   };
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
+  };
+
+  const [openArchiveDialog, setOpenArchiveDialog] = useState(false);
+  const handleOpenArchiveDialog = () => {
+    setOpenArchiveDialog(true);
+  };
+  const handleCloseArchiveDialog = () => {
+    setOpenArchiveDialog(false);
   };
 
   return (
@@ -68,6 +77,7 @@ export default function ProjectRow({
         <Tooltip title={isActivatedToolTip} arrow>
           <IconButton
             className={`${commonClasses.action} ${classes.midIcon} ${isActivatedStyle}`}
+            onClick={handleOpenArchiveDialog}
           ></IconButton>
         </Tooltip>
         <Tooltip title="delete" arrow>
@@ -77,11 +87,19 @@ export default function ProjectRow({
           ></IconButton>
         </Tooltip>
       </StyledTableCell>
+
       <AlertDialog
         open={openDeleteDialog}
         content={`Do you really want to delete ${projectName} project?`}
         handleCloseDialog={handleCloseDeleteDialog}
         handelActionDialog={() => handleDeleteProject(_.get(project, "id"))}
+      />
+      <AlertDialog
+        open={openArchiveDialog}
+        content={`Do you really want to ${isActivatedToolTip} ${projectName} project?`}
+        handleCloseDialog={handleCloseArchiveDialog}
+        handelActionDialog={() => handleArchiveProject(_.get(project, "id"))}
+        btnText={isActivatedToolTip}
       />
     </StyledTableRow>
   );

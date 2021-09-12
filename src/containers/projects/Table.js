@@ -23,6 +23,7 @@ const ProjectsTable = ({
   isLoading,
   handleOpenDialog,
   handleDeleteProject,
+  handleArchiveProject,
 }) => {
   const classes = useStyles({ emptyRows });
 
@@ -75,6 +76,7 @@ const ProjectsTable = ({
                   project={row}
                   handleOpenDialog={handleOpenDialog}
                   handleDeleteProject={handleDeleteProject}
+                  handleArchiveProject={handleArchiveProject}
                 />
               ))}
 

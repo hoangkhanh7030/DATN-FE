@@ -9,6 +9,7 @@ import positions from "./positionReducer";
 import emails from "./emailReducer";
 import users from "./userReducer";
 import reports from "./reportReducer";
+import dashboard from "./dashboardReducer";
 
 export default combineReducers({
   auth,
@@ -21,4 +22,5 @@ export default combineReducers({
   emails,
   users,
   reports,
+  dashboard,
 });

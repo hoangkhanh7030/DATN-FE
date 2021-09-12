@@ -6,11 +6,12 @@ import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { LOGIN_URL } from "constants/index";
 import Workspaces from "containers/workspaces/Workspaces";
-import Report from "containers/report/Report";
+import Workspace from "containers/workspace/Workspace";
 
 export default function TheLayout(Component = Workspaces) {
   const classes = useStyles();
-  const style = Component === Report ? classes.dashboard : classes.root;
+  const style = Component === Workspace ? classes.dashboard : classes.root;
+
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   const pathName = window.location.pathname;

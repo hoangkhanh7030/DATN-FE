@@ -13,12 +13,13 @@ import { ResetBtn } from "components/common/ResetBtn";
 export default function ProjectsHeader({
   searched = "",
   status = STATUS,
-  setSearched,
+  keyUp,
   cancelSearch,
   handleChangeDropdown,
   handleOpenDialog,
   handleReset,
   handleImportProjects,
+  handleExportProjects,
 }) {
   const classes = useStyles();
 
@@ -40,7 +41,7 @@ export default function ProjectsHeader({
           value={searched}
           className={classes.searchbar}
           onCancelSearch={cancelSearch}
-          onChange={(newValue) => setSearched(newValue)}
+          onKeyUp={keyUp}
         />
         <StatusFilter
           status={status}
@@ -56,6 +57,7 @@ export default function ProjectsHeader({
           handleClickOption={handleClickOption}
           handleCloseOption={handleCloseOption}
           handleImportProjects={handleImportProjects}
+          handleExportProjects={handleExportProjects}
         />
 
         <Button

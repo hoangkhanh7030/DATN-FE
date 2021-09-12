@@ -68,9 +68,18 @@ export default function reducer(state = initialState, action) {
       return { ...state, isLoading: true };
 
     case actionTypes.IMPORT_PROJECTS_SUCCEED:
-      return { ...state, status: payload.status, isLoading: false };
+      return { ...state, isLoading: false };
 
     case actionTypes.IMPORT_PROJECTS_FAILED:
+      return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.EXPORT_PROJECTS:
+      return { ...state, isLoading: true };
+
+    case actionTypes.EXPORT_PROJECTS_SUCCEED:
+      return { ...state, isLoading: false };
+
+    case actionTypes.EXPORT_PROJECTS_FAILED:
       return { ...state, status: payload.status, isLoading: false };
 
     default:

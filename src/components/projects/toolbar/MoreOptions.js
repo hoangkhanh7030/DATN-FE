@@ -10,6 +10,7 @@ export const MoreOptions = ({
   handleClickOption,
   handleCloseOption,
   handleImportProjects,
+  handleExportProjects,
 }) => {
   const classes = useStyles();
   const onFileSelect = (e) => {
@@ -61,7 +62,9 @@ export const MoreOptions = ({
           </label>
         </MenuItem>
         <MenuItem key="export" value="export">
-          Export
+          <Button component="span" onClick={handleExportProjects}>
+            Export
+          </Button>
         </MenuItem>
       </Menu>
     </Box>

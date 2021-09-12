@@ -90,3 +90,24 @@ export const importProjectsService = (id, file) => {
       return response.data;
     });
 };
+
+export const exportProjectsService = (id) => {
+  return axios
+    .get(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${PROJECTS_URL}/export`,
+      {
+        headers: authHeader(),
+        responseType: "blob",
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.setAttribute("download", "Projects.csv");
+      document.body.appendChild(a);
+      a.click();
+    });
+};

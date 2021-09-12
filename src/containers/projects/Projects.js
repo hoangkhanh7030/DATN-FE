@@ -17,6 +17,7 @@ import {
   deleteProject,
   archiveProject,
   importProjects,
+  exportProjects,
 } from "redux/actions/projectAction";
 import { setMessage, clearMessage } from "redux/actions/msgAction";
 
@@ -47,6 +48,15 @@ import {
 
 import * as _ from "underscore";
 
+const DEFAULT_PARAMS = {
+  page: INITIAL_PAGE,
+  size: INITIAL_ROWS_PER_PAGE,
+  searchName: "",
+  sortName: "",
+  type: false,
+  isActivate: STATUS,
+};
+
 export default function Projects() {
   const classes = useStyles();
 
@@ -55,64 +65,32 @@ export default function Projects() {
 
   const { message } = useSelector((state) => state.message);
   const [errorImport, setErrorImport] = useState(false);
-
-  const [projects, setProjects] = useState([]);
-
-  const [searched, setSearched] = useState("");
-
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [rowsPerPage, setRowsPerPage] = useState(INITIAL_ROWS_PER_PAGE);
-
-  const [hasMessage, setOpenMessage] = useState(false);
-
   const storeProjects = useSelector((state) => state.projects);
   const actionStatus = _.get(storeProjects, ACTION_STATUS);
 
-  const [status, setStatus] = useState(STATUS);
-
-  const [order, setOrder] = useState(false);
-
-  const [orderBy, setOrderBy] = useState("");
-
+  const [params, setParams] = useState(DEFAULT_PARAMS);
+  const [projects, setProjects] = useState([]);
+  const [hasMessage, setOpenMessage] = useState(false);
   const [project, setProject] = useState(DEFAULT_PROJECT);
   const [projectID, setProjectID] = useState(null);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [dialog, setDialog] = useState({});
 
-  const setProjectParams = (
-    searchNameParam = searched,
-    pageParam = page,
-    sizeParam = rowsPerPage,
-    sortNameParam = orderBy,
-    typeParam = order,
-    isActivateParam = status
-  ) => {
-    return {
-      page: pageParam - 1,
-      size: sizeParam,
-      sortName: sortNameParam,
-      searchName: searchNameParam,
-      type: typeParam ? ASC : DESC,
-      isActivate: isActivateParam === STATUS ? "" : status,
+  const fetchProjects = () => {
+    const data = {
+      ...params,
+      page: params.page - 1,
+      type: params.type ? ASC : DESC,
+      isActivate: params.isActivate === STATUS ? "" : params.isActivate,
     };
-  };
-
-  const fetchProjects = (projectParams) => {
-    dispatch(getProjects(id, projectParams));
+    dispatch(getProjects(id, data));
   };
 
   useEffect(() => {
     dispatch(clearMessage());
-    const projectParams = setProjectParams(
-      searched,
-      page,
-      rowsPerPage,
-      orderBy,
-      order,
-      status
-    );
-    fetchProjects(projectParams);
-  }, [id, dispatch, page, rowsPerPage, orderBy, order, status]);
+    fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, params]);
 
   useEffect(() => {
     if (!storeProjects.data) {
@@ -122,23 +100,24 @@ export default function Projects() {
     setProjects(storeProjects.data);
   }, [storeProjects.data]);
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      page === INITIAL_PAGE
-        ? fetchProjects(setProjectParams())
-        : setPage(INITIAL_PAGE);
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
-  }, [searched]);
+  const keyUp = (event) => {
+    const value = event.target.value;
+    if (event.keyCode === 13 || value === "") {
+      if (value !== params.searchName)
+        setParams({
+          ...params,
+          searchName: value,
+          page: INITIAL_PAGE,
+        });
+    }
+  };
 
   const cancelSearch = () => {
-    setSearched("");
+    setParams({ ...params, searchName: "" });
   };
 
   const handleSort = (orderBy) => {
-    setOrderBy(orderBy);
-    setOrder(!order);
+    setParams({ ...params, sortName: orderBy, type: !params.type });
   };
 
   const handleCloseMessage = (reason) => {
@@ -149,15 +128,16 @@ export default function Projects() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setParams({ ...params, page: newPage });
   };
 
   const handleChangeDropdown = (e) => {
-    setPage(INITIAL_PAGE);
     const { name, value } = e.target;
+    if (name === SIZE_OPTION)
+      setParams({ ...params, page: INITIAL_PAGE, size: value });
 
-    if (name === STATUS_OPTION) setStatus(value);
-    if (name === SIZE_OPTION) setRowsPerPage(value);
+    if (name === STATUS_OPTION)
+      setParams({ ...params, page: INITIAL_PAGE, isActivate: value });
 
     return;
   };
@@ -187,7 +167,7 @@ export default function Projects() {
   const handleCreateProject = (newProject) => {
     dispatch(addProject(id, newProject))
       .then(() => {
-        window.location.reload();
+        handleReset();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -198,7 +178,7 @@ export default function Projects() {
     dispatch(editProject(id, projectID, editedProject))
       .then(() => {
         setOpenMessage(true);
-        fetchProjects(setProjectParams());
+        fetchProjects();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -209,7 +189,10 @@ export default function Projects() {
     dispatch(deleteProject(id, projectID))
       .then(() => {
         setOpenMessage(true);
-        fetchProjects(setProjectParams());
+        setParams({
+          ...params,
+          page: _.size(projects) > 1 ? params.page : params.page - 1,
+        });
       })
       .catch(() => {
         setOpenMessage(true);
@@ -219,7 +202,7 @@ export default function Projects() {
   const handleArchiveProject = (projectID) => {
     dispatch(archiveProject(id, projectID))
       .then(() => {
-        fetchProjects(setProjectParams());
+        fetchProjects();
         setOpenMessage(true);
       })
       .catch(() => {
@@ -231,7 +214,7 @@ export default function Projects() {
     if (file.type === "application/vnd.ms-excel") {
       dispatch(importProjects(id, file))
         .then(() => {
-          fetchProjects(setProjectParams());
+          handleReset();
           setOpenMessage(true);
         })
         .catch(() => {
@@ -245,31 +228,35 @@ export default function Projects() {
     }
   };
 
-  const handleReset = () => {
-    setSearched("");
-    setStatus(STATUS);
+  const handleExportProjects = () => {
+    dispatch(exportProjects(id));
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length);
+  const handleReset = () => {
+    setParams(DEFAULT_PARAMS);
+  };
+
+  const emptyRows = params.size - Math.min(params.size, projects.length);
 
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
-        searched={searched}
-        setSearched={setSearched}
+        searched={params.searchName}
+        keyUp={keyUp}
         cancelSearch={cancelSearch}
-        status={status}
+        status={params.isActivate}
         handleChangeDropdown={handleChangeDropdown}
         handleOpenDialog={handleOpenDialog}
         handleReset={handleReset}
         handleImportProjects={handleImportProjects}
+        handleExportProjects={handleExportProjects}
       />
 
       <Box className={classes.boxTable}>
         <ProjectsTable
           rows={projects}
-          page={page}
-          rowsPerPage={rowsPerPage}
+          page={params.page}
+          rowsPerPage={params.size}
           emptyRows={emptyRows}
           handleSort={handleSort}
           isLoading={storeProjects.isLoading}
@@ -280,11 +267,11 @@ export default function Projects() {
       </Box>
 
       <TableFooter
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={params.size}
         handleChangePage={handleChangePage}
         handleChangeDropdown={handleChangeDropdown}
         numPage={storeProjects.numPage}
-        page={page}
+        page={params.page}
       />
 
       {message ? (

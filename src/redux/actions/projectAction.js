@@ -8,6 +8,7 @@ import {
   deleteProjectService,
   archiveProjectService,
   importProjectsService,
+  exportProjectsService
 } from "services/project-service";
 
 export const getProjects = (id, projectParams) => (dispatch) => {
@@ -198,6 +199,40 @@ export const importProjects = (id, file) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.IMPORT_PROJECTS_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const exportProjects = (id) => (dispatch) => {
+  dispatch({
+    type: actionTypes.EXPORT_PROJECTS,
+  });
+
+  return exportProjectsService(id).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.EXPORT_PROJECTS_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.EXPORT_PROJECTS_FAILED,
       });
 
       dispatch({

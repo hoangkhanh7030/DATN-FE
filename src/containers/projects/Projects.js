@@ -14,6 +14,7 @@ import {
   getProjects,
   addProject,
   editProject,
+  deleteProject,
 } from "redux/actions/projectAction";
 import { clearMessage } from "redux/actions/msgAction";
 
@@ -201,6 +202,17 @@ export default function Projects() {
       });
   };
 
+  const handleDeleteProject = (projectID) => {
+    dispatch(deleteProject(id, projectID))
+      .then(() => {
+        setOpenMessage(true);
+        fetchProjects(setProjectParams());
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+
   const handleReset = () => {
     setSearched("");
     setStatus(STATUS);
@@ -229,6 +241,7 @@ export default function Projects() {
           handleSort={handleSort}
           isLoading={storeProjects.isLoading}
           handleOpenDialog={handleOpenDialog}
+          handleDeleteProject={handleDeleteProject}
         />
       </Box>
 

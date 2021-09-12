@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, IconButton, Tooltip } from "@material-ui/core";
 import { StyledTableCell, StyledTableRow, useStyles } from "./style";
 import { commonStyle } from "../../assets/css/Common";
+import AlertDialog from "components/common/AlertDialog";
 import {
   PROJECT_NAME,
   CLIENT_NAME,
@@ -13,7 +14,12 @@ import {
 } from "constants/index";
 import * as _ from "underscore";
 
-export default function ProjectRow({ project = {}, handleOpenDialog }) {
+export default function ProjectRow({
+  project = {},
+  handleOpenDialog,
+  handleDeleteProject,
+}) {
+  const projectName = _.get(project, PROJECT_NAME);
   const projectColor = _.get(project, "color");
   const classes = useStyles({ projectColor });
   const commonClasses = commonStyle();
@@ -23,13 +29,21 @@ export default function ProjectRow({ project = {}, handleOpenDialog }) {
   const isActivatedStyle = isActivated ? `fas fa-inbox` : `fas fa-undo`;
   const isActivatedToolTip = isActivated ? ARCHIVE : ENABLE;
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
   return (
     <StyledTableRow key={_.get(project, "id")}>
       <StyledTableCell component="th" scope="row">
         <i
           className={`fas fa-circle ${commonClasses.icon}  ${classes.color}`}
         ></i>
-        {_.get(project, PROJECT_NAME)}
+        {projectName}
       </StyledTableCell>
       <StyledTableCell align="center">
         {_.get(project, CLIENT_NAME)}
@@ -59,9 +73,16 @@ export default function ProjectRow({ project = {}, handleOpenDialog }) {
         <Tooltip title="delete" arrow>
           <IconButton
             className={`far fa-trash-alt ${commonClasses.action}`}
+            onClick={handleOpenDeleteDialog}
           ></IconButton>
         </Tooltip>
       </StyledTableCell>
+      <AlertDialog
+        open={openDeleteDialog}
+        content={`Do you really want to delete ${projectName} project?`}
+        handleCloseDialog={handleCloseDeleteDialog}
+        handelActionDialog={() => handleDeleteProject(_.get(project, "id"))}
+      />
     </StyledTableRow>
   );
 }

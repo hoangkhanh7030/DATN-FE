@@ -5,6 +5,7 @@ import {
   getProjectsService,
   addProjectService,
   editProjectService,
+  deleteProjectService,
 } from "services/project-service";
 
 export const getProjects = (id, projectParams) => (dispatch) => {
@@ -93,6 +94,40 @@ export const editProject = (id, projectID, data) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.EDIT_PROJECT_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const deleteProject = (id, projectID) => (dispatch) => {
+  dispatch({
+    type: actionTypes.DELETE_PROJECT,
+  });
+
+  return deleteProjectService(id, projectID).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.DELETE_PROJECT_SUCCEED,
+        payload: data,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: data.message,
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.DELETE_PROJECT_FAILED,
       });
 
       dispatch({

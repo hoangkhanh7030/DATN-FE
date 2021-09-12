@@ -24,7 +24,7 @@ export default function AlertDialog({
   open,
   content,
   handleCloseDialog,
-  handelDeleteWorkspace,
+  handelActionDialog,
   btnText,
 }) {
   const commonClasses = commonStyle();
@@ -62,7 +62,7 @@ export default function AlertDialog({
             Cancel
           </Button>
           <Button
-            onClick={handelDeleteWorkspace}
+            onClick={handelActionDialog}
             color="secondary"
             variant="contained"
             autoFocus

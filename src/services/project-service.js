@@ -44,3 +44,17 @@ export const editProjectService = (id, projectID, data) => {
       return response.data;
     });
 };
+
+export const deleteProjectService = (id, projectID) => {
+  return axios
+    .delete(
+      process.env.REACT_APP_API_URL +
+        `${WORKSPACES_URL}/${id}${PROJECTS_URL}/${projectID}`,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

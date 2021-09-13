@@ -24,6 +24,19 @@ import { useStyles } from "./style";
 import { addResource } from "redux/actions/resourceAction";
 import { getUsers } from "redux/actions/userAction";
 
+import BookingDialog from "./dialog/BookingDialog";
+import { addBooking, editBooking } from "redux/actions/bookingAction";
+import { getProjectsBooking } from "redux/actions/projectAction";
+import { getResourcesBooking } from "redux/actions/resourceAction";
+const INITIAL_BOOKING = {
+  id: "",
+  startDate: "",
+  endDate: "",
+  projectId: "",
+  resourceId: "",
+  percentage: 100,
+  duration: 8,
+};
 export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -42,6 +55,19 @@ export default function Workspace() {
   const [searched, setSearched] = useState("");
 
   const classes = useStyles({ view });
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [booking, setBooking] = useState(null);
+
+  const storeResources = useSelector((state) => state.resources);
+  const storeProjects = useSelector((state) => state.projects);
+  const [prjList, setPrjList] = useState([]);
+  const [rscList, setRscList] = useState([]);
+
+  const [projectSearch, setProjectSearch] = useState("");
+  const [resourceSearch, setResourceSearch] = useState("");
+
+  const [selectedDays, setSelectedDays] = useState([]);
 
   const fetchBookings = (thisCalendar = [], searchValue = "") => {
     const params = {
@@ -149,6 +175,103 @@ export default function Workspace() {
     setIsAccess(tmp.includes(accountId));
   }, [storeUsers.data]);
 
+  const handleCloseDialog = () => {
+    selectedDays?.forEach((element) => {
+      document.getElementById(`${element}`).style.backgroundColor = `white`;
+    });
+    setOpenDialog(false);
+  };
+
+  const handleOpenDialog = (
+    startDate = null,
+    resourceId = "",
+    booking = null,
+    endDate = null,
+    selectedDays = []
+  ) => {
+    setSelectedDays(selectedDays);
+    setBooking(
+      booking
+        ? {
+            id: _.get(booking, "id"),
+            startDate: moment(_.get(booking, "startDate")),
+            endDate: moment(_.get(booking, "endDate")),
+            projectId: _.get(booking, ["projectDTO", "id"]),
+            resourceId: resourceId,
+            percentage: _.get(booking, "percentage"),
+            duration: _.get(booking, "duration"),
+          }
+        : {
+            ...INITIAL_BOOKING,
+            startDate: startDate.isBefore(endDate) ? startDate : endDate,
+            endDate: endDate.isAfter(startDate) ? endDate : startDate,
+            resourceId,
+          }
+    );
+
+    setOpenDialog(true);
+  };
+
+  const handleAddBooking = (data) => {
+    dispatch(addBooking(id, data))
+      .then(() => {
+        handleCloseDialog();
+        setOpenMessage(true);
+        fetchBookings(calendar);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+  const handleEditBooking = (data) => {
+    dispatch(editBooking(id, data))
+      .then(() => {
+        setOpenDialog(false);
+        setOpenMessage(true);
+        fetchBookings(calendar);
+      })
+      .catch(() => {
+        setOpenMessage(true);
+      });
+  };
+  useEffect(() => {
+    fetchProjects(projectSearch);
+    fetchResources(resourceSearch);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (!storeResources.data && !storeProjects.data) {
+      return;
+    }
+
+    setRscList(storeResources.data);
+    setPrjList(storeProjects.data);
+  }, [storeResources.data, storeProjects.data]);
+
+  const fetchProjects = (projectSearch) => {
+    dispatch(getProjectsBooking(id, projectSearch));
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchProjects(projectSearch);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [projectSearch]);
+
+  const fetchResources = (resourceSearch) => {
+    dispatch(getResourcesBooking(id, resourceSearch));
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchResources(resourceSearch);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [resourceSearch]);
+
   return (
     <ThemeProvider theme={theme}>
       <Header
@@ -181,9 +304,28 @@ export default function Workspace() {
             handleDeleteBooking={handleDeleteBooking}
             handleAddResource={handleAddResource}
             setUploading={setUploading}
+            handleOpenDialog={handleOpenDialog}
           />
         </Grid>
       </Box>
+      {openDialog && storeProjects.data && storeResources.data ? (
+        <BookingDialog
+          openDialog={openDialog}
+          booking={booking}
+          setBooking={setBooking}
+          handleCloseDialog={handleCloseDialog}
+          projects={prjList}
+          resources={rscList}
+          handleAddBooking={handleAddBooking}
+          handleEditBooking={handleEditBooking}
+          projectSearch={projectSearch}
+          setProjectSearch={setProjectSearch}
+          resourceSearch={resourceSearch}
+          setResourceSearch={setResourceSearch}
+        />
+      ) : (
+        <></>
+      )}
       {message ? (
         <Message
           message={message}

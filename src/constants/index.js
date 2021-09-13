@@ -39,6 +39,13 @@ export const ENABLE = "enable";
 export const ARCHIVE = "archive";
 
 /* --------------------- resources ---------------------- */
+export const DEFAULT_RESOURCE = {
+  avatar: "",
+  name: "",
+  teamId: "",
+  positionId: "",
+};
+
 export const RESOURCE_NAME = "name";
 export const TEAM_NAME = "team";
 export const POSITION_NAME = "position";
@@ -65,6 +72,7 @@ export const INVITE_URL = "/invitedemail";
 export const USERS_URL = "/manageUsers";
 export const RE_INVITE_URL = "/reinvited";
 export const REPORTS_URL = "/report";
+export const BOOKINGS_URL = "/bookings";
 
 /* ----------------------- projects ----------------------- */
 export const PROJECT_NAME = "name";
@@ -118,3 +126,12 @@ export const Y_M_D = "YYYY-MM-DD";
 
 export const SUN = "Sun";
 export const WEEKENDS = ["Sat", "Sun"];
+
+export const PROJECT_ID = "projectId";
+export const RESOURCE_ID = "resourceId";
+
+export const START_DATE = "START DATE";
+export const END_DATE = "END DATE";
+
+export const PERCENTAGE = "PERCENTAGE";
+export const DURATION = "DURATION";

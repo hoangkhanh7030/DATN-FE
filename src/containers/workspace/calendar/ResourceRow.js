@@ -11,6 +11,7 @@ export default function ResourceRow({
   team = {},
   indexTeam = 1,
   handleDeleteBooking,
+  handleOpenDialog,
 }) {
   resources = _.isEmpty(resources) ? Array(3).fill({}) : resources;
   return resources
@@ -30,6 +31,7 @@ export default function ResourceRow({
             view={view}
             resource={resource}
             handleDeleteBooking={handleDeleteBooking}
+            handleOpenDialog={handleOpenDialog}
           />
         </Fragment>
       );

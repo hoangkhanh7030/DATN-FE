@@ -22,6 +22,8 @@ const ID = "id";
 
 const useStyles = makeStyles({
   container: {
+    "-webkit-user-select": "none",
+    cursor: "pointer",
     position: "absolute",
     left: 10,
     top: ({ index }) => 8 + index * 50,
@@ -86,6 +88,7 @@ export default function Event({
   view = 1,
   resource = {},
   handleDeleteBooking,
+  handleOpenDialog,
 }) {
   const days = _.isEmpty(booking)
     ? 0
@@ -120,25 +123,14 @@ export default function Event({
     setOpenDelete(false);
   };
 
-  function HourTotal() {
-    return isHiddenHour ? null : (
-      <Box className={classes.side}>
-        <i className="fas fa-clock"></i>
-        <Typography className={classes.textHour}>
-          {_.get(booking, HOUR_TOTAL)}
-        </Typography>
-      </Box>
-    );
-  }
-
-  const handleOpenEdit = (booking) => {};
+  const handleOpenEdit = () =>
+    handleOpenDialog(booking.startDate, resource.id, booking);
 
   return _.isEmpty(booking) ? null : (
     <Box
       className={classes.container}
       onMouseEnter={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
-      onClick={() => handleOpenEdit(booking)}
     >
       <HourTotal
         classes={classes}
@@ -146,7 +138,7 @@ export default function Event({
         booking={booking}
       />
 
-      <Box className={classes.textBox}>
+      <Box className={classes.textBox} onClick={handleOpenEdit}>
         <Typography noWrap className={classes.textProject}>
           {_.get(booking, [PROJECT, PROJECT_NAME])}
         </Typography>
@@ -171,7 +163,7 @@ export default function Event({
         open={openDelete}
         content={`Do you really want to delete this booking?`}
         handleCloseDialog={handleCloseDeleteDialog}
-        handelDeleteWorkspace={() => handleDeleteBooking(_.get(booking, ID))}
+        handelActionDialog={() => handleDeleteBooking(_.get(booking, ID))}
       />
     </Box>
   );

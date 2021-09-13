@@ -18,13 +18,20 @@ const styles = (theme) => ({
     top: theme.spacing(1),
     color: "black",
   },
+  dialogStyle: {
+    marginTop: 10,
+  },
 });
 
 export const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
+  const { children, classes, onClose, dialogStyle, ...other } = props;
 
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <MuiDialogTitle
+      disableTypography
+      className={`${classes.root} ${dialogStyle ? classes.dialogStyle : ""}`}
+      {...other}
+    >
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton

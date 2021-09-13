@@ -8,8 +8,9 @@ import {
   deleteProjectService,
   archiveProjectService,
   importProjectsService,
-  exportProjectsService
+  exportProjectsService,
 } from "services/project-service";
+import { getProjectsBookingService } from "containers/workspace/dialog/api";
 
 export const getProjects = (id, projectParams) => (dispatch) => {
   dispatch({
@@ -233,6 +234,36 @@ export const exportProjects = (id) => (dispatch) => {
       const message = _.get(error, ["response", "data", "error"]);
       dispatch({
         type: actionTypes.EXPORT_PROJECTS_FAILED,
+      });
+
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const getProjectsBooking = (id, searchName) => (dispatch) => {
+  dispatch({
+    type: actionTypes.GET_PROJECTS_BOOKING,
+  });
+
+  return getProjectsBookingService(id, searchName).then(
+    (data) => {
+      dispatch({
+        type: actionTypes.GET_PROJECTS_BOOKING_SUCCEED,
+        payload: data,
+      });
+
+      return Promise.resolve();
+    },
+    (error) => {
+      const message = _.get(error, ["response", "data", "error"]);
+      dispatch({
+        type: actionTypes.GET_PROJECTS_BOOKING_FAILED,
       });
 
       dispatch({

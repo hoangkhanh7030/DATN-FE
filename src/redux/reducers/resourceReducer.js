@@ -1,7 +1,7 @@
 import * as actionTypes from "redux/constants";
 
 const initialState = {
-  data: [],
+  data: null,
   status: null,
   isLoading: false,
   pageSize: 1,
@@ -63,6 +63,19 @@ export default function reducer(state = initialState, action) {
 
     case actionTypes.DELETE_RESOURCE_FAILED:
       return { ...state, status: payload.status, isLoading: false };
+
+    case actionTypes.GET_RESOURCES_BOOKING:
+      return { ...state, data: [], isLoading: true };
+
+    case actionTypes.GET_RESOURCES_BOOKING_SUCCEED:
+      return {
+        ...state,
+        data: payload,
+        isLoading: false,
+      };
+
+    case actionTypes.GET_RESOURCES_BOOKING_FAILED:
+      return { ...state, isLoading: false };
 
     default:
       return state;

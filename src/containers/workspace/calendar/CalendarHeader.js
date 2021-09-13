@@ -23,7 +23,7 @@ export default function CalendarHeader({
           {`${rscAmount} RESOURCES`}
         </Typography>
       </Grid>
-      
+
       <Days calendar={calendar} view={view} />
     </>
   );

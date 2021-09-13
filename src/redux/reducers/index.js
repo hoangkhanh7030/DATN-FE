@@ -10,6 +10,7 @@ import emails from "./emailReducer";
 import users from "./userReducer";
 import reports from "./reportReducer";
 import dashboard from "./dashboardReducer";
+import booking from "./bookingReducer";
 
 export default combineReducers({
   auth,
@@ -23,4 +24,5 @@ export default combineReducers({
   users,
   reports,
   dashboard,
+  booking
 });

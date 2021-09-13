@@ -79,7 +79,6 @@ export default function Header({
         >
           <i className={`fas fa-sun ${classes.todayIcon}`}></i>TODAY
         </Button>
-
         <FormControl className={classes.select} noValidate autoComplete="off">
           <TextField
             select

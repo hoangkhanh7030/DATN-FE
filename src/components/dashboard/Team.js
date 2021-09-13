@@ -38,7 +38,7 @@ const useStyles = makeStyles({
   },
 });
 
-const INITIAL_RESOURCE = {
+const DEFAULT_RESOURCE = {
   avatar: "",
   name: "",
   teamId: "",
@@ -83,11 +83,11 @@ export default function Team({
     setOpenRename(true);
   };
 
-  const [resource, setResource] = useState(INITIAL_RESOURCE);
+  const [resource, setResource] = useState(DEFAULT_RESOURCE);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    setResource({ ...INITIAL_RESOURCE, teamId: _.get(team, ID) });
+    setResource({ ...DEFAULT_RESOURCE, teamId: _.get(team, ID) });
     handleCloseOption();
     setIsOpenDialog(true);
   };

@@ -30,7 +30,7 @@ import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
 import { storage } from "../../firebase";
 
-const INITIAL_RESOURCE = {
+const DEFAULT_RESOURCE = {
   avatar: "",
   name: "",
   teamId: "",
@@ -72,7 +72,7 @@ export default function Resources() {
             teamId: _.get(resource, ["positionDTO", "teamDTO", "id"]),
             positionId: _.get(resource, ["positionDTO", "id"]),
           }
-        : INITIAL_RESOURCE
+        : DEFAULT_RESOURCE
     );
     setResourceId(resource ? _.get(resource, "id") : null);
     setIsOpenDialog(true);
@@ -232,7 +232,7 @@ export default function Resources() {
         setOpenMessage(true);
       });
   };
-  
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
 
   return (

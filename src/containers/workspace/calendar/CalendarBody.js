@@ -12,6 +12,7 @@ export default function CalendarBody({
   handleDeleteBooking,
   handleAddResource,
   setUploading,
+  handleOpenDialog,
 }) {
   teams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
 
@@ -35,6 +36,7 @@ export default function CalendarBody({
           view={view}
           resources={resources}
           handleDeleteBooking={handleDeleteBooking}
+          handleOpenDialog={handleOpenDialog}
         />
       </Fragment>
     );

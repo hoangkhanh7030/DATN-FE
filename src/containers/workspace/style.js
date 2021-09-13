@@ -121,6 +121,12 @@ export const useStyles = makeStyles((theme) => ({
     "&:hover": {
       border: `1px solid ${colors.primaryColor}`,
       cursor: "pointer",
+      backgroundColor: `#9BB7FA`,
+      pointerEvents: "pointer",
+    },
+    "&:active": {
+      cursor: "pointer",
+      pointerEvents: "none",
     },
   },
 }));

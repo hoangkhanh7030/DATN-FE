@@ -2,11 +2,10 @@ import { Box, Typography } from "@material-ui/core";
 import { useStyles } from "./style";
 
 export default function DetailStatistic({ data = {}, type = "HOURS" }) {
-  console.log(data);
   const classes = useStyles();
 
   return (
-    <Box className={classes.statistics} style={{  paddingBottom: 51}}>
+    <Box className={classes.statistics} style={{ paddingBottom: 51 }}>
       <Typography variant="h5" style={{ color: "#bdbdbd" }}>
         {data.title.toUpperCase()} ({type}S)
       </Typography>
@@ -15,7 +14,7 @@ export default function DetailStatistic({ data = {}, type = "HOURS" }) {
         className={classes.hours}
         style={{ fontWeight: "bold", fontSize: 32 }}
       >
-        {data.amount}
+        {data.amount.toLocaleString("de-DE")}
       </Typography>
     </Box>
   );

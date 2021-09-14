@@ -167,6 +167,7 @@ export default function Projects() {
   const handleCreateProject = (newProject) => {
     dispatch(addProject(id, newProject))
       .then(() => {
+        // setOpenMessage(true);
         handleReset();
       })
       .catch(() => {

@@ -8,7 +8,6 @@ export default function Chart({
   reportType = "project",
   viewType = "DAYS",
 }) {
-  console.log(reportData);
   const classes = useStyles();
   const names = reportData?.map((item) => item.name);
   // const [clients, setClients] = useState([]);
@@ -30,18 +29,8 @@ export default function Chart({
 
   const workingDays = reportData?.map((item) => item.workingDays);
   let max = Math.max(...workingDays);
-  console.log("🚀 ~ file: Chart.js ~ line 29 ~ Chart ~ max", max);
-  console.log(
-    "🚀 ~ file: Chart.js ~ line 28 ~ Chart ~ workingDays",
-    workingDays
-  );
   const overtimeDays = reportData?.map((item) => item.overtimeDays);
   let max1 = Math.max(...overtimeDays);
-  console.log("🚀 ~ file: Chart.js ~ line 29 ~ Chart ~ max", max1);
-  console.log(
-    "🚀 ~ file: Chart.js ~ line 30 ~ Chart ~ overtimeDays",
-    overtimeDays
-  );
   let sumMax = max + max1;
   const data = {
     labels: names,
@@ -73,8 +62,8 @@ export default function Chart({
     {
       afterDraw: function (chart) {
         if (
-          !chart.data.datasets[0].data.length  &&
-          !chart.data.datasets[1].data.length 
+          !chart.data.datasets[0].data.length &&
+          !chart.data.datasets[1].data.length
         ) {
           let ctx = chart.ctx;
           let width = chart.width;
@@ -117,8 +106,6 @@ export default function Chart({
     },
     type: "bar",
     scales: {
-      
-
       xAxes: [
         {
           display: reportData.length,
@@ -132,7 +119,7 @@ export default function Chart({
           ticks: {
             beginAtZero: true,
             min: 0,
-            max: Math.ceil(sumMax) + (Math.ceil(sumMax) % 2 ? 1 : 2) ,
+            max: Math.ceil(sumMax) + (Math.ceil(sumMax) % 2 ? 1 : 2),
             // stepSize: 20,
           },
         },

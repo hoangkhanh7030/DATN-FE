@@ -18,7 +18,6 @@ import { Progress } from "components/common/Progress";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-  console.log("🚀 ~ file: Report.js ~ line 20 ~ TabPanel ~ children", children);
 
   return (
     <div
@@ -41,7 +40,6 @@ function a11yProps(index) {
 }
 
 export default function Report() {
-  console.log("🚀 ~ file: Report.js ~ line 42 ~ Report ~ Report");
   const [value, setValue] = useState(0);
   const [today, setToday] = useState(moment());
   const [startDate, setStartDate] = useState(moment());
@@ -84,7 +82,6 @@ export default function Report() {
     if (!storeReport.data) {
       return;
     }
-    console.log("here", _.get(storeReport, "data"));
     setProjectReport(
       _.get(storeReport, ["data", "projectReports", "projects"])
     );
@@ -142,8 +139,6 @@ export default function Report() {
         setExportLoading(false);
       });
   };
-  console.log("projectReport", projectReport);
-  console.log("resourceReport", resourceReport);
   return (
     <ThemeProvider theme={theme}>
       <Paper square elevation={0} className={`${classes.header}`}>

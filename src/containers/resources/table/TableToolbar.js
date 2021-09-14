@@ -22,7 +22,7 @@ export default function TableToolbar(props) {
   const {
     keyword = "",
     status = STATUS,
-    setKeyword,
+    keyUp,
     cancelSearch,
     handleChangeDropdown,
     handleOpenDialog,
@@ -58,7 +58,7 @@ export default function TableToolbar(props) {
             value={keyword}
             className={classes.searchbar}
             onCancelSearch={cancelSearch}
-            onChange={(newValue) => setKeyword(newValue)}
+            onKeyUp={keyUp}
           />
           <FormControl variant="outlined" className={classes.selectInput}>
             <Select

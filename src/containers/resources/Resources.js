@@ -10,14 +10,20 @@ import {
   INITIAL_ROWS_PER_PAGE,
   SIZE_OPTION,
   STATUS,
-  STATUS_OPTION
+  STATUS_OPTION,
 } from "constants/index";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage, setMessage } from "redux/actions/msgAction";
 import {
-  addResource, archiveResource, deleteResource, editResource, exportResources, getResources, importResources
+  addResource,
+  archiveResource,
+  deleteResource,
+  editResource,
+  exportResources,
+  getResources,
+  importResources,
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
 import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
@@ -27,6 +33,15 @@ import ResourceDialog from "./dialog/ResourceDialog";
 import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
+
+const DEFAULT_PARAMS = {
+  page: INITIAL_PAGE,
+  size: INITIAL_ROWS_PER_PAGE,
+  keyword: "",
+  sortColumn: "",
+  type: false,
+  isArchived: STATUS,
+};
 
 export default function Resources() {
   const { id } = useParams();
@@ -38,14 +53,6 @@ export default function Resources() {
   const { message } = useSelector((state) => state.message);
   const [openMessage, setOpenMessage] = useState(false);
 
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [rowsPerPage, setRowsPerPage] = useState(INITIAL_ROWS_PER_PAGE);
-
-  const [keyword, setKeyword] = useState("");
-  const [status, setStatus] = useState(STATUS);
-  const [order, setOrder] = useState(false);
-  const [orderBy, setOrderBy] = useState("");
-
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [resourceId, setResourceId] = useState(null);
   const [resource, setResource] = useState(null);
@@ -55,6 +62,8 @@ export default function Resources() {
   const [isUploading, setIsUploading] = useState(false);
 
   const [errorImport, setErrorImport] = useState(false);
+
+  const [params, setParams] = useState(DEFAULT_PARAMS);
 
   const handleOpenDialog = (resource = null) => {
     setResource(
@@ -71,41 +80,21 @@ export default function Resources() {
     setIsOpenDialog(true);
   };
 
-  const setResourceParams = (
-    keywordParam = keyword,
-    pageParam = page,
-    sizeParam = rowsPerPage,
-    sortColumnParam = orderBy,
-    typeParam = order,
-    isArchivedParam = status
-  ) => {
-    return {
-      page: pageParam - 1,
-      size: sizeParam,
-      sortColumn: sortColumnParam,
-      keyword: keywordParam,
-      type: typeParam ? ASC : DESC,
-      isArchived: isArchivedParam === STATUS ? "" : status,
+  const fetchResources = () => {
+    const data = {
+      ...params,
+      page: params.page - 1,
+      type: params.type ? ASC : DESC,
+      isArchived: params.isArchived === STATUS ? "" : params.isArchived,
     };
-  };
-
-  const fetchResources = (resourceParams) => {
-    dispatch(getResources(id, resourceParams));
+    dispatch(getResources(id, data));
   };
 
   useEffect(() => {
     dispatch(clearMessage());
-    const resourceParams = setResourceParams(
-      keyword,
-      page,
-      rowsPerPage,
-      orderBy,
-      order,
-      status
-    );
-    fetchResources(resourceParams);
+    fetchResources();
     dispatch(getTeams(id));
-  }, [dispatch, id, page, rowsPerPage, orderBy, order, status]);
+  }, [dispatch, id, params]);
 
   useEffect(() => {
     if (!storeResources.data) {
@@ -115,23 +104,24 @@ export default function Resources() {
     setResources(storeResources.data);
   }, [storeResources.data]);
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      page === INITIAL_PAGE
-        ? fetchResources(setResourceParams())
-        : setPage(INITIAL_PAGE);
-    }, 1000);
-
-    return () => clearTimeout(delayDebounce);
-  }, [keyword]);
+  const keyUp = (event) => {
+    const value = event.target.value;
+    if (event.keyCode === 13 || value === "") {
+      if (value !== params.keyword)
+        setParams({
+          ...params,
+          keyword: value,
+          page: INITIAL_PAGE,
+        });
+    }
+  };
 
   const cancelSearch = () => {
-    setKeyword("");
+    setParams({ ...params, keyword: "" });
   };
 
   const handleSort = (orderBy) => {
-    setOrderBy(orderBy);
-    setOrder(!order);
+    setParams({ ...params, sortColumn: orderBy, type: !params.type });
   };
 
   const handleCloseMessage = (reason) => {
@@ -142,27 +132,28 @@ export default function Resources() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setParams({ ...params, page: newPage });
   };
 
   const handleChangeDropdown = (e) => {
-    setPage(INITIAL_PAGE);
     const { name, value } = e.target;
+    if (name === SIZE_OPTION)
+      setParams({ ...params, page: INITIAL_PAGE, size: value });
 
-    if (name === STATUS_OPTION) setStatus(value);
-    if (name === SIZE_OPTION) setRowsPerPage(value);
-
+    if (name === STATUS_OPTION)
+      setParams({ ...params, page: INITIAL_PAGE, isArchived: value });
     return;
+  };
+
+  const handleReset = () => {
+    setParams(DEFAULT_PARAMS);
   };
 
   const callApiAddResource = (id, resource) => {
     dispatch(addResource(id, resource))
       .then(() => {
-        dispatch({
-          type: GET_RESOURCES,
-        });
-        window.location.reload();
-        setOpenMessage(true);
+        // setOpenMessage(true);
+        handleReset();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -172,8 +163,8 @@ export default function Resources() {
   const callApiEditResource = (id, resourceId, resource) => {
     dispatch(editResource(id, resourceId, resource))
       .then(() => {
-        fetchResources(setResourceParams());
         setOpenMessage(true);
+        fetchResources();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -208,23 +199,21 @@ export default function Resources() {
     });
   };
 
-  const handleReset = () => {
-    setKeyword("");
-    setStatus(STATUS);
-  };
-
   const handelDeleteResource = (resourceId) => {
     dispatch(deleteResource(id, resourceId))
       .then(() => {
-        fetchResources(setResourceParams());
         setOpenMessage(true);
+        setParams({
+          ...params,
+          page: _.size(resources) > 1 ? params.page : params.page - 1,
+        });
       })
       .catch(() => {
         setOpenMessage(true);
       });
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, resources.length);
+  const emptyRows = params.size - Math.min(params.size, resources.length);
 
   const handleExportResources = () => {
     dispatch(exportResources(id));
@@ -234,8 +223,7 @@ export default function Resources() {
     if (file.type === "application/vnd.ms-excel") {
       dispatch(importResources(id, file))
         .then(() => {
-          fetchResources(setResourceParams());
-
+          handleReset();
           setOpenMessage(true);
         })
         .catch(() => {
@@ -252,9 +240,7 @@ export default function Resources() {
   const callApiArchiveResource = (projectId) => {
     dispatch(archiveResource(id, projectId))
       .then(() => {
-        dispatch(fetchResources(setResourceParams())).catch(() => {
-          setOpenMessage(true);
-        });
+        fetchResources();
         setOpenMessage(true);
       })
       .catch(() => {
@@ -265,10 +251,10 @@ export default function Resources() {
   return (
     <ThemeProvider theme={theme}>
       <TableToolbar
-        keyword={keyword}
-        setKeyword={setKeyword}
+        keyword={params.keyword}
         cancelSearch={cancelSearch}
-        status={status}
+        status={params.isArchived}
+        keyUp={keyUp}
         handleChangeDropdown={handleChangeDropdown}
         handleOpenDialog={handleOpenDialog}
         handleReset={handleReset}
@@ -285,8 +271,8 @@ export default function Resources() {
         callApiArchiveResource={callApiArchiveResource}
       />
       <TableFooter
-        page={page}
-        rowsPerPage={rowsPerPage}
+        page={params.page}
+        rowsPerPage={params.size}
         pageSize={storeResources.pageSize}
         handleChangePage={handleChangePage}
         handleChangeDropdown={handleChangeDropdown}

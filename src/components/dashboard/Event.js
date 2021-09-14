@@ -124,7 +124,7 @@ export default function Event({
   };
 
   const handleOpenEdit = () =>
-    handleOpenDialog(booking.startDate, resource.id, booking);
+    handleOpenDialog(booking.startDate, resource.id, booking, booking.endDate);
 
   return _.isEmpty(booking) ? null : (
     <Box

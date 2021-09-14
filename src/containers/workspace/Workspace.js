@@ -122,7 +122,6 @@ export default function Workspace() {
   };
 
   const handleAddResource = (id, resource) => {
-    console.log(resource);
     dispatch(addResource(id, resource))
       .then(() => {
         setOpenMessage(true);
@@ -180,11 +179,11 @@ export default function Workspace() {
     resourceId = "",
     booking = null,
     endDate = null,
-    selectedDays = []
+    selectedDays = [],
   ) => {
     setSelectedDays(selectedDays);
     setBooking(
-      booking
+      booking && startDate
         ? {
             id: _.get(booking, "id"),
             startDate: moment(_.get(booking, "startDate")),

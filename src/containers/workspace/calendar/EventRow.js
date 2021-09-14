@@ -47,7 +47,8 @@ export default function EventRow({
   const [startDate, setStartDate] = useState(null);
   const [selectedDays, setSelectedDays] = useState([]);
   const handleOpenAddDialog = (day) => {
-    handleOpenDialog(startDate, resource.id, null, day, selectedDays);
+    if (startDate)
+      handleOpenDialog(startDate, resource.id, null, day, selectedDays);
     setStartDate(null);
   };
   const handleMouseMove = (day, index) => {
@@ -70,18 +71,24 @@ export default function EventRow({
           className={`${classes.calendarDay} ${classes.listBooking} ${
             isWeekend(day) ? classes.weekend : null
           }`}
+          onMouseUp={() => {
+            handleOpenAddDialog(day);
+          }}
           onMouseMove={() => {
             handleMouseMove(day, index);
           }}
-          onMouseDown={() => {
-            setStartDate(day);
-          }}
-          onMouseUp={() => handleOpenAddDialog(day)}
         >
           <Box
             className={`${classes.silbingGrid} ${
               isWeekend(day) ? classes.weekend : null
             }`}
+            onMouseDown={() => {
+              setStartDate(day);
+              setSelectedDays([...selectedDays, `${index}-${resource.id}`]);
+              document.getElementById(
+                `${index}-${resource.id}`
+              ).style.backgroundColor = `#9BB7FA`;
+            }}
           ></Box>
 
           <Events

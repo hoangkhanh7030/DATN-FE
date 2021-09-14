@@ -7,7 +7,6 @@ export default function CommonStatistic({
   allocatedTime = 0,
   totalAmount = 0,
 }) {
-  console.log(data);
   const classes = useStyles();
 
   return (

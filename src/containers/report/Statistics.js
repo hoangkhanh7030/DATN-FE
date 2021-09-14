@@ -9,8 +9,6 @@ export default function Statistics({
   overTime = 0,
   type = "HOURS",
 }) {
-  console.log("🚀 ~ file: Statistics.js ~ line 7 ~ Statistics ~ Statistics");
-
   const classes = useStyles();
 
   const items = [

@@ -62,21 +62,21 @@ export default function Report() {
   const [allocatedTime, setAllocatedTime] = useState(0);
 
   useEffect(() => {
-    setStartDate(start());
-    setEndDate(end());
-  }, [today, view]);
-  const fetchReports = () => {
+    const startDate = start();
+    const endDate = end();
+    setStartDate(startDate);
+    setEndDate(endDate);
+    fetchReports(startDate, endDate);
+  }, [today, view, id, type]);
+
+  const fetchReports = (startDate, endDate) => {
     const params = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
       type,
     };
-
     dispatch(getReport(id, params));
   };
-  useEffect(() => {
-    fetchReports();
-  }, [dispatch, id, startDate, endDate, type]);
 
   useEffect(() => {
     if (!storeReport.data) {

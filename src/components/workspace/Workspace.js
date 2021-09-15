@@ -160,7 +160,7 @@ export default function Workspace(props) {
                       open={openDelete}
                       content={`Do you really want to delete ${workspace.name} workspace?`}
                       handleCloseDialog={handleCloseDeleteDialog}
-                      handelDeleteWorkspace={handelDeleteWorkspace}
+                      handelActionDialog={handelDeleteWorkspace}
                     />
                     <MenuItem
                       onClick={() =>

@@ -14,3 +14,32 @@ export const getTeamsService = (workspaceId) => {
       return response.data;
     });
 };
+
+export const addTeamsService = (id, data) => {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${TEAMS_URL}`,
+      // process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}/team`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};
+
+export const updateTeamsService = (id, data) => {
+  return axios
+    .put(
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}${TEAMS_URL}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      return response.data;
+    });
+};

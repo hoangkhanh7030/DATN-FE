@@ -60,16 +60,22 @@ export default function ResourceDialog(props) {
       const selectedTeam = teams.find(
         (item) => item.id === _.get(resource, "teamId")
       );
-      setPositions(selectedTeam.positions);
-      const isEdit = selectedTeam.positions.some(
-        (e) => e.id === _.get(resource, "positionId")
-      );
-      setResource({
-        ...resource,
-        positionId: isEdit ? _.get(resource, "positionId") : "",
-      });
+
+      if (selectedTeam) {
+        setPositions(selectedTeam ? selectedTeam.positions : []);
+        let isEdit =
+          selectedTeam?.positions.findIndex(
+            (item) => item.id === _.get(resource, "positionId")
+          ) + 1;
+
+        if (!isEdit)
+          setResource({
+            ...resource,
+            positionId: "",
+          });
+      }
     }
-  }, [_.get(resource, "teamId"), teams]);
+  }, [_.get(resource, "teamId"), resourceId]);
 
   const handleChange = (event) => {
     setInvalidName(getInvalidValue(event.target));
@@ -183,7 +189,13 @@ export default function ResourceDialog(props) {
                 disableUnderline
                 renderValue={
                   hasSelectedValue(_.get(resource, "teamId"))
-                    ? undefined
+                    ? teams.find(
+                        (item) => item.id === _.get(resource, "teamId")
+                      )
+                      ? undefined
+                      : () => (
+                          <Typography>{_.get(resource, "team")} </Typography>
+                        )
                     : () => <Placeholder>Select a team</Placeholder>
                 }
               >
@@ -229,7 +241,15 @@ export default function ResourceDialog(props) {
                     disableUnderline
                     renderValue={
                       hasSelectedValue(_.get(resource, "positionId"))
-                        ? undefined
+                        ? teams.find(
+                            (item) => item.id === _.get(resource, "teamId")
+                          )
+                          ? undefined
+                          : () => (
+                              <Typography>
+                                {_.get(resource, "position")}
+                              </Typography>
+                            )
                         : () => <Placeholder>Select a position</Placeholder>
                     }
                   >

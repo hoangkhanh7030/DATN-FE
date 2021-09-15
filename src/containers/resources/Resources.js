@@ -26,13 +26,15 @@ import {
   importResources,
 } from "redux/actions/resourceAction";
 import { getTeams } from "redux/actions/teamAction";
-import { GET_RESOURCES, SET_MESSAGE } from "redux/constants";
+import { SET_MESSAGE } from "redux/constants";
 import * as _ from "underscore";
 import { storage } from "../../firebase";
 import ResourceDialog from "./dialog/ResourceDialog";
 import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
+import SettingDialog from "./dialog/SettingDialog";
+import { Progress } from "components/common/Progress";
 
 const DEFAULT_PARAMS = {
   page: INITIAL_PAGE,
@@ -65,6 +67,10 @@ export default function Resources() {
 
   const [params, setParams] = useState(DEFAULT_PARAMS);
 
+  const [openSettingsDialog, setOpenSettingsDialog] = useState(false);
+
+  const [isCallApi, setIsCallApi] = useState(false);
+
   const handleOpenDialog = (resource = null) => {
     setResource(
       resource
@@ -73,6 +79,8 @@ export default function Resources() {
             name: _.get(resource, "name"),
             teamId: _.get(resource, ["positionDTO", "teamDTO", "id"]),
             positionId: _.get(resource, ["positionDTO", "id"]),
+            team: _.get(resource, ["positionDTO", "teamDTO", "name"]),
+            position: _.get(resource, ["positionDTO", "name"]),
           }
         : DEFAULT_RESOURCE
     );
@@ -103,6 +111,23 @@ export default function Resources() {
 
     setResources(storeResources.data);
   }, [storeResources.data]);
+
+  useEffect(() => {
+    if (storeTeams.data) {
+      setIsCallApi(true);
+    }
+  }, [storeTeams.data]);
+
+  const handleCloseSettingsDialog = () => {
+    fetchResources();
+    setOpenSettingsDialog(false);
+    dispatch(getTeams(id));
+    setIsCallApi(false);
+  };
+
+  const handleOpenSettingsDialog = () => {
+    setOpenSettingsDialog(true);
+  };
 
   const keyUp = (event) => {
     const value = event.target.value;
@@ -152,8 +177,8 @@ export default function Resources() {
   const callApiAddResource = (id, resource) => {
     dispatch(addResource(id, resource))
       .then(() => {
-        // setOpenMessage(true);
-        handleReset();
+        setOpenMessage(true);
+        params === DEFAULT_PARAMS ? fetchResources() : handleReset();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -250,6 +275,21 @@ export default function Resources() {
 
   return (
     <ThemeProvider theme={theme}>
+      {!storeTeams.data ? (
+        <></>
+      ) : (
+        <SettingDialog
+          open={
+            isCallApi && (storeTeams.data?.length === 0 || openSettingsDialog)
+          }
+          isObligated={storeTeams.data?.length === 0}
+          teamsPositions={storeTeams.data || []}
+          handleCloseSettingsDialog={handleCloseSettingsDialog}
+          setOpenSettingsDialog={setOpenSettingsDialog}
+          type={storeTeams.data?.length > 0 ? "put" : "post"}
+        />
+      )}
+
       <TableToolbar
         keyword={params.keyword}
         cancelSearch={cancelSearch}
@@ -260,6 +300,7 @@ export default function Resources() {
         handleReset={handleReset}
         handleExportResources={handleExportResources}
         handleImportResources={handleImportResources}
+        handleSettingsDialog={handleOpenSettingsDialog}
       />
       <ResourcesTable
         data={resources}
@@ -300,10 +341,13 @@ export default function Resources() {
           isOpen={openMessage}
           handleCloseMessage={handleCloseMessage}
           type={
-            storeResources.status === 200 && !errorImport ? "success" : "error"
+            storeResources.status === 200 || storeTeams.status === 200
+              ? "success"
+              : "error"
           }
         />
       )}
+      <Progress isOpen={storeTeams?.isLoading} />
     </ThemeProvider>
   );
 }

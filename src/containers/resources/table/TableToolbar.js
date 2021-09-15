@@ -29,6 +29,7 @@ export default function TableToolbar(props) {
     handleReset,
     handleExportResources,
     handleImportResources,
+    handleSettingsDialog,
   } = props;
   const classes = useToolbarStyles();
 
@@ -96,9 +97,19 @@ export default function TableToolbar(props) {
             transformOrigin={{ vertical: "top", horizontal: "center" }}
             elevation={5}
           >
-            <MenuItem>Settings</MenuItem>
-            <MenuItem onClick={handleExportResources}>Export</MenuItem>
             <MenuItem>
+              <Button
+                component="span"
+                onClick={() => {
+                  handleSettingsDialog();
+                  handleClose();
+                }}
+              >
+                Settings
+              </Button>
+            </MenuItem>
+
+            <MenuItem style={{ paddingLeft: "0px !important" }}>
               <label htmlFor="btn-upload">
                 <TextField
                   type="file"
@@ -109,6 +120,12 @@ export default function TableToolbar(props) {
                 />
                 <Button component="span">Import</Button>
               </label>
+            </MenuItem>
+
+            <MenuItem>
+              <Button component="span" onClick={handleExportResources}>
+                Export
+              </Button>
             </MenuItem>
           </Menu>
           <Button

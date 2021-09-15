@@ -36,7 +36,7 @@ export default function Workspace() {
   const storeDashboard = useSelector((state) => state.dashboard);
   const status = _.get(storeDashboard, ["data", "status"]);
   const [isUploading, setUploading] = useState(false);
-  const { message } = useSelector((state) => state.message);
+  const { message, isDisplay } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
 
   const [teams, setTeams] = useState([]);
@@ -179,7 +179,7 @@ export default function Workspace() {
     resourceId = "",
     booking = null,
     endDate = null,
-    selectedDays = [],
+    selectedDays = []
   ) => {
     setSelectedDays(selectedDays);
     setBooking(
@@ -321,13 +321,19 @@ export default function Workspace() {
       {message ? (
         <Message
           message={message}
-          isOpen={hasMessage}
+          isOpen={hasMessage || isDisplay}
           handleCloseMessage={handleCloseMessage}
           type={status === 200 ? "success" : "error"}
         />
       ) : (
         <></>
       )}
+      <Message
+        message={message}
+        isOpen={isDisplay}
+        handleCloseMessage={handleCloseMessage}
+        type={"error"}
+      />
       <Progress isOpen={storeDashboard.isLoading || isUploading} />
     </ThemeProvider>
   );

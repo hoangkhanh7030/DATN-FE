@@ -13,10 +13,30 @@ export default function CustomizedTab(props) {
     endDate = moment(),
     handleChangeTab,
     handleChangeTabInput,
+    isMulti = false,
+    workDays = [],
   } = props;
+  const countWorkingDayNum = (startDate, endDate, listWorkingDays) => {
+    // total days between these day
+    let DaysBetween =
+      (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+    DaysBetween = DaysBetween - endDate.getDay() - (6 - startDate.getDay() + 1);
 
+    let count = 0;
+    for (let day of listWorkingDays) {
+      day >= startDate.getDay() && count++;
+      day <= endDate.getDay() && count++;
+    }
+    return count + Math.floor(DaysBetween / 7) * listWorkingDays.length;
+  };
   const days =
-    endDate.startOf("day").diff(startDate.startOf("day"), "days") + 1;
+    endDate.startOf("day").diff(startDate.startOf("day"), "days") + 1 > 1
+      ? countWorkingDayNum(
+          moment(startDate).toDate(),
+          moment(endDate).toDate(),
+          workDays
+        )
+      : endDate.startOf("day").diff(startDate.startOf("day"), "days") + 1;
 
   const tabs = [
     { tabType: PERCENTAGE, value: percentage },

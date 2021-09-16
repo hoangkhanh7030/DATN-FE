@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import { LOGIN_URL } from "constants/index";
 import Workspaces from "containers/workspaces/Workspaces";
 import Workspace from "containers/workspace/Workspace";
+import Report from "containers/report/Report";
 
 export default function TheLayout(Component = Workspaces) {
   const classes = useStyles();
@@ -24,7 +25,10 @@ export default function TheLayout(Component = Workspaces) {
     ? (props) => (
         <Fragment>
           <TheHeader />
-          <Container maxWidth={false} className={style}>
+          <Container
+            maxWidth={false}
+            className={Component === Report ? classes.dashboard : style}
+          >
             <Component {...props} />
           </Container>
         </Fragment>

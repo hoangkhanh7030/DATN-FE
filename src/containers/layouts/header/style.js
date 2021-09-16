@@ -43,6 +43,7 @@ export const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 200,
+    maxWidth: 200,
     paddingLeft: "10px",
   },
   select: {
@@ -65,6 +66,35 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     flex: 1,
+  },
+  checkIcon: {
+    color: ({ checkColor }) => checkColor,
+    marginRight: 4,
+    position: "absolute",
+  },
+  resize: {
+    color: colors.blackColor,
+    fontSize: "18px",
+    padding: 6,
+  },
+  headItem: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    maxWidth: 180,
+    marginLeft: 28,
+  },
+  selectedItem: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+  },
+  flexGrid: {
+    display: "flex",
+  },
+  selectedIcon: {
+    display: "flex",
+    position: "relative",
   },
 }));
 

@@ -95,6 +95,7 @@ export default function SettingsRow(props) {
           // margin="dense"
           value={data.positions?.map((item) => item.name)}
           fullWidth
+          blurBehavior="add"
           placeholder={"Type here to add a new position"}
           {...(data.error?.position && {
             error: true,

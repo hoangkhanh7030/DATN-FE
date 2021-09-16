@@ -152,3 +152,10 @@ export const DEFAULT_BOOKING = {
   percentage: 100,
   duration: 8,
 };
+
+export const DEFAULT_WORKSPACE = {
+  id: "",
+  name: "",
+  emailSuffixes: [],
+  workDays: [false, true, true, true, true, true, false],
+};

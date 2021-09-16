@@ -23,13 +23,7 @@ import WorkspaceDialog from "components/workspace/dialog/Dialog";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
 import { clearMessage } from "redux/actions/msgAction";
-
-const INITIAL_WORKSPACE = {
-  id: "",
-  name: "",
-  emailSuffixes: [],
-  workDays: [false, true, true, true, true, true, false],
-};
+import { DEFAULT_WORKSPACE } from "constants/index";
 
 export default function Workspaces() {
   const classes = useStyles();
@@ -63,7 +57,7 @@ export default function Workspaces() {
 
   // handle workspace dialog
   const handleDialog = (workspace = null) => {
-    setWorkspace(!openDialog && workspace ? workspace : INITIAL_WORKSPACE);
+    setWorkspace(!openDialog && workspace ? workspace : DEFAULT_WORKSPACE);
     setOpenDialog(!openDialog);
   };
 

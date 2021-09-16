@@ -167,8 +167,9 @@ export default function Projects() {
   const handleCreateProject = (newProject) => {
     dispatch(addProject(id, newProject))
       .then(() => {
-        // setOpenMessage(true);
-        handleReset();
+        setOpenMessage(true);
+        if (params === DEFAULT_PARAMS) fetchProjects();
+        else handleReset();
       })
       .catch(() => {
         setOpenMessage(true);
@@ -190,10 +191,12 @@ export default function Projects() {
     dispatch(deleteProject(id, projectID))
       .then(() => {
         setOpenMessage(true);
-        setParams({
-          ...params,
-          page: _.size(projects) > 1 ? params.page : params.page - 1,
-        });
+        if (_.size(projects) === 1)
+          setParams({
+            ...params,
+            page: params.page - 1,
+          });
+        else fetchProjects();
       })
       .catch(() => {
         setOpenMessage(true);

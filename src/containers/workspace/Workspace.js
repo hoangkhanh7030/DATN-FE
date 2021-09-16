@@ -12,7 +12,14 @@ import CalendarHeader from "./calendar/CalendarHeader";
 import CalendarBody from "./calendar/CalendarBody";
 import buildCalendar from "./others/buildCalendar";
 
-import { VIEWS, Y_M_D, DATA, TEAMS, RESOURCES } from "./others/constants";
+import {
+  VIEWS,
+  Y_M_D,
+  DATA,
+  TEAMS,
+  RESOURCES,
+  WORK_DAYS,
+} from "./others/constants";
 import {
   getBookings,
   deleteBooking,
@@ -62,6 +69,10 @@ export default function Workspace() {
 
   const [selectedDays, setSelectedDays] = useState([]);
 
+  const [workDays, setWorkDays] = useState([]);
+
+  const storeWorkspaces = useSelector((state) => state.workspaces);
+
   const fetchBookings = (thisCalendar = [], searchValue = "") => {
     const params = {
       startDate: _.first(thisCalendar).format(Y_M_D),
@@ -84,8 +95,11 @@ export default function Workspace() {
       return;
     }
     setResources(_.get(storeDashboard, [DATA, RESOURCES]));
+    setWorkDays(
+      storeWorkspaces.data.filter((item) => +item.id === +id)[0]?.workDays
+    );
     setTeams(_.get(storeDashboard, [DATA, TEAMS]));
-  }, [storeDashboard]);
+  }, [storeDashboard, storeWorkspaces]);
 
   const keyUp = (event) => {
     if (event.keyCode === 13 || searched === "") {
@@ -181,6 +195,7 @@ export default function Workspace() {
     endDate = null,
     selectedDays = []
   ) => {
+
     setSelectedDays(selectedDays);
     setBooking(
       booking && startDate
@@ -198,6 +213,7 @@ export default function Workspace() {
             startDate: startDate.isBefore(endDate) ? startDate : endDate,
             endDate: endDate.isAfter(startDate) ? endDate : startDate,
             resourceId,
+            isMulti: selectedDays.length > 1,
           }
     );
 
@@ -304,6 +320,10 @@ export default function Workspace() {
         <BookingDialog
           openDialog={openDialog}
           booking={booking}
+          workDays={workDays.reduce(
+            (out, bool, index) => (bool ? out.concat(index) : out),
+            []
+          )}
           setBooking={setBooking}
           handleCloseDialog={handleCloseDialog}
           projects={prjList}

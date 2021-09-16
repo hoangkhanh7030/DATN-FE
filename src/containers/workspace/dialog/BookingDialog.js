@@ -22,6 +22,7 @@ import {
 } from "constants/index";
 import ResourceDialog from "containers/resources/dialog/ResourceDialog";
 import { storage } from "firebase/index";
+import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -38,6 +39,7 @@ export default function BookingDialog(props) {
   const {
     openDialog = false,
     booking = {},
+    workDays = [],
     setBooking,
     handleCloseDialog,
     projects = [],
@@ -199,6 +201,20 @@ export default function BookingDialog(props) {
       );
     });
   };
+  //
+  const countWorkingDayNum = (startDate, endDate, listWorkingDays) => {
+    // total days between these day
+    let DaysBetween =
+      (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+    DaysBetween = DaysBetween - endDate.getDay() - (6 - startDate.getDay() + 1);
+
+    let count = 0;
+    for (let day of listWorkingDays) {
+      day >= startDate.getDay() && count++;
+      day <= endDate.getDay() && count++;
+    }
+    return count + Math.floor(DaysBetween / 7) * listWorkingDays.length;
+  };
 
   return (
     <>
@@ -254,6 +270,8 @@ export default function BookingDialog(props) {
             endDate={booking.endDate}
             handleChangeTab={handleChangeTab}
             handleChangeTabInput={handleChangeTabInput}
+            isMulti={booking.isMulti}
+            workDays={workDays}
           />
 
           <CustomizedSelect

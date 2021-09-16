@@ -19,6 +19,7 @@ export const WEEKENDS = ["Sat", "Sun"];
 export const DATA = "data";
 export const TEAMS = "teams";
 export const RESOURCES = "resources";
+export const WORK_DAYS = "workDays";
 
 export const STARTDATE = "startDate";
 export const ENDDATE = "endDate";

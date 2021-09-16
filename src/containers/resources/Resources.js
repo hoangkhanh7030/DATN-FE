@@ -228,10 +228,12 @@ export default function Resources() {
     dispatch(deleteResource(id, resourceId))
       .then(() => {
         setOpenMessage(true);
-        setParams({
-          ...params,
-          page: _.size(resources) > 1 ? params.page : params.page - 1,
-        });
+        if (_.size(resources) === 1)
+          setParams({
+            ...params,
+            page: params.page - 1,
+          });
+        else fetchResources();
       })
       .catch(() => {
         setOpenMessage(true);

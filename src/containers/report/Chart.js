@@ -39,7 +39,8 @@ export default function Chart({
     positions,
     datasets: [
       {
-        label: "Working Hours",
+        indexAxis: "y",
+        label: `Working ${viewType.toLowerCase()}s`,
         backgroundColor: "#3870F5",
         borderColor: "#072f8f",
         borderWidth: 1,
@@ -48,7 +49,8 @@ export default function Chart({
       },
 
       {
-        label: "Overtime Hours",
+        indexAxis: "y",
+        label: `Overtime ${viewType.toLowerCase()}s`,
         backgroundColor: "#ED6A5A",
         borderColor: "#931e10",
         borderWidth: 1,
@@ -79,6 +81,7 @@ export default function Chart({
   ];
 
   const options = {
+    indexAxis: "y",
     responsive: true,
     // maintainAspectRatio: false,
 
@@ -102,7 +105,7 @@ export default function Chart({
       },
     },
     legend: {
-      display: false,
+      display: data.datasets[0].data.length && data.datasets[1].data.length,
     },
     type: "bar",
     scales: {
@@ -110,6 +113,8 @@ export default function Chart({
         {
           display: reportData.length,
           stacked: true,
+          // barThickness: 40,
+          maxBarThickness: 60,
         },
       ],
       yAxes: [

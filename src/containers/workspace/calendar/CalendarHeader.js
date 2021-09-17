@@ -15,7 +15,11 @@ export default function CalendarHeader({
 
   return _.isEmpty(calendar) ? null : (
     <>
-      <Grid item className={`${classes.calendarDay} ${classes.leftWidth}`}>
+      <Grid
+        item
+        className={`${classes.calendarDay} ${classes.leftWidth}`}
+        style={{ pointerEvents: "none" }}
+      >
         <Typography className={classes.textOverall}>
           {`${teamAmount} TEAMS`}
         </Typography>

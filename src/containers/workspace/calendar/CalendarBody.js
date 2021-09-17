@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import * as _ from "underscore";
 import TeamRow from "./TeamRow";
 import ResourceRow from "./ResourceRow";
+import { useSelector } from "react-redux";
 
 export default function CalendarBody({
   calendar = [],
@@ -14,9 +15,22 @@ export default function CalendarBody({
   setUploading,
   handleOpenDialog,
 }) {
-  teams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
+  const newTeams = _.isEmpty(teams) ? Array(2).fill({}) : teams;
+  const [isOpenTeam, setOpenTeam] = useState(Array(2).fill(true));
+  const storeDashboard = useSelector((state) => state.dashboard);
+  useEffect(() => {
+    if (!storeDashboard.data) {
+      return;
+    }
 
-  return teams.map((team, index) => {
+    setOpenTeam(
+      _.get(storeDashboard, ["data", "teams"])
+        ? Array(_.size(_.get(storeDashboard, ["data", "teams"]))).fill(true)
+        : Array(2).fill(true)
+    );
+  }, [storeDashboard]);
+
+  return newTeams.map((team, index) => {
     return (
       <Fragment key={index}>
         <TeamRow
@@ -27,17 +41,24 @@ export default function CalendarBody({
           handleRenameTeam={handleRenameTeam}
           handleAddResource={handleAddResource}
           setUploading={setUploading}
+          setOpenTeam={setOpenTeam}
+          isOpenTeam={isOpenTeam}
+          indexTeam={index}
         />
 
-        <ResourceRow
-          team={team}
-          indexTeam={index}
-          calendar={calendar}
-          view={view}
-          resources={resources}
-          handleDeleteBooking={handleDeleteBooking}
-          handleOpenDialog={handleOpenDialog}
-        />
+        {isOpenTeam[index] ? (
+          <ResourceRow
+            team={team}
+            indexTeam={index}
+            calendar={calendar}
+            view={view}
+            resources={resources}
+            handleDeleteBooking={handleDeleteBooking}
+            handleOpenDialog={handleOpenDialog}
+          />
+        ) : (
+          <></>
+        )}
       </Fragment>
     );
   });

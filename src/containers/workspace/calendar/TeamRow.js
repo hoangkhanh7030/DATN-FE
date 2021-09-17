@@ -27,6 +27,9 @@ export default function TeamRow({
   handleRenameTeam,
   handleAddResource,
   setUploading,
+  setOpenTeam,
+  isOpenTeam,
+  indexTeam,
 }) {
   const classes = useStyles({ view });
 
@@ -45,6 +48,9 @@ export default function TeamRow({
             handleRenameTeam={handleRenameTeam}
             handleAddResource={handleAddResource}
             setUploading={setUploading}
+            setOpenTeam= {setOpenTeam}
+            isOpenTeam = {isOpenTeam}
+            indexTeam={indexTeam}
           />
         )}
       </Grid>

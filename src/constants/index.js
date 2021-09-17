@@ -84,23 +84,22 @@ export const TEXT_COLOR = "textColor";
 export const COLOR_PATTERN = "colorPattern";
 
 export const PALETTE = {
-  red: "#ff0000",
-  blue: "#0000ff",
-  yellow: "yellow",
-  lime: "lime",
-  gray: "gray",
-  orange: "orange",
-  purple: "purple",
-  black: "black",
-  white: "white",
-  pink: "pink",
+  red: "#FE2224",
+  orange: "#E45200",
+  yellow: "#FFD700",
+  blue: "#2B99F0",
+  green: "#56940B",
+  pink: "#E889E8",
+  purple: "#8D35C8",
+  black: "#000",
+  white: "#FFF",
 };
 
 export const DEFAULT_PROJECT = {
   name: "",
   clientName: "",
-  color: "#fff",
-  textColor: "#000",
+  color: "#3870F5",
+  textColor: "#FFF",
   colorPattern: "#ff00",
 };
 
@@ -141,7 +140,6 @@ export const DURATION = "DURATION";
 export const DOWNLOAD = "download";
 export const RESPONSE_TYPE = "blob";
 export const RESOURCES_CSV = "Resources.csv";
-
 
 export const DEFAULT_BOOKING = {
   id: "",

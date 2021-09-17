@@ -15,7 +15,7 @@ export const useStyles = makeStyles((theme) => ({
       },
       "& .MuiTab-root": {
         minWidth: 140,
-        minHeight: 55,
+        minHeight: 62,
         padding: 0,
       },
       "& .MuiTab-textColorInherit": {

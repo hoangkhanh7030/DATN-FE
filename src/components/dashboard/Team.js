@@ -9,7 +9,7 @@ import TeamOptions from "./TeamOptions";
 import TeamDialog from "./TeamDialog";
 import ResourceDialog from "containers/resources/dialog/ResourceDialog";
 import { getTeams } from "redux/actions/teamAction";
-
+import PopoverHover from "components/dashboard/Popover";
 import { IMAGES_URL } from "constants/index";
 import { storage } from "firebase/index";
 import { setMessage } from "redux/actions/msgAction";
@@ -44,6 +44,9 @@ export default function Team({
   handleRenameTeam,
   handleAddResource,
   setUploading,
+  setOpenTeam,
+  isOpenTeam,
+  indexTeam = 0,
 }) {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -75,6 +78,17 @@ export default function Team({
     handleCloseOption();
     setOpenRename(true);
   };
+
+  const [anchor, setAnchor] = useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchor(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchor(null);
+  };
+
+  const content = [[{ title: "TEAM", detail: _.get(team, "name") }]];
 
   const [resource, setResource] = useState(DEFAULT_RESOURCE);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
@@ -110,16 +124,36 @@ export default function Team({
     });
   };
 
+  const handleClose = () => {
+    const temp = [...isOpenTeam];
+    temp.splice(indexTeam, 1, !isOpenTeam[indexTeam]);
+    setOpenTeam([...temp]);
+  };
+
   return (
     <Box className={classes.container}>
-      <Box className={classes.left}>
+      <Box
+        className={classes.left}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+      >
         <IconButton
-          className={`fas fa-chevron-up ${classes.icon}`}
+          className={`${
+            isOpenTeam[indexTeam] ? `fas fa-chevron-down` : `fas fa-chevron-up`
+          } ${classes.icon}`}
+          onClick={handleClose}
         ></IconButton>
-        <Typography noWrap className={classes.text}>
+        <Typography
+          noWrap
+          className={classes.text}
+          style={{ pointerEvents: "none" }}
+        >
           {team.name}
         </Typography>
-        <Typography className={classes.text}>{`(${rscAmount})`}</Typography>
+        <Typography
+          className={classes.text}
+          style={{ pointerEvents: "none" }}
+        >{`(${rscAmount})`}</Typography>
       </Box>
 
       <IconButton
@@ -150,6 +184,11 @@ export default function Team({
         setIsOpenDialog={setIsOpenDialog}
         callApiAddResource={handleAddResource}
         getUploadedImageUrl={getUploadedImageUrl}
+      />
+      <PopoverHover
+        handlePopoverClose={handlePopoverClose}
+        anchorEl={anchor}
+        content={content}
       />
     </Box>
   );

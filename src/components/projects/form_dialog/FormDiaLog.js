@@ -21,6 +21,7 @@ import {
   DEFAULT_PROJECT,
   COLOR,
   TEXT_COLOR,
+  EMPTY_ERROR
 } from "constants/index";
 
 import * as _ from "underscore";
@@ -41,18 +42,20 @@ export const FormDialog = ({
   setOpenDialog,
   dialog,
   dialogStyle = false,
+  projects,
 }) => {
   const classes = useStyles({ dialogStyle });
 
   const [invalidName, setInvalidName] = useState("");
   const [invalidClient, setInvalidClient] = useState("");
-
+  const [message, setMessage] = useState(EMPTY_ERROR)
   const getInvalidNameValue = ({ name, value }) => {
     return !value && [PROJECT_NAME, CLIENT_NAME].includes(name) ? name : "";
   };
 
   const handleTextChange = (e) => {
     setInvalidName(getInvalidNameValue(e.target));
+    setMessage(EMPTY_ERROR)
     setInvalidClient(getInvalidNameValue(e.target));
     setProject({ ...project, [e.target.name]: e.target.value });
   };
@@ -68,9 +71,18 @@ export const FormDialog = ({
   const checkValidForm = () => {
     const nameValue = _.get(project, PROJECT_NAME);
     const clientValue = _.get(project, CLIENT_NAME);
-    if (!nameValue) setInvalidName(PROJECT_NAME);
+    if (!nameValue) {
+      setInvalidName(PROJECT_NAME);
+      setMessage(EMPTY_ERROR)
+    }
     if (!clientValue) setInvalidClient(CLIENT_NAME);
-
+    const isDuplicated = projects.filter(
+      (project) => project.name === nameValue
+    );
+    if (!_.isEmpty(isDuplicated)){
+      setInvalidName(PROJECT_NAME)
+      setMessage("Project's name must not be duplicated !")
+    }
     return Boolean(nameValue && clientValue);
   };
 
@@ -120,7 +132,7 @@ export const FormDialog = ({
           inputValue={_.get(project, PROJECT_NAME)}
           handleTextChange={handleTextChange}
         />
-        <HelperText errorName={PROJECT_NAME} errorValue={invalidName} />
+        <HelperText errorName={PROJECT_NAME} errorValue={invalidName} message={message} />
 
         <DialogInput
           title={CLIENT_TITLE}

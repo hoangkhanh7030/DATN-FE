@@ -89,7 +89,6 @@ export default function Projects() {
   useEffect(() => {
     dispatch(clearMessage());
     fetchProjects();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, params]);
 
   useEffect(() => {
@@ -296,6 +295,7 @@ export default function Projects() {
         isOpenDialog={isOpenDialog}
         setOpenDialog={setOpenDialog}
         dialog={dialog}
+        projects={projects}
       />
     </ThemeProvider>
   );

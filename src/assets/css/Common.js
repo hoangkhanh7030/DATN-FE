@@ -43,7 +43,7 @@ export const commonStyle = makeStyles(() => ({
   helperText: {
     color: "#F44336",
     fontSize: "12px",
-    padding: "5px 0px",
+    padding: "5px 2px",
   },
 }));
 

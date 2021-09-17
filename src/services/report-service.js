@@ -12,23 +12,21 @@ export const getReportService = (workspaceId, params) => {
       }
     )
     .then((response) => {
-      console.log(response.data);
       return response.data;
     });
 };
 
-export const exportReportService = (id) => {
+export const exportReportService = (id, params) => {
   return axios
     .get(
-      process.env.REACT_APP_API_URL +
-        `${WORKSPACES_URL}/${id}/exportReport?startDate=2021-01-01&endDate=2021-12-30&type=DAY`,
+      process.env.REACT_APP_API_URL + `${WORKSPACES_URL}/${id}/exportReport`,
       {
+        params,
         headers: authHeader(),
         responseType: "blob",
       }
     )
     .then((response) => {
-      console.log(response.data);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;

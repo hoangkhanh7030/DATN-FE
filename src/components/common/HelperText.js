@@ -5,7 +5,7 @@ export const HelperText = ({
   dateError,
   errorValue,
   errorName,
-  message = "This field is required !",
+  message = "this field is required !",
   type = "",
 }) => {
   const commonClasses = commonStyle();

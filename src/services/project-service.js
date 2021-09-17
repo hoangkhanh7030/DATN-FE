@@ -102,7 +102,6 @@ export const exportProjectsService = (id) => {
       }
     )
     .then((response) => {
-      console.log(response.data);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;

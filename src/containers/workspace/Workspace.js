@@ -87,7 +87,7 @@ export default function Workspace() {
     const thisCalendar = buildCalendar(today, view);
 
     setCalendar(thisCalendar);
-    fetchBookings(thisCalendar);
+    fetchBookings(thisCalendar, searched);
   }, [today, view, id]);
 
   useEffect(() => {
@@ -195,7 +195,6 @@ export default function Workspace() {
     endDate = null,
     selectedDays = []
   ) => {
-
     setSelectedDays(selectedDays);
     setBooking(
       booking && startDate

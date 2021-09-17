@@ -23,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 11,
     textTransform: "uppercase",
   },
+  team: {
+    width: 30,
+    marginRight: 10,
+    color: "#929292",
+    fontSize: 11,
+  },
   detail: {
     fontSize: 13,
     fontWeight: 600,
@@ -61,7 +67,7 @@ export default function PopoverHover({
       {content.map((el) =>
         el.map((info, index) => (
           <Box key={index} className={classes.box}>
-            <Typography align="right" className={classes.title}>
+            <Typography align="right" className={info.title === "TEAM" ? classes.team : classes.title}>
               {info.title}
             </Typography>
             <Typography className={classes.detail}>{info.detail}</Typography>

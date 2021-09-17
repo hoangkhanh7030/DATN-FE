@@ -33,8 +33,8 @@ const useStyles = makeStyles({
       `calc(89% + ${days * 100.5}% - ${(view - 1) * 10}%)`,
     minHeight: "44px",
     background: ({ projectColor }) => projectColor,
-    color: "white",
     borderRadius: 8,
+    color: ({textColor}) => textColor,
   },
   side: {
     display: "flex",
@@ -64,7 +64,6 @@ const useStyles = makeStyles({
   },
   icon: {
     fontSize: 16,
-    color: "white",
     position: "absolute",
     right: 2,
     top: 2,

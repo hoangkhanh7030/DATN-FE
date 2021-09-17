@@ -23,7 +23,6 @@ export const getUsersService = (id, params) => {
       }
     )
     .then((response) => {
-      console.log(response.data);
       return response.data;
     });
 };
@@ -40,7 +39,6 @@ export const archiveUserService = (id, userID) => {
       }
     )
     .then((response) => {
-      console.log(response.data);
       return response.data;
     });
 };
@@ -56,7 +54,6 @@ export const deleteUserService = (id, userID) => {
       }
     )
     .then((response) => {
-      console.log(response.data);
       return response.data;
     });
 };

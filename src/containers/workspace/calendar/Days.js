@@ -16,7 +16,12 @@ export default function Days({ calendar, view }) {
   const showToday = (day) => (isToday(day) && view !== MAX_VIEW ? TODAY : "");
 
   return calendar.map((day) => (
-    <Grid item key={day} className={`${classes.calendarDay} ${styledDay(day)}`}>
+    <Grid
+      item
+      key={day}
+      className={`${classes.calendarDay} ${styledDay(day)}`}
+      style={{ pointerEvents: "none" }}
+    >
       <Typography variant="h2">{day.format(DATE_FMT)} </Typography>
 
       <Typography

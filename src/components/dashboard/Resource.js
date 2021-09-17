@@ -1,9 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import { Typography, Box, Avatar, Container } from "@material-ui/core";
 import * as _ from "underscore";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { RESOURCE_NAME, POSITION_NAME } from "constants/index";
+import PopoverHover from "components/dashboard/Popover";
+import { RESOURCE_NAME, POSITION_NAME, TEAM_NAME } from "constants/index";
 import { AVATAR, PERCENT } from "containers/workspace/others/constants";
 
 const useStyles = makeStyles({
@@ -46,7 +46,7 @@ const useStyles = makeStyles({
 
 const TextPercentage = ({ classes, workingPercent }) => {
   return (
-    <Typography className={classes.textPercentage}>
+    <Typography className={classes.textPercentage} >
       {"| "}
       <Box
         component="span"
@@ -58,26 +58,48 @@ const TextPercentage = ({ classes, workingPercent }) => {
   );
 };
 
-export default function Resource({ resource = {} }) {
+export default function Resource({ resource = {},team={} }) {
   const classes = useStyles();
   const workingPercent = _.get(resource, PERCENT);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const content = [
+    [{ title: RESOURCE_NAME, detail: _.get(resource, RESOURCE_NAME) }],
+    [{ title: POSITION_NAME, detail: _.get(resource, POSITION_NAME) }],
+    [{ title: TEAM_NAME, detail: _.get(team, RESOURCE_NAME) }],
+  ];
+
+
   return (
-    <Container className={classes.container}>
+    <Container className={classes.container}  onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}>
       <Avatar src={_.get(resource, AVATAR)} className={classes.avatar}></Avatar>
 
       <Box className={classes.textBox}>
-        <Typography noWrap className={classes.textName}>
+        <Typography noWrap className={classes.textName} style={{ pointerEvents: "none" }}>
           {_.get(resource, RESOURCE_NAME)}
         </Typography>
         <Box className={classes.textPosBox}>
-          <Typography noWrap className={classes.textPosition}>
+          <Typography noWrap className={classes.textPosition} style={{ pointerEvents: "none" }}>
             {_.get(resource, POSITION_NAME)}
           </Typography>
 
           <TextPercentage classes={classes} workingPercent={workingPercent} />
         </Box>
       </Box>
+      <PopoverHover
+        handlePopoverClose={handlePopoverClose}
+        anchorEl={anchorEl}
+        content={content}
+      />
     </Container>
   );
 }

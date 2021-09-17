@@ -62,7 +62,9 @@ export default function Header({
           onClick={() => setToday(prevWeek())}
         ></IconButton>
 
-        <Typography variant="h3">{rangeDays}</Typography>
+        <Typography variant="h3" style={{ pointerEvents: "none" }}>
+          {rangeDays}
+        </Typography>
 
         <IconButton
           className={`fas fa-angle-right ${classes.moveIcon}`}

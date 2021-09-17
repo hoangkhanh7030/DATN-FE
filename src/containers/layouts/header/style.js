@@ -66,6 +66,7 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     flex: 1,
+    cursor: "pointer"
   },
   checkIcon: {
     color: ({ checkColor }) => checkColor,

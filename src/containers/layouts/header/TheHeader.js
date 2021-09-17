@@ -248,10 +248,13 @@ export default function TheHeader() {
               )
         }
       >
-        <MenuItem value="" component={RouterLink} to={WORKSPACES_URL}>
-          {" "}
-          <span className={classes.headItem}>Show all workspaces</span>
-        </MenuItem>
+        {workspaces.length ? (
+          <MenuItem value="" component={RouterLink} to={WORKSPACES_URL}>
+            <span className={classes.headItem}>Show all workspaces</span>
+          </MenuItem>
+        ) : (
+          <></>
+        )}
         {workspaces &&
           workspaces
             .filter((item) => item.role !== "INACTIVE")
@@ -350,7 +353,13 @@ export default function TheHeader() {
             )}
 
             <Box className={classes.avatar}>
-              <Avatar alt="Avatar" src={avatar} onClick={handleOpenLogout} />
+              <Avatar
+                alt="Avatar"
+                src={
+                  JSON.parse(localStorage.getItem("user")).accountDTO.avatar 
+                }
+                onClick={handleOpenLogout}
+              />
             </Box>
             {logoutButton}
           </Toolbar>

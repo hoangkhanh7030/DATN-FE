@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
+  FormControlLabel,
+  FormGroup,
+  Switch,
   ThemeProvider,
+  Typography,
 } from "@material-ui/core";
 
 import { theme } from "assets/css/Common";
@@ -42,10 +46,15 @@ export default function WorkspaceDialog(props) {
   const [errSuffix, setErrSuffix] = useState("");
   const [errWorkDays, setErrWorkDays] = useState("");
 
+  const [checked, setChecked] = useState(
+    _.get(workspace, EMAIL_SUFFIXES).length
+  );
+
   const isSubmit = () => {
     return (
       _.get(workspace, WORKSPACE_NAME) &&
-      _.get(workspace, WORK_DAYS).filter(Boolean).length > 1
+      _.get(workspace, WORK_DAYS).filter(Boolean).length > 1 &&
+      ((checked && _.get(workspace, EMAIL_SUFFIXES).length > 0) || !checked)
     );
   };
 
@@ -101,8 +110,12 @@ export default function WorkspaceDialog(props) {
       setErrName(WORKSPACE_NAME_ERROR);
       return;
     }
-
-    workspace.id ? handleEdit(workspace.id, workspace) : handleAdd(workspace);
+    const updatedWorkspace = checked
+      ? workspace
+      : { ...workspace, emailSuffixes: [] };
+    workspace.id
+      ? handleEdit(workspace.id, updatedWorkspace)
+      : handleAdd(updatedWorkspace);
     handleCloseDialog();
   };
   return (
@@ -117,18 +130,43 @@ export default function WorkspaceDialog(props) {
             handleChangeName={handleChangeName}
             errMsg={errName}
           />
-          <EmailSuffix
-            emailSuffixes={_.get(workspace, EMAIL_SUFFIXES)}
-            handleAddChip={handleAddChip}
-            handleDeleteChip={handleDeleteChip}
-            handleUpdateInput={handleUpdateInput}
-            errMsg={errSuffix}
-          />
+
           <WorkingDays
             workDays={_.get(workspace, WORK_DAYS)}
             toggleDay={toggleDay}
             errMsg={errWorkDays}
           />
+          <FormGroup>
+            <FormControlLabel
+              style={{ fontSize: 14 }}
+              control={
+                <Switch
+                  color="primary"
+                  value="checked"
+                  checked={checked}
+                  onChange={(event) => {
+                    setChecked(event.target.checked);
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  Only invite with specific email suffixes
+                </Typography>
+              }
+            />
+          </FormGroup>
+          {checked ? (
+            <EmailSuffix
+              emailSuffixes={_.get(workspace, EMAIL_SUFFIXES)}
+              handleAddChip={handleAddChip}
+              handleDeleteChip={handleDeleteChip}
+              handleUpdateInput={handleUpdateInput}
+              errMsg={errSuffix}
+            />
+          ) : (
+            <></>
+          )}
         </DialogContent>
         <DialogActions className={classes.dialogActions}>
           <Button onClick={handleCloseDialog} color="primary">

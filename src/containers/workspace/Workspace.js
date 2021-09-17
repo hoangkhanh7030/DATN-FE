@@ -36,6 +36,7 @@ import { addBooking, editBooking } from "redux/actions/bookingAction";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
 import { DEFAULT_BOOKING } from "constants/index";
+import { useHistory } from "react-router-dom";
 
 export default function Workspace() {
   const { id } = useParams();
@@ -72,6 +73,8 @@ export default function Workspace() {
   const [workDays, setWorkDays] = useState([]);
 
   const storeWorkspaces = useSelector((state) => state.workspaces);
+
+  const history = useHistory();
 
   const fetchBookings = (thisCalendar = [], searchValue = "") => {
     const params = {
@@ -178,7 +181,8 @@ export default function Workspace() {
     tmp.push(storeUsers.adminId);
     const accountId = JSON.parse(localStorage.getItem("user")).accountDTO.id;
 
-    setIsAccess(tmp.includes(accountId));
+    // setIsAccess(tmp.includes(accountId));
+    if (!tmp.includes(accountId)) history.push("/workspaces");
   }, [storeUsers.data]);
 
   const handleCloseDialog = () => {

@@ -18,7 +18,9 @@ export const EmailSuffix = ({
         className={`${classes.paper} ${errMsg ? classes.invalidBorder : null}`}
         elevation={0}
       >
-        <Typography variant="h4">Email Suffix</Typography>
+        <Typography variant="h4">
+          Email Suffix <span className={classes.obligatedText}>*</span>
+        </Typography>
         <ChipInput
           value={emailSuffixes}
           classes={{ chip: classes.chip }}

@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import { HorizontalBar } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 import { useStyles } from "./style";
 
@@ -39,7 +40,6 @@ export default function Chart({
     positions,
     datasets: [
       {
-        indexAxis: "y",
         label: `Working ${viewType.toLowerCase()}s`,
         backgroundColor: "#3870F5",
         borderColor: "#072f8f",
@@ -49,7 +49,6 @@ export default function Chart({
       },
 
       {
-        indexAxis: "y",
         label: `Overtime ${viewType.toLowerCase()}s`,
         backgroundColor: "#ED6A5A",
         borderColor: "#931e10",
@@ -91,7 +90,7 @@ export default function Chart({
         label: (tooltipItems, data) => {
           var type = tooltipItems.datasetIndex ? "Overtime" : "Working";
           var multiStringText = [
-            `${type} ${viewType.toLowerCase()}s: ${tooltipItems.yLabel}`,
+            `${type} ${viewType.toLowerCase()}s: ${names.length < 10?tooltipItems.yLabel:tooltipItems.xLabel}`,
           ];
 
           if (reportType === "project") {
@@ -134,13 +133,23 @@ export default function Chart({
 
   return (
     <Box className={classes.chart}>
-      <Bar
-        data={data}
-        width={null}
-        height={80}
-        options={options}
-        plugins={plugins}
-      />
+      {names.length < 10 ? (
+        <Bar
+          data={data}
+          width={null}
+          height={80}
+          options={options}
+          plugins={plugins}
+        />
+      ) : (
+        <HorizontalBar
+          data={data}
+          // width={null}
+          // height={80}
+          options={options}
+          plugins={plugins}
+        />
+      )}
     </Box>
   );
 }

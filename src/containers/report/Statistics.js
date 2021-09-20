@@ -1,7 +1,6 @@
 import { Grid } from "@material-ui/core";
 import CommonStatistic from "./CommonStatistic";
 import DetailStatistic from "./DetailStatistic";
-import { useStyles } from "./style";
 
 export default function Statistics({
   trafficTime = 0,
@@ -9,8 +8,6 @@ export default function Statistics({
   overTime = 0,
   type = "HOURS",
 }) {
-  const classes = useStyles();
-
   const items = [
     { title: "TOTAL ALLOCATED", amount: allocatedTime },
     { title: "TOTAL AVAILABLE", amount: trafficTime - allocatedTime },
@@ -18,7 +15,7 @@ export default function Statistics({
   ];
   const totalAmount = trafficTime;
   return (
-    <Grid container style={{  margin: "16px 0", padding: "0 52px" }}>
+    <Grid container style={{ margin: "16px 0", padding: "0 52px" }}>
       <Grid item xs={3}>
         <CommonStatistic
           totalAmount={totalAmount}

@@ -23,7 +23,6 @@ export default function SettingsRow(props) {
     } else {
       setError({ ...error, team: false });
       newErr = { ...data.error, team: false };
-      // handleChangeRow({ ...data, name: event.target.value }, index);
     }
     handleChangeRow(
       { ...data, name: event.target.value, error: newErr },
@@ -42,10 +41,8 @@ export default function SettingsRow(props) {
   const handleDeleteChip = (chip, id) => {
     console.info(`You delete a Chip. ${id}`, chip);
     const newPos = data.positions.filter((chip, i) => i !== id);
-    // let newErr = { ...data.error };
     let newErr = { ...data.error, position: newPos.length === 0 };
 
-    // handleChangeRow({ ...data, positions: newPos }, index);
     handleChangeRow({ ...data, positions: newPos, error: newErr }, index);
   };
 
@@ -65,7 +62,6 @@ export default function SettingsRow(props) {
           variant="outlined"
           placeholder="Name"
           fullWidth
-          // margin="dense"
           value={data.name}
           onChange={onChangeRow}
           autoComplete="off"

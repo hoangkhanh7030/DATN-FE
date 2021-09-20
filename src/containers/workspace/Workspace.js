@@ -12,14 +12,7 @@ import CalendarHeader from "./calendar/CalendarHeader";
 import CalendarBody from "./calendar/CalendarBody";
 import buildCalendar from "./others/buildCalendar";
 
-import {
-  VIEWS,
-  Y_M_D,
-  DATA,
-  TEAMS,
-  RESOURCES,
-  WORK_DAYS,
-} from "./others/constants";
+import { VIEWS, Y_M_D, DATA, TEAMS, RESOURCES } from "./others/constants";
 import {
   getBookings,
   deleteBooking,
@@ -35,7 +28,7 @@ import BookingDialog from "./dialog/BookingDialog";
 import { addBooking, editBooking } from "redux/actions/bookingAction";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
-import { DEFAULT_BOOKING } from "constants/index";
+import { DEFAULT_BOOKING, USER, WORKSPACES_URL } from "constants/index";
 import { useHistory } from "react-router-dom";
 
 export default function Workspace() {
@@ -44,7 +37,7 @@ export default function Workspace() {
   const storeDashboard = useSelector((state) => state.dashboard);
   const status = _.get(storeDashboard, ["data", "status"]);
   const [isUploading, setUploading] = useState(false);
-  const { message, isDisplay } = useSelector((state) => state.message);
+  const { message } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
 
   const [teams, setTeams] = useState([]);
@@ -157,7 +150,6 @@ export default function Workspace() {
   };
 
   const storeUsers = useSelector((state) => state.users);
-  const [isAccess, setIsAccess] = useState(true);
 
   const params = {
     page: 1,
@@ -175,14 +167,14 @@ export default function Workspace() {
     if (!storeUsers.data) {
       return;
     }
-    const tmp = storeUsers.data
-      .filter((item) => item.role !== "INACTIVE")
-      .map((item) => item.id);
-    tmp.push(storeUsers.adminId);
-    const accountId = JSON.parse(localStorage.getItem("user")).accountDTO.id;
-
-    // setIsAccess(tmp.includes(accountId));
-    if (!tmp.includes(accountId)) history.push("/workspaces");
+    if (storeUsers.data.length) {
+      const tmp = storeUsers.data
+        .filter((item) => item.role !== "INACTIVE")
+        .map((item) => item.id);
+      tmp.push(storeUsers.adminId);
+      const accountId = JSON.parse(localStorage.getItem(USER)).accountDTO.id;
+      if (!tmp.includes(accountId)) history.push(WORKSPACES_URL);
+    }
   }, [storeUsers.data]);
 
   const handleCloseDialog = () => {
@@ -344,19 +336,13 @@ export default function Workspace() {
       {message ? (
         <Message
           message={message}
-          isOpen={hasMessage || isDisplay}
+          isOpen={hasMessage}
           handleCloseMessage={handleCloseMessage}
           type={status === 200 ? "success" : "error"}
         />
       ) : (
         <></>
       )}
-      <Message
-        message={message}
-        isOpen={isDisplay}
-        handleCloseMessage={handleCloseMessage}
-        type={"error"}
-      />
       <Progress isOpen={storeDashboard.isLoading || isUploading} />
     </ThemeProvider>
   );

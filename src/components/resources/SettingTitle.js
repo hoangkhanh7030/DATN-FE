@@ -5,8 +5,6 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import AddIcon from "@material-ui/icons/Add";
 import React from "react";
 
 const useStyles = makeStyles({

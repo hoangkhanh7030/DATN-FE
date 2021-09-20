@@ -1,7 +1,6 @@
 import { Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import * as colors from "assets/css/Common";
-import AlertDialog from "components/common/AlertDialog";
 import React from "react";
 import { useStyles } from "./style";
 

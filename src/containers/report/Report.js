@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getReport, exportReport } from "redux/actions/reportAction";
 import * as _ from "underscore";
-import Project from "./Project";
-import Resource from "./Resource";
 import Chart from "./Chart";
 import Statistics from "./Statistics";
 import { useStyles } from "./style";
@@ -67,6 +65,7 @@ export default function Report() {
     setStartDate(startDate);
     setEndDate(endDate);
     fetchReports(startDate, endDate);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [today, view, id, type]);
 
   const fetchReports = (startDate, endDate) => {
@@ -169,7 +168,6 @@ export default function Report() {
         </Tabs>
       </Paper>
       <TabPanel value={value} index={0}>
-        {/* <Resource /> */}
         <Chart
           reportData={resourceReport}
           reportType="resource"
@@ -177,8 +175,6 @@ export default function Report() {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {/* <Project /> */}
-
         <Chart
           reportData={projectReport}
           reportType="project"

@@ -75,6 +75,7 @@ export default function ResourceDialog(props) {
           });
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_.get(resource, "teamId"), resourceId]);
 
   const handleChange = (event) => {

@@ -19,7 +19,6 @@ import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { commonStyle, theme } from "assets/css/Common";
 import logo from "assets/icons/app-logo.svg";
-import avatar from "assets/images/avatar.png";
 import AlertDialog from "components/common/AlertDialog";
 import { Message } from "components/common/Message";
 

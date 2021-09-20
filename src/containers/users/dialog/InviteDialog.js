@@ -29,6 +29,7 @@ export default function InviteDialog(props) {
 
   useEffect(() => {
     dispatch(getEmails(workspaceId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
 
   const isDisabled = () => {

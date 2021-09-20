@@ -13,7 +13,6 @@ export default function CustomizedTab(props) {
     endDate = moment(),
     handleChangeTab,
     handleChangeTabInput,
-    isMulti = false,
     workDays = [],
   } = props;
   const countWorkingDayNum = (startDate, endDate, listWorkingDays) => {

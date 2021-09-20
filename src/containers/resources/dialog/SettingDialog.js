@@ -6,12 +6,10 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import { theme } from "assets/css/Common";
-import { Message } from "components/common/Message";
-import { Progress } from "components/common/Progress";
 import { EmptyData } from "components/resources/EmptyData";
 import { SettingHeader } from "components/resources/SettingHeader";
 import { SettingTitle } from "components/resources/SettingTitle";
-import { EMPTY_ERROR, WORKSPACES_URL } from "constants/index";
+import { WORKSPACES_URL } from "constants/index";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -24,14 +22,12 @@ const INITIAL_ROW = {
   name: "",
   positions: [],
   error: { team: null, position: null },
-  // error: { team: EMPTY_ERROR, position: EMPTY_ERROR },
 };
 
 export default function SettingsDialog(props) {
   const classes = useStyles();
   const {
     open = false,
-    isObligated,
     teamsPositions,
     handleCloseSettingsDialog,
     setOpenSettingsDialog,
@@ -41,14 +37,10 @@ export default function SettingsDialog(props) {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { message } = useSelector((state) => state.message);
-  const [isOpenMessage, setIsOpenMessage] = useState(false);
-
   const [data, setData] = useState([]);
 
   const storeTeams = useSelector((state) => state.teams);
 
-  const [error, setError] = useState({ team: "", position: "" });
 
   useEffect(() => {
     if (!teamsPositions) {
@@ -61,10 +53,6 @@ export default function SettingsDialog(props) {
         team: item.name === "" ? true : false,
         position: Object.keys(item.positions).length === 0 ? true : false,
       },
-      // error: {
-      //   team: item.name === "" ? EMPTY_ERROR : "",
-      //   position: Object.keys(item.positions).length === 0 ? EMPTY_ERROR : "",
-      // },
     }));
     setData(customizedData);
   }, [teamsPositions]);
@@ -142,7 +130,6 @@ export default function SettingsDialog(props) {
                 index={index}
                 handleDeleteRow={handleDeleteRow}
                 handleChangeRow={handleChangeRow}
-                error={error}
               />
             ))
           ) : (

@@ -102,6 +102,7 @@ export default function Resources() {
     dispatch(clearMessage());
     fetchResources();
     dispatch(getTeams(id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id, params]);
 
   useEffect(() => {

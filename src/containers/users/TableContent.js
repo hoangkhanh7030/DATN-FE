@@ -14,16 +14,20 @@ import UserRow from "./TableRow";
 import { LoadingTable } from "components/projects/table/LoadingTable";
 import { EmptyRows } from "components/projects/table/EmptyRows";
 import * as _ from "underscore";
-import { EMAIL, STATUS_NAME, CREATED_DATE, ROLE } from "constants/index";
+import { EMAIL } from "constants/index";
+
+const STATUS = "auth_provider";
+const CREATED_DATE = "create_date";
 
 const UsersTable = ({
   rows = [],
   emptyRows = 5,
+  sortName = "",
   handleSort,
   isLoading,
   handleArchiveUser,
   handleDeleteUser,
-  handleReInviteUser
+  handleReInviteUser,
 }) => {
   const classes = useStyles({ emptyRows });
   return (
@@ -36,6 +40,7 @@ const UsersTable = ({
                 Email
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
+                  style={{ color: sortName === EMAIL ? "black" : "gray" }}
                   onClick={() => handleSort(EMAIL)}
                 ></IconButton>
               </Typography>
@@ -46,7 +51,8 @@ const UsersTable = ({
                 Status
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  onClick={() => handleSort("auth_provider")}
+                  style={{ color: sortName === STATUS ? "black" : "gray" }}
+                  onClick={() => handleSort(STATUS)}
                 ></IconButton>
               </Typography>
             </StyledTableCell>
@@ -62,7 +68,10 @@ const UsersTable = ({
                 Created Date
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  onClick={() => handleSort("create_date")}
+                  style={{
+                    color: sortName === CREATED_DATE ? "black" : "gray",
+                  }}
+                  onClick={() => handleSort(CREATED_DATE)}
                 ></IconButton>
               </Typography>
             </StyledTableCell>

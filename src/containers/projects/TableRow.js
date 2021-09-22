@@ -98,7 +98,7 @@ export default function ProjectRow({
         open={openArchiveDialog}
         content={`Do you really want to ${isActivatedToolTip} ${projectName} project?`}
         handleCloseDialog={handleCloseArchiveDialog}
-        handelActionDialog={() => handleArchiveProject(_.get(project, "id"))}
+        handelActionDialog={() => handleArchiveProject(_.get(project, "id"),handleCloseArchiveDialog)}
         btnText={isActivatedToolTip}
       />
     </StyledTableRow>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { FormDialog } from "components/projects/form_dialog/FormDiaLog";
@@ -68,6 +68,7 @@ export default function Projects() {
   const storeProjects = useSelector((state) => state.projects);
   const actionStatus = _.get(storeProjects, ACTION_STATUS);
 
+  const [searched, setSearched] = useState("");
   const [params, setParams] = useState(DEFAULT_PARAMS);
   const [projects, setProjects] = useState([]);
   const [hasMessage, setOpenMessage] = useState(false);
@@ -75,21 +76,34 @@ export default function Projects() {
   const [projectID, setProjectID] = useState(null);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [dialog, setDialog] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
-  const fetchProjects = () => {
+  const fetchProjects = (loading = false) => {
     const data = {
       ...params,
       page: params.page - 1,
       type: params.type ? ASC : DESC,
       isActivate: params.isActivate === STATUS ? "" : params.isActivate,
     };
-    dispatch(getProjects(id, data));
+    if (loading) {
+      setLoading(true);
+      dispatch(getProjects(id, data)).finally(() => setLoading(false));
+    } else dispatch(getProjects(id, data));
   };
 
   useEffect(() => {
     dispatch(clearMessage());
-    fetchProjects();
-  }, [id, params]);
+    fetchProjects(true);
+  }, [id]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      fetchProjects();
+    }
+  }, [params]);
 
   useEffect(() => {
     if (!storeProjects.data) {
@@ -100,12 +114,11 @@ export default function Projects() {
   }, [storeProjects.data]);
 
   const keyUp = (event) => {
-    const value = event.target.value;
-    if (event.keyCode === 13 || value === "") {
-      if (value !== params.searchName)
+    if (event.keyCode === 13 || searched === "") {
+      if (searched !== params.searchName)
         setParams({
           ...params,
-          searchName: value,
+          searchName: searched,
           page: INITIAL_PAGE,
         });
     }
@@ -137,7 +150,6 @@ export default function Projects() {
 
     if (name === STATUS_OPTION)
       setParams({ ...params, page: INITIAL_PAGE, isActivate: value });
-
     return;
   };
 
@@ -202,7 +214,7 @@ export default function Projects() {
       });
   };
 
-  const handleArchiveProject = (projectID) => {
+  const handleArchiveProject = (projectID, handleCloseArchiveDialog) => {
     dispatch(archiveProject(id, projectID))
       .then(() => {
         fetchProjects();
@@ -210,6 +222,9 @@ export default function Projects() {
       })
       .catch(() => {
         setOpenMessage(true);
+      })
+      .finally(() => {
+        handleCloseArchiveDialog();
       });
   };
 
@@ -236,7 +251,14 @@ export default function Projects() {
   };
 
   const handleReset = () => {
-    setParams(DEFAULT_PARAMS);
+    setSearched("");
+    setParams({
+      ...params,
+      page: INITIAL_PAGE,
+      searchName: "",
+      sortName: "",
+      isActivate: STATUS,
+    });
   };
 
   const emptyRows = params.size - Math.min(params.size, projects.length);
@@ -244,7 +266,8 @@ export default function Projects() {
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
-        searched={params.searchName}
+        searched={searched}
+        setSearched={setSearched}
         keyUp={keyUp}
         cancelSearch={cancelSearch}
         status={params.isActivate}
@@ -261,8 +284,9 @@ export default function Projects() {
           page={params.page}
           rowsPerPage={params.size}
           emptyRows={emptyRows}
+          sortName={params.sortName}
           handleSort={handleSort}
-          isLoading={storeProjects.isLoading}
+          isLoading={isLoading}
           handleOpenDialog={handleOpenDialog}
           handleDeleteProject={handleDeleteProject}
           handleArchiveProject={handleArchiveProject}

@@ -14,6 +14,7 @@ export default function ProjectsHeader({
   searched = "",
   status = STATUS,
   keyUp,
+  setSearched,
   cancelSearch,
   handleChangeDropdown,
   handleOpenDialog,
@@ -42,6 +43,7 @@ export default function ProjectsHeader({
           className={classes.searchbar}
           onCancelSearch={cancelSearch}
           onKeyUp={keyUp}
+          onChange={(newValue)=> setSearched(newValue)}
         />
         <StatusFilter
           status={status}

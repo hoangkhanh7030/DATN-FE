@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
 
-import { Progress } from "components/common/Progress";
+import LoadingGrid from "components/dashboard/LoadingGrid";
 import { Message } from "components/common/Message";
 import Header from "./header/Header";
 import CalendarHeader from "./calendar/CalendarHeader";
@@ -30,7 +30,7 @@ import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
 import { DEFAULT_BOOKING, USER, WORKSPACES_URL } from "constants/index";
 import { useHistory } from "react-router-dom";
-
+import { clearMessage } from "redux/actions/msgAction";
 export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -68,23 +68,43 @@ export default function Workspace() {
   const storeWorkspaces = useSelector((state) => state.workspaces);
 
   const history = useHistory();
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
-  const fetchBookings = (thisCalendar = [], searchValue = "") => {
+  const fetchBookings = (
+    thisCalendar = [],
+    searchValue = "",
+    loading = false
+  ) => {
     const params = {
       startDate: _.first(thisCalendar).format(Y_M_D),
       endDate: _.last(thisCalendar).format(Y_M_D),
       searchName: searchValue,
     };
 
-    dispatch(getBookings(id, params));
+    if (loading) {
+      setLoading(true);
+      dispatch(getBookings(id, params)).finally(() => setLoading(false));
+    } else dispatch(getBookings(id, params));
   };
 
   useEffect(() => {
+    dispatch(clearMessage());
     const thisCalendar = buildCalendar(today, view);
-
     setCalendar(thisCalendar);
-    fetchBookings(thisCalendar, searched);
-  }, [today, view, id]);
+    fetchBookings(thisCalendar, searched, true);
+  }, [id]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      const thisCalendar = buildCalendar(today, view);
+
+      setCalendar(thisCalendar);
+      fetchBookings(thisCalendar, searched);
+    }
+  }, [today, view]);
 
   useEffect(() => {
     if (!storeDashboard.data) {
@@ -297,18 +317,21 @@ export default function Workspace() {
             teamAmount={_.size(teams)}
             rscAmount={_.size(resources)}
           />
-
-          <CalendarBody
-            calendar={calendar}
-            view={view}
-            teams={teams}
-            resources={resources}
-            handleRenameTeam={handleRenameTeam}
-            handleDeleteBooking={handleDeleteBooking}
-            handleAddResource={handleAddResource}
-            setUploading={setUploading}
-            handleOpenDialog={handleOpenDialog}
-          />
+          {isLoading ? (
+            <LoadingGrid isOpen={isLoading} />
+          ) : (
+            <CalendarBody
+              calendar={calendar}
+              view={view}
+              teams={teams}
+              resources={resources}
+              handleRenameTeam={handleRenameTeam}
+              handleDeleteBooking={handleDeleteBooking}
+              handleAddResource={handleAddResource}
+              setUploading={setUploading}
+              handleOpenDialog={handleOpenDialog}
+            />
+          )}
         </Grid>
       </Box>
       {openDialog && storeProjects.data && storeResources.data ? (
@@ -343,7 +366,6 @@ export default function Workspace() {
       ) : (
         <></>
       )}
-      <Progress isOpen={storeDashboard.isLoading || isUploading} />
     </ThemeProvider>
   );
 }

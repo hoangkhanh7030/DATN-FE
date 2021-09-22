@@ -24,12 +24,12 @@ export default function CalendarBody({
     }
 
     setOpenTeam(
-      _.get(storeDashboard, ["data", "teams"])
+      !_.isEmpty(_.get(storeDashboard, ["data", "teams"]))
         ? Array(_.size(_.get(storeDashboard, ["data", "teams"]))).fill(true)
         : Array(2).fill(true)
     );
   }, [storeDashboard]);
-
+  console.log(isOpenTeam);
   return newTeams.map((team, index) => {
     return (
       <Fragment key={index}>

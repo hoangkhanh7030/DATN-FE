@@ -19,6 +19,7 @@ import { PROJECT_NAME, CLIENT_NAME, IS_ACTIVATED } from "constants/index";
 const ProjectsTable = ({
   rows = [],
   emptyRows = 5,
+  sortName="",
   handleSort,
   isLoading,
   handleOpenDialog,
@@ -37,6 +38,7 @@ const ProjectsTable = ({
                 Project Name
                 <IconButton
                   className={`${classes.tableTitleIcon} fas fa-sort`}
+                  style={{ color: sortName === PROJECT_NAME ? "black" : "gray" }}
                   onClick={() => handleSort(PROJECT_NAME)}
                 ></IconButton>
               </Typography>
@@ -46,6 +48,7 @@ const ProjectsTable = ({
                 Client Name
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
+                  style={{ color: sortName === CLIENT_NAME ? "black" : "gray" }}
                   onClick={() => handleSort(CLIENT_NAME)}
                 ></IconButton>
               </Typography>
@@ -55,6 +58,7 @@ const ProjectsTable = ({
                 Status
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
+                  style={{ color: sortName === IS_ACTIVATED ? "black" : "gray" }}
                   onClick={() => handleSort(IS_ACTIVATED)}
                 ></IconButton>
               </Typography>

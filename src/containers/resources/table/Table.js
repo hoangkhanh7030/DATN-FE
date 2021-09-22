@@ -26,7 +26,7 @@ export default function ResourcesTable(props) {
         <TableHeader classes={classes} handleSort={handleSort} />
         <TableBody>
           {isLoading ? (
-            <LoadingTable />
+            <LoadingTable users={false} />
           ) : (
             <>
               {data.map((row) => (

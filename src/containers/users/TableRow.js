@@ -69,7 +69,7 @@ export default function UserRow({
           email: _.get(user, EMAIL),
           url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${id}`,
         })
-      : handleArchiveUser(_.get(user, "id"));
+      : handleArchiveUser(_.get(user, "id"), handleCloseArchiveDialog);
   };
 
   return (
@@ -95,9 +95,7 @@ export default function UserRow({
         </Button>
       </StyledTableCell>
 
-      <StyledTableCell align="center">
-        Viewer
-      </StyledTableCell>
+      <StyledTableCell align="center">Viewer</StyledTableCell>
       <StyledTableCell align="center">
         {date ? moment(date).format("DD/MM/YYYY") : `--/--/----`}
       </StyledTableCell>
@@ -124,7 +122,7 @@ export default function UserRow({
           EMAIL
         )} ?`}
         handleCloseDialog={handleCloseArchiveDialog}
-        handelDeleteWorkspace={() => handleOnAction(optionToolTip)}
+        handelActionDialog={() => handleOnAction(optionToolTip)}
         btnText={optionToolTip}
       />
 
@@ -135,7 +133,9 @@ export default function UserRow({
           EMAIL
         )} ?`}
         handleCloseDialog={handleCloseDeleteDialog}
-        handelDeleteWorkspace={() => handleDeleteUser(_.get(user, "id"))}
+        handelActionDialog={() =>
+          handleDeleteUser(_.get(user, "id"), handleCloseDeleteDialog)
+        }
         btnText={"delete"}
       />
     </StyledTableRow>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -23,19 +23,20 @@ import {
   inviteToWorkspace,
 } from "redux/actions/userAction";
 import InviteDialog from "./dialog/InviteDialog";
-
+import { setMessage, clearMessage } from "redux/actions/msgAction";
 export default function Users() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const storeUsers = useSelector((state) => state.users);
   const { message } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
-
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
   const classes = useStyles();
   const [users, setUsers] = useState([]);
 
   const [openInvite, setOpenInvite] = useState(false);
-
+  const [searched, setSearched] = useState("");
   const [params, setParams] = useState({
     page: INITIAL_PAGE,
     size: INITIAL_ROWS_PER_PAGE,
@@ -44,13 +45,25 @@ export default function Users() {
     type: true,
   });
 
-  const fetchUsers = () => {
-    dispatch(getUsers(id, params));
+  const fetchUsers = (loading = false) => {
+    if (loading) {
+      setLoading(true);
+      dispatch(getUsers(id, params)).finally(() => setLoading(false));
+    } else dispatch(getUsers(id, params));
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, [id, params]);
+    dispatch(clearMessage());
+    fetchUsers(true);
+  }, [id]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      fetchUsers();
+    }
+  }, [params]);
 
   useEffect(() => {
     if (!storeUsers.data) {
@@ -93,6 +106,7 @@ export default function Users() {
   };
 
   const handleReset = () => {
+    setSearched("");
     setParams({
       ...params,
       page: INITIAL_PAGE,
@@ -109,7 +123,8 @@ export default function Users() {
     setOpenMessage(false);
   };
 
-  const handleArchiveUser = (userID) => {
+  const handleArchiveUser = (userID, handleCloseArchiveDialog) => {
+    handleCloseArchiveDialog();
     dispatch(archiveUser(id, userID))
       .then(() => {
         fetchUsers();
@@ -120,7 +135,8 @@ export default function Users() {
       });
   };
 
-  const handleDeleteUser = (userID) => {
+  const handleDeleteUser = (userID, handleCloseDeleteDialog) => {
+    handleCloseDeleteDialog();
     dispatch(deleteUser(id, userID))
       .then(() => {
         setParams({
@@ -161,7 +177,8 @@ export default function Users() {
   return (
     <ThemeProvider theme={theme}>
       <TableHeader
-        searched={params.searchName}
+        searched={searched}
+        setSearched={setSearched}
         cancelSearch={cancelSearch}
         keyUp={keyUp}
         handleReset={handleReset}
@@ -175,8 +192,9 @@ export default function Users() {
           page={params.page}
           rowsPerPage={params.size}
           emptyRows={emptyRows}
+          sortName={params.sortName}
           handleSort={handleSort}
-          isLoading={storeUsers.isLoading}
+          isLoading={isLoading}
           handleArchiveUser={handleArchiveUser}
           handleDeleteUser={handleDeleteUser}
           handleReInviteUser={handleReInviteUser}

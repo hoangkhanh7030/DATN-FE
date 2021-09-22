@@ -6,6 +6,7 @@ import { ResetBtn } from "components/common/ResetBtn";
 
 export default function TableHeader({
   searched,
+  setSearched,
   cancelSearch,
   keyUp,
   handleReset,
@@ -21,6 +22,7 @@ export default function TableHeader({
           className={classes.searchbar}
           onCancelSearch={cancelSearch}
           onKeyUp={keyUp}
+          onChange={(newValue) => setSearched(newValue)}
         />
         <ResetBtn onClick={handleReset} />
       </Box>

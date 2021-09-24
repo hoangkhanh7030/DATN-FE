@@ -1,6 +1,6 @@
 import * as actionTypes from "redux/constants";
 
-const initialState = { data: [], status: null, isLoading: false };
+const initialState = {  status: null, isLoading: false };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -12,7 +12,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.ADD_BOOKING_SUCCEED:
       return {
         ...state,
-        status: payload.status,
+        status: 200,
         isLoading: false,
       };
 
@@ -25,7 +25,7 @@ export default function reducer(state = initialState, action) {
     case actionTypes.EDIT_BOOKING_SUCCEED:
       return {
         ...state,
-        status: payload.status,
+        status: 200,
         isLoading: false,
       };
 

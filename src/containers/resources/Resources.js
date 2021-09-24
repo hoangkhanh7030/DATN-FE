@@ -12,7 +12,7 @@ import {
   STATUS,
   STATUS_OPTION,
 } from "constants/index";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMessage, setMessage } from "redux/actions/msgAction";
@@ -71,6 +71,11 @@ export default function Resources() {
 
   const [isCallApi, setIsCallApi] = useState(false);
 
+  const [searched, setSearched] = useState("");
+
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
+
   const handleOpenDialog = (resource = null) => {
     setResource(
       resource
@@ -88,22 +93,34 @@ export default function Resources() {
     setIsOpenDialog(true);
   };
 
-  const fetchResources = () => {
+  const fetchResources = (loading = false) => {
     const data = {
       ...params,
       page: params.page - 1,
       type: params.type ? ASC : DESC,
       isArchived: params.isArchived === STATUS ? "" : params.isArchived,
     };
-    dispatch(getResources(id, data));
+    if (loading) {
+      setLoading(true);
+      dispatch(getResources(id, data)).finally(() => setLoading(false));
+    } else dispatch(getResources(id, data));
   };
 
   useEffect(() => {
     dispatch(clearMessage());
-    fetchResources();
     dispatch(getTeams(id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, id, params]);
+
+    fetchResources(true);
+  }, [id]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      fetchResources();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   useEffect(() => {
     if (!storeResources.data) {
@@ -131,12 +148,11 @@ export default function Resources() {
   };
 
   const keyUp = (event) => {
-    const value = event.target.value;
-    if (event.keyCode === 13 || value === "") {
-      if (value !== params.keyword)
+    if (event.keyCode === 13 || searched === "") {
+      if (searched !== params.keyword)
         setParams({
           ...params,
-          keyword: value,
+          keyword: searched,
           page: INITIAL_PAGE,
         });
     }
@@ -172,7 +188,14 @@ export default function Resources() {
   };
 
   const handleReset = () => {
-    setParams(DEFAULT_PARAMS);
+    setSearched("");
+    setParams({
+      ...params,
+      page: INITIAL_PAGE,
+      keyword: "",
+      sortColumn: "",
+      isArchived: STATUS,
+    });
   };
 
   const callApiAddResource = (id, resource) => {
@@ -244,7 +267,11 @@ export default function Resources() {
   const emptyRows = params.size - Math.min(params.size, resources.length);
 
   const handleExportResources = () => {
-    dispatch(exportResources(id));
+    dispatch(exportResources(id)).then(() => {
+      dispatch(setMessage("export successfully!"));
+
+      setOpenMessage(true);
+    });
   };
 
   const handleImportResources = (file) => {
@@ -252,6 +279,8 @@ export default function Resources() {
       dispatch(importResources(id, file))
         .then(() => {
           handleReset();
+          dispatch(setMessage("import successfully!"));
+
           setOpenMessage(true);
         })
         .catch(() => {
@@ -265,7 +294,7 @@ export default function Resources() {
     }
   };
 
-  const callApiArchiveResource = (projectId) => {
+  const callApiArchiveResource = (projectId, handleCloseArchiveDialog) => {
     dispatch(archiveResource(id, projectId))
       .then(() => {
         fetchResources();
@@ -273,6 +302,9 @@ export default function Resources() {
       })
       .catch(() => {
         setOpenMessage(true);
+      })
+      .finally(() => {
+        handleCloseArchiveDialog();
       });
   };
 
@@ -294,7 +326,9 @@ export default function Resources() {
       )}
 
       <TableToolbar
-        keyword={params.keyword}
+        // keyword={params.keyword}
+        searched={searched}
+        setSearched={setSearched}
         cancelSearch={cancelSearch}
         status={params.isArchived}
         keyUp={keyUp}
@@ -308,8 +342,9 @@ export default function Resources() {
       <ResourcesTable
         data={resources}
         emptyRows={emptyRows}
+        sortName={params.sortColumn}
         handleSort={handleSort}
-        isLoading={storeResources.isLoading || isUploading}
+        isLoading={isLoading}
         handleOpenDialog={handleOpenDialog}
         handelDeleteResource={handelDeleteResource}
         callApiArchiveResource={callApiArchiveResource}
@@ -350,7 +385,6 @@ export default function Resources() {
           }
         />
       )}
-      <Progress isOpen={storeTeams?.isLoading} />
     </ThemeProvider>
   );
 }

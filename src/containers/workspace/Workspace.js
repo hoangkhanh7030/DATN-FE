@@ -35,7 +35,7 @@ export default function Workspace() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const storeDashboard = useSelector((state) => state.dashboard);
-  const status = _.get(storeDashboard, ["data", "status"]);
+  const status = _.get(storeDashboard, "status");
   const [isUploading, setUploading] = useState(false);
   const { message } = useSelector((state) => state.message);
   const [hasMessage, setOpenMessage] = useState(false);
@@ -236,6 +236,7 @@ export default function Workspace() {
   };
 
   const handleAddBooking = (data) => {
+    console.log("handleAddBooking")
     dispatch(addBooking(id, data))
       .then(() => {
         handleCloseDialog();

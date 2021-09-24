@@ -173,6 +173,7 @@ export default function BookingDialog(props) {
   const callApiAddResource = (id, resource) => {
     dispatch(addResource(id, resource)).then(() => {
       dispatch(getResourcesBooking(id, projectSearch));
+      setResource(DEFAULT_RESOURCE);
     });
   };
 
@@ -314,6 +315,8 @@ export default function BookingDialog(props) {
           actionDialog: handleCreateProject,
         }}
         dialogStyle={true}
+        projects={projects}
+
       />
 
       <ResourceDialog

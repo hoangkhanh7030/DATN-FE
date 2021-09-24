@@ -12,6 +12,7 @@ export default function ResourcesTable(props) {
   const {
     data = [],
     emptyRows = INITIAL_ROWS_PER_PAGE,
+    sortName = "",
     handleSort,
     isLoading = false,
     handleOpenDialog,
@@ -23,10 +24,10 @@ export default function ResourcesTable(props) {
   return (
     <TableContainer component={Paper} className={classes.root} elevation={0}>
       <Table className={classes.table}>
-        <TableHeader classes={classes} handleSort={handleSort} />
+        <TableHeader classes={classes} handleSort={handleSort} sortName={sortName}/>
         <TableBody>
           {isLoading ? (
-            <LoadingTable users={false} />
+            <LoadingTable />
           ) : (
             <>
               {data.map((row) => (

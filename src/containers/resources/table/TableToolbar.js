@@ -20,6 +20,8 @@ import { ResetBtn } from "components/common/ResetBtn";
 
 export default function TableToolbar(props) {
   const {
+    searched = "",
+    setSearched,
     keyword = "",
     status = STATUS,
     keyUp,
@@ -56,10 +58,11 @@ export default function TableToolbar(props) {
       <Toolbar className={classes.root}>
         <Box className={classes.leftToolbar}>
           <SearchBar
-            value={keyword}
+            value={searched}
             className={classes.searchbar}
             onCancelSearch={cancelSearch}
             onKeyUp={keyUp}
+            onChange={(newValue) => setSearched(newValue)}
           />
           <FormControl variant="outlined" className={classes.selectInput}>
             <Select

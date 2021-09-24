@@ -2,7 +2,7 @@ import { Box, Paper, Tab, Tabs, ThemeProvider } from "@material-ui/core";
 import { theme } from "assets/css/Common";
 import { DAY } from "constants/index";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getReport, exportReport } from "redux/actions/reportAction";
@@ -13,6 +13,7 @@ import { useStyles } from "./style";
 import Toolbar from "./Toolbar";
 import { Message } from "components/common/Message";
 import { Progress } from "components/common/Progress";
+import { clearMessage, setMessage } from "redux/actions/msgAction";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,23 +60,42 @@ export default function Report() {
   const [trafficTime, setTrafficTime] = useState(0);
   const [allocatedTime, setAllocatedTime] = useState(0);
 
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    dispatch(clearMessage());
     const startDate = start();
     const endDate = end();
     setStartDate(startDate);
     setEndDate(endDate);
-    fetchReports(startDate, endDate);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [today, view, id, type]);
+    fetchReports(startDate, endDate, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
-  const fetchReports = (startDate, endDate) => {
+  const fetchReports = (startDate, endDate, loading = false) => {
     const params = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
       type,
     };
-    dispatch(getReport(id, params));
+    if (loading) {
+      setLoading(true);
+      dispatch(getReport(id, params)).finally(() => setLoading(false));
+    } else dispatch(getReport(id, params));
   };
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      const startDate = start();
+      const endDate = end();
+      setStartDate(startDate);
+      setEndDate(endDate);
+      fetchReports(startDate, endDate);
+    }
+  }, [today, view, type]);
 
   useEffect(() => {
     if (!storeReport.data) {
@@ -115,6 +135,7 @@ export default function Report() {
     }
     setOpenMessage(false);
   };
+
   const [exportLoading, setExportLoading] = useState(false);
 
   const handleExport = () => {
@@ -134,7 +155,10 @@ export default function Report() {
         setExportLoading(false);
       })
       .finally(() => {
+        dispatch(setMessage("export successfully!"));
+
         setOpenMessage(true);
+
         setExportLoading(false);
       });
   };
@@ -192,7 +216,7 @@ export default function Report() {
       ) : (
         <></>
       )}
-      <Progress isOpen={storeReport.isLoading || exportLoading} />
+      <Progress isOpen={isLoading} />
     </ThemeProvider>
   );
 }

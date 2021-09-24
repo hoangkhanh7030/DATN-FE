@@ -9,7 +9,7 @@ import React from "react";
 import { StyledTableCell } from "./style";
 
 export default function EnhancedTableHead(props) {
-  const { classes, handleSort } = props;
+  const { classes, handleSort, sortName = "" } = props;
 
   return (
     <TableHead className={classes.headRoot}>
@@ -22,6 +22,7 @@ export default function EnhancedTableHead(props) {
             Name
             <IconButton
               className={`fas fa-sort ${classes.sortIcon}`}
+              style={{ color: sortName === RESOURCE_NAME ? "black" : "gray" }}
               onClick={() => handleSort(RESOURCE_NAME)}
             ></IconButton>
           </Typography>
@@ -31,6 +32,7 @@ export default function EnhancedTableHead(props) {
             Team
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              style={{ color: sortName === TEAM_NAME ? "black" : "gray" }}
               onClick={() => handleSort(TEAM_NAME)}
             ></IconButton>
           </Typography>
@@ -40,6 +42,7 @@ export default function EnhancedTableHead(props) {
             Position
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              style={{ color: sortName === POSITION_NAME ? "black" : "gray" }}
               onClick={() => handleSort(POSITION_NAME)}
             ></IconButton>
           </Typography>
@@ -49,6 +52,7 @@ export default function EnhancedTableHead(props) {
             Status
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
+              style={{ color: sortName === STATUS_NAME ? "black" : "gray" }}
               onClick={() => handleSort(STATUS_NAME)}
             ></IconButton>
           </Typography>

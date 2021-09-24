@@ -32,7 +32,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: payload.status };
 
     case actionTypes.EDIT_PROJECT:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.EDIT_PROJECT_SUCCEED:
       return {
@@ -44,7 +44,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: payload.status };
 
     case actionTypes.DELETE_PROJECT:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.DELETE_PROJECT_SUCCEED:
       return { ...state, status: payload.status };
@@ -53,7 +53,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: payload.status };
 
     case actionTypes.ARCHIVE_PROJECT:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.ARCHIVE_PROJECT_SUCCEED:
       return { ...state, status: payload.status };
@@ -65,7 +65,7 @@ export default function reducer(state = initialState, action) {
       return { ...state };
 
     case actionTypes.IMPORT_PROJECTS_SUCCEED:
-      return { ...state };
+      return { ...state, status: 200 };
 
     case actionTypes.IMPORT_PROJECTS_FAILED:
       return { ...state, status: payload.status };
@@ -74,7 +74,7 @@ export default function reducer(state = initialState, action) {
       return { ...state };
 
     case actionTypes.EXPORT_PROJECTS_SUCCEED:
-      return { ...state };
+      return { ...state, status: 200 };
 
     case actionTypes.EXPORT_PROJECTS_FAILED:
       return { ...state, status: payload.status };

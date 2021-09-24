@@ -75,7 +75,6 @@ export default function Chart({
   const options = {
     indexAxis: "y",
     responsive: true,
-    maintainAspectRatio: false,
 
     tooltips: {
       mode: "nearest",
@@ -117,7 +116,8 @@ export default function Chart({
         {
           display: reportData.length,
           stacked: true,
-          barPercentage: 0.8,
+          // barPercentage: 0.5,
+          maxBarThickness: 60,
         },
       ],
     },
@@ -127,8 +127,8 @@ export default function Chart({
     <Box className={classes.chart}>
       <HorizontalBar
         data={data}
-        // width={null}
-        // height={80}
+        width={null}
+        height={null}
         options={options}
         plugins={plugins}
       />

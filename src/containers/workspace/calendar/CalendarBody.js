@@ -29,7 +29,7 @@ export default function CalendarBody({
         : Array(2).fill(true)
     );
   }, [storeDashboard]);
-  console.log(isOpenTeam);
+
   return newTeams.map((team, index) => {
     return (
       <Fragment key={index}>

@@ -87,7 +87,9 @@ export default function EnhancedTableRow(props) {
         open={openArchiveDialog}
         content={`Do you really want to ${isArchivedToolTip} this resource?`}
         handleCloseDialog={handleCloseArchiveDialog}
-        handelActionDialog={() => handleArchiveProject(_.get(row, "id"))}
+        handelActionDialog={() =>
+          handleArchiveProject(_.get(row, "id"), handleCloseArchiveDialog)
+        }
         btnText={isArchivedToolTip}
       />
     </StyledTableRow>

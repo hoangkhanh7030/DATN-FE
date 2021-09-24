@@ -3,7 +3,6 @@ import * as actionTypes from "redux/constants";
 const initialState = {
   data: null,
   status: null,
-  isLoading: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -11,26 +10,22 @@ export default function reducer(state = initialState, action) {
 
   switch (type) {
     case actionTypes.GET_REPORT:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.GET_REPORT_SUCCEED:
-      return {
-        ...state,
-        data: payload,
-        isLoading: false,
-      };
+      return { ...state, data: payload };
 
     case actionTypes.GET_REPORT_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     case actionTypes.EXPORT_REPORT:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     case actionTypes.EXPORT_REPORT_SUCCEED:
-      return { ...state, status: payload.status, isLoading: false };
+      return { ...state, status: 200 };
 
     case actionTypes.EXPORT_REPORT_FAILED:
-      return { ...state, status: payload.status, isLoading: false };
+      return { ...state, status: payload.status };
 
     default:
       return state;

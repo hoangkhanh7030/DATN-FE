@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +28,8 @@ export const SettingTitle = ({ handleAddRow }) => {
           margin="dense"
           color="primary"
           disableElevation
-          // endIcon={<AddCircleOutlineIcon />}
-          startIcon={<i className="far fa-plus-square"></i>}
+          startIcon={<AddCircleOutlineIcon />}
+
           onClick={handleAddRow}
         >
           Add team

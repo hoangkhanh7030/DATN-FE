@@ -31,7 +31,6 @@ export default function SettingsRow(props) {
   };
 
   const handleAddChip = (chip) => {
-    console.info("You add a Chip.", chip);
     const newPos = [...data.positions, { name: chip, isEdit: false }];
     let newErr = { ...data.error, position: newPos.length === 0 };
 

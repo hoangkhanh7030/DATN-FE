@@ -20,6 +20,10 @@ export const useStyles = makeStyles((theme) => ({
     background: colors.bgColor,
     borderTop: `1px solid ${colors.borderColor}`,
     padding: "12px 24px",
+    "& .Mui-disabled": {
+      backgroundColor: "#9BB7FA",
+      color: colors.secondaryColor,
+    },
   },
   selected: {
     "& .MuiListItem-root.Mui-selected": {

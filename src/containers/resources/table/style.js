@@ -69,6 +69,8 @@ export const useToolbarStyles = makeStyles({
     background: colors.secondaryColor,
     border: `1px solid ${colors.borderColor}`,
     borderRadius: "5px 5px 0px 0px",
+    paddingTop: 15,
+    paddingBottom: 15,
     justifyContent: "space-between",
   },
   leftToolbar: {

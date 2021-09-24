@@ -23,6 +23,10 @@ export const useStyles = makeStyles({
     background: colors.bgColor,
     borderTop: `1px solid ${colors.borderColor}`,
     padding: "20px 24px",
+    "& .Mui-disabled": {
+      backgroundColor: "#9BB7FA",
+      color: colors.secondaryColor,
+    },
   },
   selectInput: {
     width: "70%",

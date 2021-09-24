@@ -155,7 +155,7 @@ export default function Workspace(props) {
                     <MenuItem onClick={() => handleOpenDialog(workspace)}>
                       Edit{" "}
                     </MenuItem>
-                    <MenuItem onClick={handleOpenDeleteDialog}>Remove</MenuItem>
+                    <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
                     <AlertDialog
                       open={openDelete}
                       content={`Do you really want to delete ${workspace.name} workspace?`}

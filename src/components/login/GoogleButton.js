@@ -1,9 +1,9 @@
 import { Button } from "@material-ui/core";
 
-import { commonStyle,  } from "assets/css/Common";
+import { commonStyle } from "assets/css/Common";
 import loginStyle from "./style";
 
-export const GoogleButton = ({onClick,disabled}) => {
+export const GoogleButton = ({ onClick, isLoading, isLoginGG }) => {
   const classes = loginStyle();
   const commonClasses = commonStyle();
   return (
@@ -12,10 +12,16 @@ export const GoogleButton = ({onClick,disabled}) => {
       variant="contained"
       onClick={onClick}
       className={classes.google}
-      color="secondary"
+      disableElevation
     >
-      <i className={`${commonClasses.ggicon} + fab fa-google`}></i>
-      Login with Google
+      {isLoading && isLoginGG ? (
+        ""
+      ) : (
+        <>
+          <i className={`${commonClasses.ggicon} + fab fa-google`}></i>
+          Login with Google
+        </>
+      )}
     </Button>
   );
 };

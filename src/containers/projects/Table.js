@@ -38,7 +38,7 @@ const ProjectsTable = ({
                 Project Name
                 <IconButton
                   className={`${classes.tableTitleIcon} fas fa-sort`}
-                  style={{ color: sortName === PROJECT_NAME ? "black" : "gray" }}
+                  style={{ color: sortName === PROJECT_NAME ? "black" : "#CECECE" }}
                   onClick={() => handleSort(PROJECT_NAME)}
                 ></IconButton>
               </Typography>
@@ -48,7 +48,7 @@ const ProjectsTable = ({
                 Client Name
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  style={{ color: sortName === CLIENT_NAME ? "black" : "gray" }}
+                  style={{ color: sortName === CLIENT_NAME ? "black" : "#CECECE" }}
                   onClick={() => handleSort(CLIENT_NAME)}
                 ></IconButton>
               </Typography>
@@ -58,7 +58,7 @@ const ProjectsTable = ({
                 Status
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  style={{ color: sortName === IS_ACTIVATED ? "black" : "gray" }}
+                  style={{ color: sortName === IS_ACTIVATED ? "black" : "#CECECE" }}
                   onClick={() => handleSort(IS_ACTIVATED)}
                 ></IconButton>
               </Typography>

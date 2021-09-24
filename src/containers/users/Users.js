@@ -112,7 +112,7 @@ export default function Users() {
       page: INITIAL_PAGE,
       searchName: "",
       sortName: "",
-      type: false,
+      type: true,
     });
   };
 

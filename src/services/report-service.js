@@ -30,7 +30,7 @@ export const exportReportService = (id, params) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;
-      a.setAttribute("download", "Report.csv");
+      a.setAttribute("download", "Report.xlsx");
       document.body.appendChild(a);
       a.click();
     });

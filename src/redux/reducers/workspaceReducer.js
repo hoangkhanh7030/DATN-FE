@@ -1,13 +1,13 @@
 import * as actionTypes from "redux/constants";
 
-const initialState = { data: [], status: null, isLoading: false };
+const initialState = { data: [], status: null };
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
     case actionTypes.GET_WORKSPACES:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.GET_WORKSPACES_SUCCEED:
       return {
@@ -17,10 +17,10 @@ export default function reducer(state = initialState, action) {
       };
 
     case actionTypes.GET_WORKSPACES_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     case actionTypes.ADD_WORKSPACE:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.ADD_WORKSPACE_SUCCEED:
       return {
@@ -30,10 +30,10 @@ export default function reducer(state = initialState, action) {
       };
 
     case actionTypes.ADD_WORKSPACE_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     case actionTypes.UPDATE_WORKSPACE:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.UPDATE_WORKSPACE_SUCCEED:
       return {
@@ -43,10 +43,10 @@ export default function reducer(state = initialState, action) {
       };
 
     case actionTypes.UPDATE_WORKSPACE_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     case actionTypes.DELETE_WORKSPACE:
-      return { ...state, isLoading: true };
+      return { ...state };
 
     case actionTypes.DELETE_WORKSPACE_SUCCEED:
       return {
@@ -56,7 +56,7 @@ export default function reducer(state = initialState, action) {
       };
 
     case actionTypes.DELETE_WORKSPACE_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state };
 
     default:
       return state;

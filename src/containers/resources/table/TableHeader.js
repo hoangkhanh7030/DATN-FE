@@ -22,7 +22,7 @@ export default function EnhancedTableHead(props) {
             Name
             <IconButton
               className={`fas fa-sort ${classes.sortIcon}`}
-              style={{ color: sortName === RESOURCE_NAME ? "black" : "gray" }}
+              style={{ color: sortName === RESOURCE_NAME ? "black" : "#CECECE" }}
               onClick={() => handleSort(RESOURCE_NAME)}
             ></IconButton>
           </Typography>
@@ -32,7 +32,7 @@ export default function EnhancedTableHead(props) {
             Team
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
-              style={{ color: sortName === TEAM_NAME ? "black" : "gray" }}
+              style={{ color: sortName === TEAM_NAME ? "black" : "#CECECE" }}
               onClick={() => handleSort(TEAM_NAME)}
             ></IconButton>
           </Typography>
@@ -42,7 +42,7 @@ export default function EnhancedTableHead(props) {
             Position
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
-              style={{ color: sortName === POSITION_NAME ? "black" : "gray" }}
+              style={{ color: sortName === POSITION_NAME ? "black" : "#CECECE" }}
               onClick={() => handleSort(POSITION_NAME)}
             ></IconButton>
           </Typography>
@@ -52,7 +52,7 @@ export default function EnhancedTableHead(props) {
             Status
             <IconButton
               className={`fas fa-sort ${classes.rightSortIcon}`}
-              style={{ color: sortName === STATUS_NAME ? "black" : "gray" }}
+              style={{ color: sortName === STATUS_NAME ? "black" : "#CECECE" }}
               onClick={() => handleSort(STATUS_NAME)}
             ></IconButton>
           </Typography>

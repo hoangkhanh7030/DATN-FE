@@ -7,7 +7,7 @@ export default function reducer(state = initialState, action) {
 
   switch (type) {
     case actionTypes.GET_BOOKINGS:
-      return { ...state, data: [] };
+      return { ...state };
 
     case actionTypes.GET_BOOKINGS_SUCCEED:
       return { ...state, data: payload };

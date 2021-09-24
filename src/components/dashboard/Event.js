@@ -34,7 +34,11 @@ const useStyles = makeStyles({
     minHeight: "44px",
     background: ({ projectColor }) => projectColor,
     borderRadius: 8,
-    color: ({textColor}) => textColor,
+    color: ({ textColor }) => textColor,
+    "& .MuiIconButton-root": {
+      paddingLeft: 8,
+      paddingRight: ({ days, view }) => (view === 4 && days === 0 ? 7 : 12),
+    },
   },
   side: {
     display: "flex",
@@ -48,6 +52,9 @@ const useStyles = makeStyles({
   textBox: {
     overflow: "hidden",
     textOverflow: "ellipsis",
+    //  border: "1px solid white",
+    flex: 1,
+    marginRight: 34,
   },
   textHour: {
     fontSize: 10,
@@ -63,16 +70,17 @@ const useStyles = makeStyles({
     textTransform: "uppercase",
   },
   icon: {
-    fontSize: 16,
+    fontSize: 14,
     position: "absolute",
     right: 2,
-    top: 2,
+    top: 3,
+    color: ({ textColor }) => textColor,
   },
 });
 
-const HourTotal = ({ classes, isHiddenHour, booking }) => {
+const HourTotal = ({ classes, isHiddenHour, booking, handleOpenEdit }) => {
   return isHiddenHour ? null : (
-    <Box className={classes.side}>
+    <Box className={classes.side} onClick={handleOpenEdit}>
       <i className="fas fa-clock"></i>
       <Typography className={classes.textHour}>
         {_.get(booking, HOUR_TOTAL)}
@@ -135,6 +143,7 @@ export default function Event({
         classes={classes}
         isHiddenHour={isHiddenHour}
         booking={booking}
+        handleOpenEdit={handleOpenEdit}
       />
 
       <Box className={classes.textBox} onClick={handleOpenEdit}>

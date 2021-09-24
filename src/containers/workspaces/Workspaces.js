@@ -6,7 +6,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "assets/css/Common";
 import { useStyles } from "./style";
@@ -28,7 +28,7 @@ import { DEFAULT_WORKSPACE } from "constants/index";
 export default function Workspaces() {
   const classes = useStyles();
 
-  const { status, isLoading } = useSelector((state) => state.workspaces);
+  const { status } = useSelector((state) => state.workspaces);
   const { message } = useSelector((state) => state.message);
   const [isOpenMessage, setIsOpenMessage] = useState(false);
 
@@ -41,11 +41,24 @@ export default function Workspaces() {
 
   const [workspaces, setWorkspaces] = useState([]);
   const storeWorkspaces = useSelector((state) => state.workspaces);
+  const [isLoading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
+  const fetchWorkpaces = (loading = false) => {
+    if (loading) {
+      setLoading(true);
+      dispatch(getWorkspaces()).finally(() => setLoading(false));
+    } else dispatch(getWorkspaces());
+  };
   useEffect(() => {
     dispatch(clearMessage());
 
-    dispatch(getWorkspaces()).catch(() => setIsOpenMessage(true));
+    if (isInitialMount.current) {
+      fetchWorkpaces(true);
+      isInitialMount.current = false;
+    } else {
+      fetchWorkpaces();
+    }
   }, [dispatch]);
 
   useEffect(() => {

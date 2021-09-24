@@ -232,7 +232,9 @@ export default function Projects() {
     if (file.type === "application/vnd.ms-excel") {
       dispatch(importProjects(id, file))
         .then(() => {
-          handleReset();
+          if (params === DEFAULT_PARAMS) fetchProjects();
+          else handleReset();
+          dispatch(setMessage("import projects successfully!"));
           setOpenMessage(true);
         })
         .catch(() => {
@@ -247,7 +249,10 @@ export default function Projects() {
   };
 
   const handleExportProjects = () => {
-    dispatch(exportProjects(id));
+    dispatch(exportProjects(id)).then(() => {
+      dispatch(setMessage("export successfully!"));
+      setOpenMessage(true);
+    });
   };
 
   const handleReset = () => {
@@ -257,6 +262,7 @@ export default function Projects() {
       page: INITIAL_PAGE,
       searchName: "",
       sortName: "",
+      type: false,
       isActivate: STATUS,
     });
   };

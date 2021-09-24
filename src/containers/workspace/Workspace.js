@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ThemeProvider, Grid, Box } from "@material-ui/core";
 import * as _ from "underscore";
-
-import LoadingGrid from "components/dashboard/LoadingGrid";
+import { Progress } from "components/common/Progress";
 import { Message } from "components/common/Message";
 import Header from "./header/Header";
 import CalendarHeader from "./calendar/CalendarHeader";
@@ -318,21 +317,18 @@ export default function Workspace() {
             teamAmount={_.size(teams)}
             rscAmount={_.size(resources)}
           />
-          {isLoading ? (
-            <LoadingGrid isOpen={isLoading} />
-          ) : (
-            <CalendarBody
-              calendar={calendar}
-              view={view}
-              teams={teams}
-              resources={resources}
-              handleRenameTeam={handleRenameTeam}
-              handleDeleteBooking={handleDeleteBooking}
-              handleAddResource={handleAddResource}
-              setUploading={setUploading}
-              handleOpenDialog={handleOpenDialog}
-            />
-          )}
+
+          <CalendarBody
+            calendar={calendar}
+            view={view}
+            teams={teams}
+            resources={resources}
+            handleRenameTeam={handleRenameTeam}
+            handleDeleteBooking={handleDeleteBooking}
+            handleAddResource={handleAddResource}
+            setUploading={setUploading}
+            handleOpenDialog={handleOpenDialog}
+          />
         </Grid>
       </Box>
       {openDialog && storeProjects.data && storeResources.data ? (
@@ -367,6 +363,7 @@ export default function Workspace() {
       ) : (
         <></>
       )}
+      <Progress isOpen={isLoading} />
     </ThemeProvider>
   );
 }

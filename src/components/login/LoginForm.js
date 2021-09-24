@@ -3,15 +3,14 @@ import React from "react";
 import {
   Button,
   TextField,
-  Link,
-  Grid,
+  Box,
   Typography,
   Container,
 } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import { GoogleLogin } from "react-google-login";
 import { GoogleButton } from "./GoogleButton";
-
+import { CircularProgress } from "@material-ui/core";
 import logo from "assets/icons/app-logo.svg";
 import loginStyle from "./style";
 import { theme } from "assets/css/Common";
@@ -19,15 +18,28 @@ import { theme } from "assets/css/Common";
 const LoginForm = (props) => {
   const classes = loginStyle();
 
-  const { handleInputChange, handleFormSubmit, handleLoginWithGG, errors } =
-    props;
+  const {
+    handleInputChange,
+    handleFormSubmit,
+    handleLoginWithGG,
+    errors,
+    setInvalidInputs,
+    isLoading = false,
+    setLoginGG,
+    isLoginGG = false,
+  } = props;
 
+  const handleClick = (renderProps) => {
+    setInvalidInputs({});
+    setLoginGG(true);
+    renderProps.onClick();
+  };
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" className={classes.name}>
+      <Container component="main" maxWidth="xs" className={classes.main}>
         <div className={classes.login}>
           <img className={classes.image} src={logo} alt="Logo" width={30} />
-          <Typography variant="h1">Sign In</Typography>
+          <Typography variant="h1">Log In</Typography>
           <form className={classes.form} onSubmit={handleFormSubmit} noValidate>
             <TextField
               variant="outlined"
@@ -56,37 +68,65 @@ const LoginForm = (props) => {
               })}
             />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign In
-            </Button>
+            <Box style={{ position: "relative" }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disableElevation
+                className={classes.submit}
+              >
+                {isLoading && !isLoginGG ? "" : "Log In"}
+              </Button>
+              {isLoading && !isLoginGG ? (
+                <CircularProgress
+                  isOpen={isLoading}
+                  style={{
+                    position: "absolute",
+                    width: 20,
+                    height: 20,
+                    color: "white",
+                    top: "56%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              ) : null}
+            </Box>
+
             <Typography className={classes.text}>OR</Typography>
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
               render={(renderProps) => (
-                <GoogleButton onClick={renderProps.onClick} />
+                <Box style={{ position: "relative" }}>
+                  <GoogleButton
+                    isLoading={isLoading}
+                    isLoginGG={isLoginGG}
+                    onClick={() => handleClick(renderProps)}
+                  />
+                  {isLoading && isLoginGG ? (
+                    <CircularProgress
+                      isOpen={isLoading}
+                      style={{
+                        position: "absolute",
+                        width: 20,
+                        height: 20,
+                        color: "white",
+                        top: "56%",
+                        left: "50%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                      }}
+                    />
+                  ) : null}
+                </Box>
               )}
-              buttonText="Sign in with Google"
               onSuccess={handleLoginWithGG}
               onFailure={handleLoginWithGG}
               cookiePolicy={"single_host_origin"}
             />
-
-            <Grid container>
-              <Grid item xs>
-                <Typography variant="body2">Don't have an account?</Typography>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2" color="primary">
-                  Sign Up
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Container>

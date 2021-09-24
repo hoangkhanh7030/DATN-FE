@@ -8,7 +8,7 @@ const loginStyle = makeStyles((theme) => ({
     backgroundColor: colors.secondaryColor,
   },
   login: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(9),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -22,11 +22,16 @@ const loginStyle = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    minHeight: 37,
   },
   google: {
     margin: theme.spacing(2, 0, 2),
     color: colors.secondaryColor,
+    minHeight: 37,
     backgroundColor: colors.ggColor,
+    "&:hover": {
+      backgroundColor: "#AA312A",
+    },
   },
 }));
 

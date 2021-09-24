@@ -40,7 +40,7 @@ const UsersTable = ({
                 Email
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  style={{ color: sortName === EMAIL ? "black" : "gray" }}
+                  style={{ color: sortName === EMAIL ? "black" : "#CECECE" }}
                   onClick={() => handleSort(EMAIL)}
                 ></IconButton>
               </Typography>
@@ -51,7 +51,7 @@ const UsersTable = ({
                 Status
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
-                  style={{ color: sortName === STATUS ? "black" : "gray" }}
+                  style={{ color: sortName === STATUS ? "black" : "#CECECE" }}
                   onClick={() => handleSort(STATUS)}
                 ></IconButton>
               </Typography>
@@ -69,7 +69,10 @@ const UsersTable = ({
                 <IconButton
                   className={`${classes.tableTitleIcon} ${classes.tableTitleIconCenter} fas fa-sort`}
                   style={{
-                    color: sortName === CREATED_DATE ? "black" : "gray",
+                    color:
+                      sortName === CREATED_DATE || sortName === ""
+                        ? "black"
+                        : "#CECECE",
                   }}
                   onClick={() => handleSort(CREATED_DATE)}
                 ></IconButton>

@@ -68,7 +68,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: 200 };
 
     case actionTypes.IMPORT_PROJECTS_FAILED:
-      return { ...state, status: payload.status };
+      return { ...state, status: 400 };
 
     case actionTypes.EXPORT_PROJECTS:
       return { ...state };
@@ -77,7 +77,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: 200 };
 
     case actionTypes.EXPORT_PROJECTS_FAILED:
-      return { ...state, status: payload.status };
+      return { ...state, status: 400 };
 
     case actionTypes.GET_PROJECTS_BOOKING:
       return { ...state };

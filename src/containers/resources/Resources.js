@@ -137,6 +137,7 @@ export default function Resources() {
   }, [storeTeams.data]);
 
   const handleCloseSettingsDialog = () => {
+    setOpenMessage(true);
     fetchResources();
     setOpenSettingsDialog(false);
     dispatch(getTeams(id));

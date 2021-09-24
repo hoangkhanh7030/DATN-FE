@@ -6,7 +6,7 @@ import * as colors from "assets/css/Common";
 export const useStyles = makeStyles({
   text: {
     color: "white",
-    marginTop: 50,
+    marginTop: ({ errorLogin }) => (errorLogin ? 0 : 50),
   },
   success: {
     background: colors.primaryColor,
@@ -21,8 +21,9 @@ export const Message = ({
   isOpen,
   handleCloseMessage,
   type = "success",
+  errorLogin = false,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ errorLogin });
   const status = type === "success" ? classes.success : classes.error;
   return (
     <Snackbar
@@ -31,7 +32,7 @@ export const Message = ({
       onClose={handleCloseMessage}
       anchorOrigin={{
         vertical: "top",
-        horizontal: "right",
+        horizontal: errorLogin ? "center" : "right",
       }}
     >
       <Alert

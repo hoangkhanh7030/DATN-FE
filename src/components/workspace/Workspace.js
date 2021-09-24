@@ -14,9 +14,7 @@ import {
   IconButton,
   ThemeProvider,
   CardContent,
-  Divider,
   Typography,
-  Box,
 } from "@material-ui/core";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -95,15 +93,6 @@ export default function Workspace(props) {
     prevOpen.current = openOption;
   }, [openOption]);
 
-  function HoursAccount() {
-    return (
-      <Box className={classes.hours}>
-        <Typography variant="h1">{Math.floor(Math.random() * 100)}</Typography>
-        <Typography variant="caption">HOURS</Typography>
-      </Box>
-    );
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <Card className={classes.root} elevation={0}>
@@ -132,8 +121,6 @@ export default function Workspace(props) {
         />
         <CardContent className={classes.cardContent}>
           <img src={analyze} alt="" height="auto" />
-          <Divider orientation="vertical" flexItem />
-          <HoursAccount />
         </CardContent>
 
         <Popper

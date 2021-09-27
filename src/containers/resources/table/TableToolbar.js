@@ -22,7 +22,7 @@ export default function TableToolbar(props) {
   const {
     searched = "",
     setSearched,
-    keyword = "",
+    // keyword = "",
     status = STATUS,
     keyUp,
     cancelSearch,

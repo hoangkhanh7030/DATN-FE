@@ -13,7 +13,7 @@ import { WORKSPACES_URL } from "constants/index";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { setMessage } from "redux/actions/msgAction";
+// import { setMessage } from "redux/actions/msgAction";
 import { addTeams, getTeams, updateTeams } from "redux/actions/teamAction";
 import SettingRow from "./SettingRow";
 import { useStyles } from "./style";
@@ -142,12 +142,12 @@ export default function SettingsDialog(props) {
             onClick={() => {
               if (type === "post") {
                 history.push(`${WORKSPACES_URL}/${id}`);
-                dispatch(
-                  setMessage(
-                    "You must set team and position before managing resources!",
-                    true
-                  )
-                );
+                // dispatch(
+                //   setMessage(
+                //     "You must set team and position before managing resources!",
+                //     true
+                //   )
+                // );
               } else {
                 setOpenSettingsDialog(false);
                 // dispatch(getTeams(id));

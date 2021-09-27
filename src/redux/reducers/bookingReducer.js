@@ -3,7 +3,7 @@ import * as actionTypes from "redux/constants";
 const initialState = {  status: null, isLoading: false };
 
 export default function reducer(state = initialState, action) {
-  const { type, payload } = action;
+  const { type } = action;
 
   switch (type) {
     case actionTypes.ADD_BOOKING:

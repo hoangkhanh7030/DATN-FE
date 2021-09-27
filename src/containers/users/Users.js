@@ -23,7 +23,7 @@ import {
   inviteToWorkspace,
 } from "redux/actions/userAction";
 import InviteDialog from "./dialog/InviteDialog";
-import { setMessage, clearMessage } from "redux/actions/msgAction";
+import { clearMessage } from "redux/actions/msgAction";
 export default function Users() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -150,7 +150,9 @@ export default function Users() {
       });
   };
 
-  const handleReInviteUser = (updatedData) => {
+  const handleReInviteUser = (updatedData, handleCloseArchiveDialog) => {
+    handleCloseArchiveDialog();
+
     dispatch(reInviteUser(id, updatedData))
       .then(() => {
         setOpenMessage(true);

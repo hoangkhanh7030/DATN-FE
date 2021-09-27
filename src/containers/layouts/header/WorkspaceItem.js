@@ -19,15 +19,20 @@ export const WorkspaceItem = (props) => {
   const checkColor = hasIcon ? colors.primaryColor : "white";
   const classes = useStyles({ checkColor });
 
+  const noPermission = () => {
+    return _.get(workspace, "role") !== "EDIT";
+  };
   return (
     <Grid container wrap="nowrap" spacing={1} alignitem="center">
       <Grid item xs zeroMinWidth className={classes.selectedIcon}>
         {hasIcon ? <CheckIcon className={classes.checkIcon} /> : <></>}
         <Typography className={classes.headItem}>{workspace.name}</Typography>
       </Grid>
+
       <Grid item className={classes.flexAlign}>
-        <Tooltip title="edit" arrow>
+        <Tooltip title={noPermission() ? "" : "edit"} arrow>
           <IconButton
+            disabled={noPermission()}
             className={`fas fa-pencil-alt ${classes.resize}`}
             onClick={(e) => {
               e.preventDefault();
@@ -35,9 +40,9 @@ export const WorkspaceItem = (props) => {
             }}
           ></IconButton>
         </Tooltip>
-
-        <Tooltip title="delete" arrow>
+        <Tooltip title={noPermission() ? "" : "delete"} arrow>
           <IconButton
+            disabled={noPermission()}
             className={`far fa-trash-alt ${classes.resize}`}
             onClick={(e) => {
               e.preventDefault();
@@ -45,8 +50,9 @@ export const WorkspaceItem = (props) => {
             }}
           ></IconButton>
         </Tooltip>
-        <Tooltip title="manage users" arrow>
+        <Tooltip title={noPermission() ? "" : "manage users"} arrow>
           <IconButton
+            disabled={noPermission()}
             className={`fas fa-user-cog ${classes.resize}`}
             onClick={(e) => {
               e.preventDefault();

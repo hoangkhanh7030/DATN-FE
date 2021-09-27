@@ -68,7 +68,7 @@ export default function UserRow({
           id: _.get(user, "id"),
           email: _.get(user, EMAIL),
           url: `${process.env.REACT_APP_URL}${WORKSPACES_URL}/${id}`,
-        })
+        }, handleCloseArchiveDialog)
       : handleArchiveUser(_.get(user, "id"), handleCloseArchiveDialog);
   };
 

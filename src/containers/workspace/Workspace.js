@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { ThemeProvider, Grid, Box } from "@material-ui/core";
+import {
+  ThemeProvider,
+  Grid,
+  Box,
+  Snackbar,
+  Button,
+  SnackbarContent,
+} from "@material-ui/core";
 import * as _ from "underscore";
 import { Progress } from "components/common/Progress";
 import { Message } from "components/common/Message";
@@ -27,7 +34,12 @@ import BookingDialog from "./dialog/BookingDialog";
 import { addBooking, editBooking } from "redux/actions/bookingAction";
 import { getProjectsBooking } from "redux/actions/projectAction";
 import { getResourcesBooking } from "redux/actions/resourceAction";
-import { DEFAULT_BOOKING, USER, WORKSPACES_URL } from "constants/index";
+import {
+  DEFAULT_BOOKING,
+  RESOURCES_URL,
+  USER,
+  WORKSPACES_URL,
+} from "constants/index";
 import { useHistory } from "react-router-dom";
 import { clearMessage } from "redux/actions/msgAction";
 export default function Workspace() {
@@ -235,7 +247,6 @@ export default function Workspace() {
   };
 
   const handleAddBooking = (data) => {
-    console.log("handleAddBooking")
     dispatch(addBooking(id, data))
       .then(() => {
         handleCloseDialog();
@@ -363,6 +374,44 @@ export default function Workspace() {
       ) : (
         <></>
       )}
+      {/* <Message
+        message={"You must set team and position before managing resources!"}
+        isOpen={!isLoading && !teams?.length}
+        handleCloseMessage={handleCloseMessage}
+        type={"warning"}
+      /> */}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{ marginTop: 50, marginRight: -4, boxShadow: "none" }}
+        open={!isLoading && !teams?.length}
+        message={"You must set team and position before managing resources!"}
+      >
+        <SnackbarContent
+          style={{
+            backgroundColor: "#f77f00",
+            boxShadow: "none",
+          }}
+          message={
+            <span>
+              You must set team and position before managing resources !
+            </span>
+          }
+          action={
+            <Button
+              style={{ color: "white", fontWeight: 600, border: "1px solid" }}
+              size="small"
+              onClick={() => {
+                history.push(`${window.location.pathname}${RESOURCES_URL}`);
+              }}
+            >
+              Setting
+            </Button>
+          }
+        />
+      </Snackbar>
       <Progress isOpen={isLoading} />
     </ThemeProvider>
   );

@@ -13,7 +13,6 @@ import { StyledTableCell, useStyles } from "containers/projects/style";
 import UserRow from "./TableRow";
 import { LoadingTable } from "components/projects/table/LoadingTable";
 import { EmptyRows } from "components/projects/table/EmptyRows";
-import * as _ from "underscore";
 import { EMAIL } from "constants/index";
 
 const STATUS = "auth_provider";

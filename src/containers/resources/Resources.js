@@ -34,7 +34,6 @@ import ResourcesTable from "./table/Table";
 import TableFooter from "./table/TableFooter";
 import TableToolbar from "./table/TableToolbar";
 import SettingDialog from "./dialog/SettingDialog";
-import { Progress } from "components/common/Progress";
 
 const DEFAULT_PARAMS = {
   page: INITIAL_PAGE,

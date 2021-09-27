@@ -31,10 +31,13 @@ import {
   REPORT_URL,
   WORKSPACES_URL,
 } from "constants/index";
+import buildCalendar from "containers/workspace/others/buildCalendar";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, useHistory, useParams } from "react-router-dom";
 import { logout } from "redux/actions/authAction";
+import { getBookings } from "redux/actions/dashboardAction";
 import { clearMessage } from "redux/actions/msgAction";
 import {
   addWorkspace,
@@ -44,6 +47,7 @@ import {
 } from "redux/actions/workspaceAction";
 import { MenuProps, useStyles } from "./style";
 import { WorkspaceItem } from "./WorkspaceItem";
+import * as _ from "underscore";
 
 export default function TheHeader() {
   const history = useHistory();
@@ -122,6 +126,16 @@ export default function TheHeader() {
         dispatch(getWorkspaces()).catch(() => {
           setIsOpenMessage(true);
         });
+        const thisCalendar = buildCalendar(moment(), constants.VIEWS[0].value);
+
+        const params = {
+          startDate: _.first(thisCalendar).format(constants.Y_M_D),
+          endDate: _.last(thisCalendar).format(constants.Y_M_D),
+          searchName: "",
+        };
+        if (window.location.pathname.split("/").length === 3) {
+          dispatch(getBookings(id, params));
+        }
         setIsOpenMessage(true);
       })
       .catch(() => {
@@ -241,7 +255,9 @@ export default function TheHeader() {
                 <Grid item xs zeroMinWidth className={classes.flexGrid}>
                   <DesktopWindowsIcon className={classes.selectIcon} />
                   <Typography className={classes.selectedItem}>
-                    {workspaces.filter((item) => +item.id === +id)[0]?.name}
+                    {workspaces
+                      .filter((item) => +item.id === +id)[0]
+                      ?.name.toUpperCase()}
                   </Typography>
                 </Grid>
               )
@@ -354,9 +370,7 @@ export default function TheHeader() {
             <Box className={classes.avatar}>
               <Avatar
                 alt="Avatar"
-                src={
-                  JSON.parse(localStorage.getItem("user")).accountDTO.avatar 
-                }
+                src={JSON.parse(localStorage.getItem("user")).accountDTO.avatar}
                 onClick={handleOpenLogout}
               />
             </Box>
